@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+<web-app version="4.0" 
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
     <!--All Controller mapping-->
     <servlet>
         <servlet-name>Admin</servlet-name>
@@ -8,15 +11,6 @@
     <servlet-mapping>
         <servlet-name>Admin</servlet-name>
         <url-pattern>/Admin</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>Teacher</servlet-name>
-        <servlet-class>controllers.TeacherController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Teacher</servlet-name>
-        <url-pattern>/Teacher</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -44,7 +38,7 @@
     <!--constraint containers-->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Protected Area - A</web-resource-name>
+            <web-resource-name>Protected AreaA</web-resource-name>
             <url-pattern>/admin/*</url-pattern>
         </web-resource-collection>
         
@@ -52,14 +46,14 @@
             <role-name>ADMIN</role-name>
         </auth-constraint>
 
-        <user-data-constraint>
+        <!--<user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
+        </user-data-constraint>-->
     </security-constraint>
     
        <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Protected Area - M</web-resource-name>
+            <web-resource-name>Protected AreaM</web-resource-name>
             <url-pattern>/member/*</url-pattern>
         </web-resource-collection>
         
@@ -67,16 +61,17 @@
             <role-name>MEMBER</role-name>
         </auth-constraint>
 
-        <user-data-constraint>
+        <!--<user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
+        </user-data
+        </user-data-constraint>-->
     </security-constraint>
     
     <!--Authentication Config-->
-    <Login-config>
+    <login-config>
         <auth-method>BASIC</auth-method>
         <realm-name>Secure Area Login</realm-name>
-    </Login-config>
+    </login-config>
     <!--Session config-->
     
     <session-config>
@@ -84,4 +79,11 @@
             30
         </session-timeout>
     </session-config>
+    
+    <!--welcome file-->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 </web-app>
+
