@@ -45,8 +45,9 @@
                 <input type="text" name="confPassword" id="confPassword"/>
 
                 <input type="submit" value="Register"/>
-
+                
             </form>
+            <span>${errors}</span>
         </div>
        
     </body>

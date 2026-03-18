@@ -23,6 +23,9 @@
                 </ul>
             </nav>
             <div>
+                <span>${username}</span>
+            </div>
+            <div>
                 <form action="Public" method="post">
                     <input type="hidden" name="action" value="logout"/>
                     

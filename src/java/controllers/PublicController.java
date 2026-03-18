@@ -70,9 +70,9 @@ public class PublicController extends HttpServlet {
                          System.out.println("PublicController -> User " + username + " has logged in.");
                     }else{
                          System.out.println("A actor attempted to login.");
-                         request.setAttribute("errors", errors);
-                         url = "/public-authorization/login";
+                         url = "/public-authorization/login.jsp";
                     }
+                    break;
                 case ("logout"):
                     request.logout();
                     url = "/index.jsp";
@@ -123,6 +123,10 @@ public class PublicController extends HttpServlet {
                     
                     url = "/public-authorization/register.jsp";
                     break;
+            }
+            
+            if(errors.size() > 0){
+                request.setAttribute("errors", errors);
             }
 
              getServletContext()

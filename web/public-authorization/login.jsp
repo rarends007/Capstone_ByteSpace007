@@ -27,9 +27,10 @@
                 <input type="text" name="password" id="password"/>
 
                 <input type="submit" value="Login"/>
-
+                
 
             </form>
+            <span>${errors}</span>
         </div>
     </body>
 </html>
