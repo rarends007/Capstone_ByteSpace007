@@ -22,6 +22,15 @@
         <url-pattern>/Public</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>Member</servlet-name>
+        <servlet-class>controller.MemberController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Member</servlet-name>
+        <url-pattern>/Member</url-pattern>
+    </servlet-mapping>
+    
     <!--Roles, Security Constraints, authenticaton config-->
     
     <!--roles-->
@@ -69,8 +78,11 @@
     
     <!--Authentication Config-->
     <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>Secure Area Login</realm-name>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/public-authorization/login.jsp</form-login-page>
+            <form-error-page>/public-authorization/form-error.html</form-error-page>
+        </form-login-config>
     </login-config>
     <!--Session config-->
     
