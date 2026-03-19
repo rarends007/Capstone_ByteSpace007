@@ -21,7 +21,7 @@ public class CommentDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean commentDeleted = false; 
         
         String query = """
                        DELETE FROM comment
@@ -33,7 +33,7 @@ public class CommentDB {
 
             result = ps.executeUpdate();
             System.out.println("CommentsDB -> deleteAllCommentsForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            commentDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("CommentsDB -> deleteAllCommentsForUser() failed-> \nExcetion -> " + ex +"\n") ;
@@ -42,6 +42,6 @@ public class CommentDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return commentDeleted;
     } 
 }

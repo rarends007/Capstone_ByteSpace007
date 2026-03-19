@@ -20,7 +20,7 @@ public class ReportDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean reportDeleted = false; 
         
         String query = """
                        DELETE FROM report
@@ -32,7 +32,7 @@ public class ReportDB {
 
             result = ps.executeUpdate();
             System.out.println("ReportDB -> deleteAllReportsForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            reportDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("\nReportDB -> deleteAllReportsForUser() failed-> \nExcetion -> " + ex +"\n") ;
@@ -41,6 +41,6 @@ public class ReportDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return reportDeleted;
     } 
 }

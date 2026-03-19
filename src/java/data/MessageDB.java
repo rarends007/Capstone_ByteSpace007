@@ -43,4 +43,36 @@ public class MessageDB {
         
         return userDeleted;
     } 
+     
+   public static boolean setAllRecieverMessageUserNamesBlankForUser(int userID){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+       
+        int result = -1;
+        
+        boolean receiverMessagesSetToBlankForUser = false; 
+        
+        String query = """
+                       UPDATE message
+                       SET reciever_id = null
+                       WHERE reciever_id = ?;
+                       """;
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+
+            result = ps.executeUpdate();
+            System.out.println("MessageDB -> setAllRecieverMessageUserNamesBlankForUser() -> Delete executed -> rows effected -> " + result);
+            receiverMessagesSetToBlankForUser = true;
+
+        }catch(SQLException ex){
+            System.out.println("MessageDB -> setAllRecieverMessageUserNamesBlankForUser() failed-> \nExcetion -> " + ex +"\n") ;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+        return receiverMessagesSetToBlankForUser;
+    }   
 }

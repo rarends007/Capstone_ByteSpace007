@@ -20,7 +20,7 @@ public class LogDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean logDeleted = false; 
         
         String query = """
                        DELETE FROM log
@@ -32,7 +32,7 @@ public class LogDB {
 
             result = ps.executeUpdate();
             System.out.println("LogDB -> deleteLogsForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            logDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("LogDB -> deleteLogsForUser() failed-> \nExcetion -> " + ex +"\n") ;
@@ -41,6 +41,6 @@ public class LogDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return logDeleted;
     } 
 }

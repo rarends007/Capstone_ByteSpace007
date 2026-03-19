@@ -20,7 +20,7 @@ public class NotificationDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean notificationsDeleted = false; 
         
         String query = """
                        DELETE FROM notification
@@ -32,7 +32,7 @@ public class NotificationDB {
 
             result = ps.executeUpdate();
             System.out.println("NotificationsDB -> deleteNotificationsForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            notificationsDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("NotificationsDB -> deleteNotificationsForUser() failed-> \nExcetion -> " + ex +"\n") ;
@@ -41,6 +41,6 @@ public class NotificationDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return notificationsDeleted;
     } 
 }

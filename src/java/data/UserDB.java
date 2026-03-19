@@ -21,51 +21,6 @@ import business.bytespace.Super.User;
 
 public class UserDB {
     
-     private void copyPasteMeToEasyAddNewDBFunction()
-             throws SQLException{ //remember to catch the exception in the calling code, 
-         //OR you can just catch it in this func you are defining
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null; //remove if not USING a SELECT statement -> returning a resultset
-        
-        String query = """
-                       MySQL Here ?;
-                       """;
-        
-        ps = connection.prepareStatement(query);
-        //do stuff
-        //ps.setObject(1, obj));
-        
-        /*
-         ###if you update, insert, delete
-                int result = ps.executeUpdate(); returns a int for num rows affected
-        
-                return result; if null it failed. -> place where it needs to go \/
-        
-         ###if you SELECT
-                rs.executeQuery(); //put here
-                if(rs != null){
-                    while(rs.next()) { //greater than one RECORD/ROW returned from SELECT
-                        Integer userid = rs.getInt("userid");
-                    }
-               }
-               if(rs != null){
-                    exactly one RECORD/ROW -> follow this format
-                    Integer userid = rs.getInt("userid");
-                }
-                return user(s) or whatever value you are returning below \/
-        */
-        
-        rs = ps.executeQuery(); //remove if not using SELECT and thus returning a resultset, place in proper spot above /\
-        DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset
-        
-        DBUtil.closePreparedStatement(ps);
-        pool.freeConnection(connection);
-        
-        //put return statement here
-    }
-     
     public static boolean insertUserMember(User user, ArrayList errors){
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -239,9 +194,10 @@ public class UserDB {
         try{
             ImageDB.deleteAllImagesForUser(userID);
             CommentDB.deleteAllCommentsForUser(userID);
-            PostDB.deleteAllPostsForUser(userID);
+            PostDB.deleteAllPostsForUser(userID); //if a post is deleted I set the DB to delete all associated fk on cascade -> i.e. comments, becasue without a post comments are not needed, however, I left in the comment delete because I don't feel like removing it.
             LogDB.deleteLogsForUser(userID);
             MessageDB.deleteMessagesForUser(userID);
+            MessageDB.setAllRecieverMessageUserNamesBlankForUser(userID);
             NotificationDB.deleteNotificationsForUser(userID);
             ProfileDB.deleteAnyProfilesForUser(userID);
             ReportDB.deleteAllReportsForUser(userID); //must execute in order so all fk are deleted then then finally the parent user record

@@ -53,6 +53,19 @@ public class AdminController extends HttpServlet {
                 }
                 request.setAttribute("usersHashMap", userHashMap);
                 url = "/admin/admin_level_add_delete_users.jsp";
+                
+                
+                //Start userDeletedMessage Logic
+                //ALL of this is ONLY for displaying a success message on the page when an admin deletes a user 
+                String adminIsDeletingUser = request.getParameter("adminIsDeletingUser");
+                if(adminIsDeletingUser != null && adminIsDeletingUser.equals("true")){
+                    String userDeletedMessage = request.getParameter("userDeletedMessage");
+                    
+                    request.setAttribute("userDeletedMessage", userDeletedMessage);
+                }
+                //End userDeletedMessage Logic
+                
+                
                 break;
             case "deleteUser":
                 messages.clear();
@@ -62,12 +75,14 @@ public class AdminController extends HttpServlet {
                 if(UserDB.deleteUser(Integer.parseInt(userID))){
                     System.out.println("user deleted " + username);
                     messages.add("username " + username + "has been successfully deleted from the database.");
+                    
+                    url = "/Admin?action=getAllUsers&userDeletedMessage=" + messages.get(0) + "&adminIsDeletingUser=true"; //so the list will repopulate with the missing user shown as gone, proper refresh, NOTE: only one ? allowed in URL to properly parametize it on forward
+                    System.out.println("Admin -> switch case 'deleteUser' url is -> " + url );                                                                        //values get called in Admin ->  getAllUsers switch case, where it is directed
                 }else{
                     errors.add("Unable to delete user " + username + ", issue with the database connection.");
+                    url = "/admin/admin_level_add_delete_users.jsp";
                 }
-                
-                url = "/admin/admin_level_add_delete_users.jsp";
-                
+
                 break;
         }
         

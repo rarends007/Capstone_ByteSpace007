@@ -20,24 +20,20 @@ public class PostDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean postsDeleted = false; 
         
         String query = """
-                       DELETE FROM comment
-                       FROM comment 
-                       WHERE commenting_user_id = IN
-                       (
-                            SELECT post_id
-                            FROM post user_id
-                        );
+                       DELETE FROM post
+                       WHERE user_id = ?;
                        """;
+      
         try{
             ps = connection.prepareStatement(query);
             ps.setInt(1, userID);
 
             result = ps.executeUpdate();
             System.out.println("PostDB -> deleteAllPostsForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            postsDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("\nPostDB -> deleteAllPostsForUser() failed-> \nExcetion -> " + ex +"\n") ;
@@ -46,6 +42,6 @@ public class PostDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return postsDeleted;
     } 
 }

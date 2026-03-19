@@ -21,7 +21,7 @@ public class ProfileDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean profileDeleted = false; 
         
         String query = """
                        DELETE FROM profile
@@ -33,7 +33,7 @@ public class ProfileDB {
 
             result = ps.executeUpdate();
             System.out.println("ProfileDB -> deleteAnyProfilesForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            profileDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("\nProfileDB -> deleteAnyProfilesForUser() failed-> \nExcetion -> " + ex +"\n");
@@ -42,6 +42,6 @@ public class ProfileDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return profileDeleted;
     } 
 }

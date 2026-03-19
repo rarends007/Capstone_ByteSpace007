@@ -20,7 +20,7 @@ public class ImageDB {
        
         int result = -1;
         
-        boolean userDeleted = false; 
+        boolean imagesDeleted = false; 
         
         String query = """
                        DELETE FROM image
@@ -32,7 +32,7 @@ public class ImageDB {
 
             result = ps.executeUpdate();
             System.out.println("ImageDB -> deleteAllImagesForUser() -> Delete executed -> rows effected -> " + result);
-            userDeleted = true;
+            imagesDeleted = true;
 
         }catch(SQLException ex){
             System.out.println("ImageDB -> deleteAllImagesForUser() failed-> \nExcetion -> " + ex +"\n");
@@ -41,6 +41,6 @@ public class ImageDB {
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
         
-        return userDeleted;
+        return imagesDeleted;
     } 
 }
