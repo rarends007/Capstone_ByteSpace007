@@ -9,6 +9,9 @@ import data.ConnectionPool;
 import java.sql.*;
 import data.DBUtil;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import business.bytespace.Super.User;
 
 
 /**
@@ -166,6 +169,53 @@ public class UserDB {
         pool.freeConnection(connection);
         
        return userID;
+    }
+     
+     /**
+      * 
+      * @return HashMap<Integer, User> userHashMap -> returns a hash map of all users in the database 
+      */
+     public static HashMap<Integer, User> getAllUsers(){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null; 
+        
+        HashMap<Integer, User> userHashMap = new HashMap<>();
+        String query = """
+                       SELECT *
+                       FROM user;
+                       """;
+        
+        try{
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery(); 
+            
+            if(rs != null){
+               while(rs.next()){
+                   int userID = rs.getInt("user_id");
+                   String username = rs.getString("username");
+                   String firstname = rs.getString("firstname");
+                   String middlename = rs.getString("middlename");
+                   String lastname = rs.getString("lastname");
+                   String credential = rs.getString("credential");
+                   
+                   User user = new User(userID, username, firstname, middlename, lastname, credential);
+                   
+                   userHashMap.put(userID, user);
+               }
+               
+             }
+        }catch(SQLException ex){
+            System.out.println("error retrieving userID -> UserDB -> getAllUser()");
+        }
+     
+        DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset
+        
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+       return userHashMap;
     }
     
 }

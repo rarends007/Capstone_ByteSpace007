@@ -30,6 +30,17 @@ public class User implements Serializable{
         role = null;
         credential = null;
     }
+
+    public User(Integer userID, String username, String firstname, String middlename, String lastname, String credential) {
+        this.userID = userID;
+        this.username = username;
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.lastname = lastname;
+        this.credential = credential;
+    }
+    
+    
     
     public Integer getUserID() {
         return userID;
