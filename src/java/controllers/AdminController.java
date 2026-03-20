@@ -5,12 +5,13 @@
 package controllers;
 
 import business.bytespace.Super.User;
+import utilities.validation.NewUserValidation;
+
 import data.UserDB;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author raren
  */
-@WebServlet(name = "AdminController", urlPatterns = {"/AdminController"})
 public class AdminController extends HttpServlet {
 
     /**
@@ -34,7 +34,13 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HashMap<Integer, User> userHashMap = UserDB.getAllUsers();
+        HashMap<Integer, User> userHashMap = null; //always check if null before using this
+        try{
+             userHashMap = UserDB.getAllUsers();
+        }catch(Exception ex){
+            System.out.println("Admin loading userHashMap error -> " + ex);
+        }
+       
         
         String url = "/admin/index.jsp";
         
@@ -43,13 +49,22 @@ public class AdminController extends HttpServlet {
         ArrayList<String> messages = new ArrayList<>();
         ArrayList<String> errors = new ArrayList<>();
         
+        //URL parameters
+        String userID;
+        String username;
+        String firstname;
+        String middlename;
+        String lastname;
+        String password;
+        String confirmPassword;
+        String role;
+        
         switch (action){
             case "getAllUsers":
                 if(userHashMap != null){
                     System.out.println("Admin ->switch case getAllUsers -> AllUsersHashMap populated successfully.");
                 }else{
                     System.out.println("Admin ->switch case getAllUsers -> AllUsersHashMap is null");
-                    HashMap<Integer, String> error = new HashMap<>();
                 }
                 request.setAttribute("usersHashMap", userHashMap);
                 url = "/admin/admin_level_add_delete_users.jsp";
@@ -69,8 +84,8 @@ public class AdminController extends HttpServlet {
                 break;
             case "deleteUser":
                 messages.clear();
-                String userID = request.getParameter("userID");
-                String username = request.getParameter("username");
+                userID = request.getParameter("userID");
+                username = request.getParameter("username");
                 
                 if(UserDB.deleteUser(Integer.parseInt(userID))){
                     System.out.println("user deleted " + username);
@@ -86,6 +101,28 @@ public class AdminController extends HttpServlet {
                 break;
                 
             case "addUser":
+                username = request.getParameter("username");
+                firstname = request.getParameter("firstname");
+                middlename = request.getParameter("middlename");
+                lastname = request.getParameter("lastname");
+                password = request.getParameter("password");
+                confirmPassword = request.getParameter("confPassword");
+                role = request.getParameter("user_role_select");
+                
+                User user = new User(username, firstname, middlename, lastname, password, role);
+                
+                if(NewUserValidation.userValid(user, password, confirmPassword, errors)) {
+                    UserDB.insertUserMember(user, errors);
+                    System.out.println("User " + username + " has been added as a " + role);
+                    messages.add("User " + username + " has been added as a " + role);
+                }
+
+                if(userHashMap != null){
+                     request.setAttribute("usersHashMap", userHashMap);
+                }
+               
+                url = "/admin/admin_level_add_delete_users.jsp";
+                
                 break;
         }
         

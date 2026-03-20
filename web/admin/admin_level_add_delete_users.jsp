@@ -15,11 +15,11 @@
     </head>
     <body> 
         
-        <nav><a href="./../index.jsp">Home</a></nav>
+        <nav><a href="${pageContext.request.contextPath}admin/index.jsp">Home</a></nav>
         <div>
             
             <h1>Add User</h1>
-            <form action="./../Admin" method="post">
+            <form action="${pageContext.request.contextPath}/Admin" method="post">
                 <input type="hidden" name="action" value="addUser"/>
                       <div>
 
@@ -42,9 +42,9 @@
                 <label>Confirm Password</label>
                 <input type="text" name="confPassword" id="confPassword"/>
                 
-                <label>Role:</label>
-
-                <select name="user_role_select" id="user_role_select">
+                <label for="user_role_select">Role:</label>
+                <select name="user_role_select" id="user_role_select"><!--https://www.geeksforgeeks.org/html/html-select-tag/-->
+                  <option value="" disabled selected>Select a user role</option>
                   <option value="ADMIN">Administrator</option>
                   <option value="MEMBER">Member</option>
                 </select>
@@ -52,6 +52,7 @@
                 <input type="submit" value="Register"/>
                 
             </form>
+            <br>
             <span>${errors}</span>
         </div>
                 
