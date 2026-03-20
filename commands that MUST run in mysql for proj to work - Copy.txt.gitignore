@@ -1,0 +1,35 @@
+*explanation* -> This is me not giving a step, but just explaining.
+
+Step 1: login to MySQL with the root user and password you chose
+MySQL -u root -p *press enter*
+*put in your password at the prompt*
+
+
+then -> 
+
+		DO THIS ->
+
+//This is code you use to create a new user
+CREATE USER 'capstone_user'@'localhost' IDENTIFIED BY 'Password_Capstone_1475';
+
+GRANT ALL PRIVILEGES ON *.* TO 'capstone_user'@'localhost';
+
+FLUSH PRIVILEGES; *ensure the privs take effect instantly*
+
+EXIT;
+
+*Now -> 
+    ->  you need to go into workbench and add this user there.
+    ->  run the mathapp db creation script
+    ->  *The implemented jdbc driver and connection pool should work on you build of the 
+		project now.*
+
+
+			OR DO THIS ->
+
+
+//As of 2/18/26 if you want to use the db please run these 2 commands if you previously made a user and don't want to make another one. 
+//This is done as an attempt to gain compatibility with Docker
+RENAME USER 'capstone_user'@'localhost' TO 'capstone_2026'@'localhost'; 
+
+ALTER USER 'capstone_2026'@'localhost' IDENTIFIED BY 'Password_Capstone_1475';

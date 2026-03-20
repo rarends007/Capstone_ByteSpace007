@@ -9,9 +9,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Admin Home</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <nav>
+            <ul>
+                <li><a href="./../Admin?action=getAllUsers">Manage Users</a></li>
+            </ul>
+        </nav>
     </body>
 </html>

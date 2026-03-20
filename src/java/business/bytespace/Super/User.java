@@ -30,6 +30,29 @@ public class User implements Serializable{
         role = null;
         credential = null;
     }
+
+    public User(Integer userID, String username, String firstname, String middlename, String lastname, String credential) {
+        this.userID = userID;
+        this.username = username;
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.lastname = lastname;
+        this.credential = credential;
+    }
+    
+    //for admin user control
+    public User(String username, String firstname, String middlename, String lastname, String credential, String role) {
+        this.username = username;
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.lastname = lastname;
+        this.role = role;
+        this.credential = credential;
+    }
+    
+    
+    
+    
     
     public Integer getUserID() {
         return userID;
