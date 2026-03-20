@@ -1,0 +1,98 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Mar 19, 2026, 4:39:35 PM
+    Author     : raren
+*/
+
+/*classes*/
+.pageColor {
+    background-color: black;
+    color: greenyellow;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
+.userList {
+    
+}
+
+.box {
+    width: 200px;
+    height: 100px;
+    background-color: grey;
+}
+
+.shift-right {
+    margin-left: 170px;
+}
+
+/*admin -> admin_level_add_delete_users.jsp customization*/
+.admin-form {
+    position: relative;
+    width: 500px;
+    align-items: center;
+    height: 500px;
+    margin-left: 250px;
+    padding: 1em;
+    box-sizing: border-box;
+    background: lightslategray;
+    color: black;
+
+    
+}
+
+
+/*elements*/
+
+body { 
+    font: 1.3rem sans-serif;
+    padding: 0.5em;
+    margin: 0;
+    background: black;
+    color: lightgreen;
+}
+
+
+a {
+    color: red;
+    text-decoration: blink;
+    font-weight: bold;
+}
+
+label {  /* lign up the labels */
+    margin-right: 25px;
+    display: inline-block;
+    width: 140px;
+    text-align: right;
+    padding-top: 10px;
+    text-align: left;
+}
+
+input {
+    margin: 10px;
+}
+
+select { 
+    margin: 10px;
+    background-color: lightgreen;
+}
+
+a:hover {
+    color: azure;
+}
+
+button { 
+    background-color: greenyellow;
+    height: 50px;
+    width: 100px;
+}
+
+
+
