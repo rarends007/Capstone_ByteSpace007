@@ -15,7 +15,7 @@
     </head>
     <body> 
         
-        <nav><a href="${pageContext.request.contextPath}admin/index.jsp">Home</a></nav>
+        <nav><a href="${pageContext.request.contextPath}/admin/index.jsp">Home</a></nav>
         <div>
             
             <h1>Add User</h1>

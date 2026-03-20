@@ -16,11 +16,11 @@
     <body>
         
         <div>
-            <nav><a href="./../index.jsp">Home</a></nav>
+            <nav><a href="${pageContext.request.contextPath}/index.jsp">Home</a></nav>
         </div>
         
         <div>
-            <form action="./../Public" method="post">
+            <form action="${pageContext.request.contextPath}/Public" method="post">
                 <input type="hidden" name="action" value="register"/>
                 
                 <input type="hidden" name="role" value="MEMBER"/>
@@ -48,6 +48,7 @@
                 
             </form>
             <span>${errors}</span>
+            <span>${messages}</span>
         </div>
        
     </body>

@@ -9,9 +9,16 @@ package utilities;
  * @author raren
  */
 
+import business.bytespace.Super.User;
+import data.UserDB;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.catalina.realm.SecretKeyCredentialHandler;
+import utilities.validation.NewUserValidation;
+
+import org.apache.catalina.CredentialHandler; //https://tomcat.apache.org/tomcat-8.5-doc/config/credentialhandler.html
 
 public class Utility {
     
@@ -36,5 +43,44 @@ public class Utility {
         
         return isSuccessfulLogin;
     }
-
+    
+    /**
+     * handles the hard part of registering a user, to be called right after getting parameters for the user form the request and instaniting the user object with them
+     * @param user
+     * @param password
+     * @param confirmPassword
+     * @param errors
+     * @param messages 
+     */
+    public static void handleRegistration(User user, String password, String confirmPassword, ArrayList<String> errors, ArrayList<String> messages){
+        if(NewUserValidation.userValid(user, password, confirmPassword, errors)) {
+                    SecretKeyCredentialHandler sc = null;
+                    String credential = null;
+                    
+                    user.setUsername(user.getUsername().trim());
+                    user.setFirstname(user.getFirstname().trim());
+                    user.setMiddlename(user.getMiddlename().trim());
+                    user.setLastname(user.getLastname().trim());
+                    user.setRole(user.getRole().trim());
+                    
+                    try{
+                            sc = new SecretKeyCredentialHandler();
+                            sc.setAlgorithm("PBKDF2WithHmacSHA512");
+                            sc.setKeyLength(256);
+                            sc.setSaltLength(16);
+                            sc.setIterations(4096);
+                            
+                            credential = sc.mutate(password);
+                            user.setCredential(credential);
+                            
+                            if(UserDB.insertUser(user, errors)){
+                                System.out.println("User " + user.getUsername() + " has been added as a " + user.getRole());
+                                messages.add("User " + user.getUsername() + " has been added as a " + user.getRole());
+                            }
+                            
+                     }catch(NoSuchAlgorithmException ex){
+                         System.out.println("Exeception hasing password -> " + ex);
+                     }
+             }
+      }                 
 }

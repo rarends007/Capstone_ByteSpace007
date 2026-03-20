@@ -5,10 +5,11 @@
 package controllers;
 
 import business.bytespace.Super.User;
-import utilities.validation.NewUserValidation;
+import utilities.Utility;
 
 import data.UserDB;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.ServletException;
@@ -111,11 +112,7 @@ public class AdminController extends HttpServlet {
                 
                 User user = new User(username, firstname, middlename, lastname, password, role);
                 
-                if(NewUserValidation.userValid(user, password, confirmPassword, errors)) {
-                    UserDB.insertUserMember(user, errors);
-                    System.out.println("User " + username + " has been added as a " + role);
-                    messages.add("User " + username + " has been added as a " + role);
-                }
+                Utility.handleRegistration(user,  password, confirmPassword,  errors, messages);
 
                 if(userHashMap != null){
                      request.setAttribute("usersHashMap", userHashMap);

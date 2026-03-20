@@ -21,7 +21,13 @@ import business.bytespace.Super.User;
 
 public class UserDB {
     
-    public static boolean insertUserMember(User user, ArrayList errors){
+    /**
+     * Accepts a user object that is used to process all user fields into the database as appropriate and insert the new user.
+     * @param user
+     * @param errors
+     * @return 
+     */
+    public static boolean insertUser(User user, ArrayList errors){
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -65,19 +71,17 @@ public class UserDB {
                     ps.setString(2, user.getRole());
              }
             System.out.println("New User added, and now User role added too.");
+            userRegistered = true;
             
         }catch(SQLException ex){
             System.out.println("\nUserDB -> insertUserMember() -> Need to update Validation, Malformed User -> \nExcetion -> " + ex) ;
-            if("java.sql.SQLIntegrityConstraintViolationException: Duplicate entry".equals(ex.toString().trim().substring(0, 66))){
+            //if("java.sql.SQLIntegrityConstraintViolationException: Duplicate entry".equals(ex.toString().trim().substring(0, 66))){ obsolete
+              if(ex.toString().contains("Duplicate entry")){
                 System.out.println("UserDB -> insertUserMember -> This username already exists.");
                 errors.add("Username already exists, choose another one.");
             }
             
         }
-        
-       
-        
-        
         
        
         DBUtil.closePreparedStatement(ps);
