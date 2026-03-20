@@ -12,45 +12,67 @@
         <title>Register</title>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css" />
     </head>
-    <h1>Registration</h1>
+    
         
     <body>
         
-        <div>
-            <nav><a href="${pageContext.request.contextPath}/index.jsp">Home</a></nav>
-        </div>
+        <h1 class="shiftRight250px">Registration</h1>
+        
+        <header class="shiftRight250px">
+            <strong>Register For Bytespace</strong>
+        </header>
         
         <div>
-            <form action="${pageContext.request.contextPath}/Public" method="post">
+            <nav class="floatNavRight"><a href="${pageContext.request.contextPath}/index.jsp">Home</a></nav>
+        </div>
+        
+        <main class="clearFloat">
+            <form class="member-register-form" action="${pageContext.request.contextPath}/Public" method="post">
+               
                 <input type="hidden" name="action" value="register"/>
-                
                 <input type="hidden" name="role" value="MEMBER"/>
-
-                <label>Username</label>
-                <input type="text" name="username" id="username"/>
-
-                <label>Firstname</label>
-                <input type="text" name="firstname" id="firstname"/>
-
-                <label>middlename</label>
-                <input type="text" name="middlename" id="middlename"/>
-
-                <label>Lastname</label>
-                <input type="text" name="lastname" id="lastname"/>
-
-
-                <label>Password</label>
-                <input type="text" name="password" id="password"/>
-
-                <label>Confirm Password</label>
-                <input type="text" name="confPassword" id="confPassword"/>
-
-                <input type="submit" value="Register"/>
+                
+                <div>
+                    <label>Username</label>
+                    <input type="text" name="username" id="username"/>
+                </div>
+                
+                <div>
+                    <label>Firstname</label>
+                    <input type="text" name="firstname" id="firstname"/>
+                </div>
+                
+                <div>
+                    <label>middlename</label>
+                    <input type="text" name="middlename" id="middlename"/>
+                </div>
+                
+                <div>
+                    <label>Lastname</label>
+                    <input type="text" name="lastname" id="lastname"/>
+                </div>
+                
+                 <div>
+                    <label>Password</label>
+                    <input type="text" name="password" id="password"/>
+                 </div>
+                
+                <div>
+                    <label>Confirm Password</label>
+                    <input type="text" name="confPassword" id="confPassword"/>
+                </div>
+                <div>
+                    <input type="submit" value="Register"/>
+                </div>
                 
             </form>
-            <span>${errors}</span>
-            <span>${messages}</span>
-        </div>
-       
+        </main>
+            
+        <span>${errors}</span>
+        <span>${messages}</span>
+
+       <footer class="shiftRight250px">
+             <small><i>Copyright &copy; 2026 bytepace</i></small>
+        </footer>
     </body>
 </html>

@@ -23,6 +23,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     
 }
 
+.solidborder {
+    border-width: 5px;
+    border-style: solid;
+    border-color: greenyellow;
+}
+
 .box {
     width: 200px;
     height: 100px;
@@ -33,11 +39,45 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     margin-left: 170px;
 }
 
+.shiftRight250px {
+    margin-left: 170px;
+}
+
+.floatNavRight {
+    float: left;
+    width: 100px;
+    margin-left: 40px;
+}
+
+.clearFloat {
+    clear: both;
+}
+
+/*admin customization*/
+
 /*admin -> admin_level_add_delete_users.jsp customization*/
 .admin-form {
     position: relative;
     width: 500px;
-    align-items: center;
+    align-items: normal;
+    height: 500px;
+    margin-left: 50px;
+    padding: 1em;
+    box-sizing: border-box;
+    background: lightslategray;
+    color: black;
+    display: flex;
+
+    
+}
+
+/*member customization*/
+
+/*member -> registration customization*/
+.member-register-form {
+    position: relative;
+    width: 500px;
+    align-items: normal;
     height: 500px;
     margin-left: 250px;
     padding: 1em;
@@ -45,8 +85,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     background: lightslategray;
     color: black;
 
-    
 }
+    
+.member-form-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 500px;
+}
+
 
 
 /*elements*/
@@ -94,5 +141,7 @@ button {
     width: 100px;
 }
 
-
+nav ul {
+    list-style-type: none;
+}
 
