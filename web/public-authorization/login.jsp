@@ -14,21 +14,26 @@
     </head>
     <body>
         <div>
-            <nav><a href="./../index.jsp">Home</a></nav>
+            <nav class="floatNavRight" style="margin-top: 50px;"><a href="./../index.jsp">Home</a></nav>
         </div>
         
-        <div>
+        <div class="member-login-form" style="margin-top: 25px;">
             <form action="./../Public" method="post">
                 <input type="hidden" name="action" value="login"/>
-
-                <label>Username</label>
-                <input type="text" name="username" id="username"/>
-
-                <label>Password</label>
-                <input type="text" name="password" id="password"/>
-
-                <input type="submit" value="Login"/>
                 
+                <div>
+                    <label>Username</label>
+                    <input type="text" name="username" id="username"/>
+                </div>
+                
+                <div>
+                    <label>Password</label>
+                    <input type="text" name="password" id="password"/>
+                </div>
+                
+                <div>
+                    <input type="submit" value="Login"/>
+                </div>
 
             </form>
             <span>${errors}</span>
