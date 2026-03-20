@@ -16,11 +16,11 @@
     </head>
     <body class="pageColor"> 
         
-        <nav><a href="${pageContext.request.contextPath}/admin/index.jsp">Home</a></nav>
+        <nav class="floatNavRight" style="margin-top: 100px"><a href="${pageContext.request.contextPath}/admin/index.jsp">Home</a></nav>
         <div>
             
             <h1 style="margin-left: 250px">Add User</h1>
-            <form  class="admin-form" action="${pageContext.request.contextPath}/Admin" method="post">
+            <form  class="admin-form" style="margin-left: 150px" action="${pageContext.request.contextPath}/Admin" method="post">
                 <input type="hidden" name="action" value="addUser"/>
                      
                 
