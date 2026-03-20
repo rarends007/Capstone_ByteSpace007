@@ -6,6 +6,7 @@ package controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+
+//self made classes
+import utilities.IO;
 
 /**
  *
@@ -40,15 +45,30 @@ public class MemberController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        //1. know -> lots of parts are coming in from the servlet
-        Part filePart = request.getPart("file"); //2. this gets the part coming from the servlet called file
-        String fileName = filePart.getSubmittedFileName(); //3. this cretes the filename from that file part -> you can add prefixes and sufffixes as needed here
-        for (Part part: request.getParts()){ //4. take the file name of the upload and create a file in x folder
-            part.write(request.getContextPath() + "\\.\\..\\" + fileName );
-        }
-        response.getWriter().print("the file was uploaded sucessfully");
+            HttpSession session = request.getSession();
+            ArrayList errors = new ArrayList();
+            ArrayList messages = new ArrayList();
+            
+            String action = request.getParameter("action");
+            String url = "/index.jsp";
+            
+            switch (action){
+                case "uploadProfilePhoto": 
+                    try{
+                       IO.uploadFile(request, response, messages);
+                    }catch(ServletException ex){
+                        System.out.println("Issue with Servlet file parts -> \nError thrown:" + ex);
+                    }
+                    url = "/member/upload_member_profile_photo.jsp";
+                    break;
+            }
+            
+            request.setAttribute("messages", messages);
+            request.setAttribute("errors", errors);
        
-       // C:\apache-tomcat-9.0.115-windows-x64\work\Catalina\localhost\bytespace\bytespace\.\..\member\profile_pics\Screenshot 2025-12-06 144227.jpg
+            getServletContext()
+                     .getRequestDispatcher(url)
+                     .forward(request, response);
         
     }
 
