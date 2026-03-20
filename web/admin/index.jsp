@@ -10,7 +10,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Admin Profile</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css" />
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/global.css" />
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/member/style.css" />
     </head>
     <body>
         <nav>

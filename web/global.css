@@ -45,8 +45,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .floatNavRight {
     float: left;
-    width: 100px;
-    margin-left: 40px;
+    width: 200px;
+    margin-left: 0px;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 .clearFloat {

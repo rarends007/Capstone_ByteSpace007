@@ -12,11 +12,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
+
 /**
  *
  * @author raren
  */
-@WebServlet(name = "MemberController", urlPatterns = {"/MemberController"})
+//@WebServlet(name = "MemberController", urlPatterns = {"/MemberController"})
+
+@MultipartConfig (   //Needed so that the servlet can process mulitipart files.
+      fileSizeThreshold = 1024 * 1024 * 1, //1MB 
+      maxFileSize = 1024 * 1024 *10, //10MB
+      maxRequestSize = 1024 * 1024 * 100 //100GB
+)
 public class MemberController extends HttpServlet {
 
     /**
@@ -30,19 +39,17 @@ public class MemberController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MemberController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MemberController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        //1. know -> lots of parts are coming in from the servlet
+        Part filePart = request.getPart("file"); //2. this gets the part coming from the servlet called file
+        String fileName = filePart.getSubmittedFileName(); //3. this cretes the filename from that file part -> you can add prefixes and sufffixes as needed here
+        for (Part part: request.getParts()){ //4. take the file name of the upload and create a file in x folder
+            part.write(request.getContextPath() + "\\.\\..\\" + fileName );
         }
+        response.getWriter().print("the file was uploaded sucessfully");
+       
+       // C:\apache-tomcat-9.0.115-windows-x64\work\Catalina\localhost\bytespace\bytespace\.\..\member\profile_pics\Screenshot 2025-12-06 144227.jpg
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

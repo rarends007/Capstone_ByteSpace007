@@ -12,7 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Users</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css" />
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/global.css" />
     </head>
     <body class="pageColor"> 
         <nav  class="floatNavRight" style="margin-top: 100px; width: 200px;">
