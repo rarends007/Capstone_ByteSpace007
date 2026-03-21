@@ -203,7 +203,7 @@ public class UserDB {
             MessageDB.deleteMessagesForUser(userID);
             MessageDB.setAllRecieverMessageUserNamesBlankForUser(userID);
             NotificationDB.deleteNotificationsForUser(userID);
-            ProfileDB.deleteAnyProfilesForUser(userID);
+            ProfileDB.deleteUserProfile(userID);
             ReportDB.deleteAllReportsForUser(userID); //must execute in order so all fk are deleted then then finally the parent user record
             
             

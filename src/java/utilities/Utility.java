@@ -10,6 +10,7 @@ package utilities;
  */
 
 import business.bytespace.Super.User;
+import data.ProfileDB;
 import data.UserDB;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.catalina.realm.SecretKeyCredentialHandler;
 import utilities.validation.NewUserValidation;
+
 
 import org.apache.catalina.CredentialHandler; //https://tomcat.apache.org/tomcat-8.5-doc/config/credentialhandler.html
 
@@ -76,6 +78,12 @@ public class Utility {
                             if(UserDB.insertUser(user, errors)){
                                 System.out.println("User " + user.getUsername() + " has been added as a " + user.getRole());
                                 messages.add("User " + user.getUsername() + " has been added as a " + user.getRole());
+                                
+                                user.setUserID(UserDB.getUserID(user.getUsername()));
+                                //Now create the users profile in the db
+                                if(ProfileDB.createUserProfile(user)){
+                                    System.out.println("The users profile has been created! ");
+                                }
                             }
                             
                      }catch(NoSuchAlgorithmException ex){

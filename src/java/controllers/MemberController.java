@@ -20,6 +20,7 @@ import javax.servlet.http.Part;
 //self made classes
 import utilities.IO;
 
+
 /**
  *
  * @author raren
@@ -52,14 +53,31 @@ public class MemberController extends HttpServlet {
             String action = request.getParameter("action");
             String url = "/index.jsp";
             
-            switch (action){
+            String currentURL = request.getRequestURL().toString();//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
+            
+            switch (currentURL){ //get
+                case "http://localhost:8080/bytespace/member/index.jsp":
+                    String profilePhotoPathLoad = ""; //call db method to get the photo
+                    
+                    break;
+            }
+            
+            switch (action){ //post
                 case "uploadProfilePhoto": 
-                    String profilePhotoFileName = "";
+                    
+                    //Part 1 add photo to file system in C:/bytespace/photos/username/file.jpg
+                    String profilePhotoFilePath = "";
                     try{
-                      profilePhotoFileName =  IO.uploadFile(request, response, messages, ""); //replace "" with the members username later retrieved from the session object
+                      profilePhotoFilePath =  IO.uploadFile(request, response, messages, ""); //replace "" with the members username later retrieved from the session object
+                      
+                      System.out.println("The profile photo path adding to db is: " + profilePhotoFilePath);
                     }catch(ServletException ex){
                         System.out.println("Issue with Servlet file parts -> \nError thrown:" + ex);
                     }
+                    
+                    //part 2, submit photo path string to the database in the profile table
+                    
+                    
                     url = "/member/upload_member_profile_photo.jsp";
                     break;
                 case "loadProfile" :

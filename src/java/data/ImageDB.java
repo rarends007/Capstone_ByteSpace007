@@ -5,9 +5,12 @@
 package data;
 
 import java.sql.Connection;
+import java.sql.ResultSet; 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+
+import data.UserDB;
 /**
  *
  * @author raren
@@ -43,4 +46,22 @@ public class ImageDB {
         
         return imagesDeleted;
     } 
+     
+    public static String getProfilePhotoPath(String username){
+        String profilePhotoPath = "";
+        int userID = UserDB.getUserID(username);
+        
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String query = """
+                            
+                       """;
+        
+        return profilePhotoPath;
+    }
+    
+    
 }
