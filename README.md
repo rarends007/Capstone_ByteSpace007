@@ -9,5 +9,6 @@ This is a student created gaming social media website.
 - MySQL Connector-J
 - Java ANT
 - SSL
-- JSTL
+- JSTL 1.2.7
+- Java EE 8
 
