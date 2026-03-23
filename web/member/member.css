@@ -78,12 +78,42 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 */
 
 .hover:hover { /*Controls opacity of the image on hover*/
-  /*background-color: hsla(0, 100%, 100%, 0.0);*/ 
-  opacity: 0.5;
+    /*background-color: hsla(0, 100%, 100%, 0.0);*/
+    opacity: 0.5;
 }
 
-#changeImage {}
+#changeImage {
+}
 
 .alterSpan {
     float: left;
+}
+
+
+.uplaod_image_form{
+    display: none;
+    position: fixed;
+    background-color: #141124;
+    padding: 15px;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    border-radius: 15px;
+}
+
+.uplaod_image_form_header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.uplaod_image_form_header button{
+    background: none;
+    border: none;
+    width: auto;
+    height: auto;
+    align-self: flex-start;
+}
+
+.uplaod_image_form_header button:hover{
+    cursor:pointer;
 }
