@@ -12,31 +12,26 @@
         <title>Login</title>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/global.css" />
     </head>
-    <body>
-        <div>
-            <nav class="floatNavLeft" style="margin-top: 50px;"><a href="./../index.jsp">Home</a></nav>
-        </div>
-        
-        <div class="member-login-form" style="margin-top: 25px;">
-            <form action="./../Public" method="post">
-                <input type="hidden" name="action" value="login"/>
-                
-                <div>
-                    <label>Username</label>
-                    <input type="text" name="username" id="username"/>
-                </div>
-                
-                <div>
-                    <label>Password</label>
-                    <input type="text" name="password" id="password"/>
-                </div>
-                
-                <div>
-                    <input type="submit" value="Login"/>
-                </div>
 
+    <body>
+        <div class="gradient_bg">
+            <h1>ByteSpace</h1>
+        </div>
+        <div class="login_container">
+            <div class="login_links">
+                <span><a href="${pageContext.request.contextPath}/public-authorization/register.jsp">Registration</a></span> /
+                <span> Login</span>
+            </div>
+            <h3>Welcome Back</h3>
+            <form action="./../Public" method="post" class="login-form_container">
+                <input type="hidden" name="action" value="login">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" required>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
+                <p class="error_message">${errors}</p>
+                <input type="submit" value="Log In" class="login_btn">
             </form>
-            <span>${errors}</span>
         </div>
     </body>
 </html>
