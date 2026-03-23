@@ -42,6 +42,13 @@ public class Post implements Serializable {
             this.postText = postText;
             this.comments = comments;
         }
+        
+        public Post(Integer postID, String postText, HashMap<Integer, Image> images, HashMap<Integer, Comment> comments) {
+            this.postID = postID;
+            this.postText = postText;
+            this.images = images;
+            this.comments = comments;
+        }
 
         public Integer getPostID() {
             return postID;

@@ -6,17 +6,19 @@ package controllers;
 
 
 import business.bytespace.Super.User;
-import data.UserDB;
+//import data.UserDB;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+//import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.catalina.CredentialHandler; //https://tomcat.apache.org/tomcat-8.5-doc/config/credentialhandler.html
-import org.apache.catalina.realm.SecretKeyCredentialHandler;
+//import org.apache.catalina.realm.SecretKeyCredentialHandler;
+
+//import utilities.validation.NewUserValidation; No longer need with the increased modularization I implemented
+
 
 //defined java classes
 import utilities.Utility;
@@ -42,6 +44,7 @@ public class PublicController extends HttpServlet {
         
             HttpSession session = request.getSession();
             ArrayList errors = new ArrayList();
+            ArrayList messages = new ArrayList();
 
             String action = request.getParameter("action");
             String url = "/index.jsp";
@@ -51,7 +54,8 @@ public class PublicController extends HttpServlet {
             String middlename;
             String lastname;
             String password;
-            String credential;
+            String confirmPassword;
+            //String credential; no longer needed with new modularization of registration functionality
             String role;
             
             switch (action) {
@@ -68,7 +72,7 @@ public class PublicController extends HttpServlet {
                     if(session.getAttribute("username") == null){ //protects the current logged in user until they click logout
                         if(Utility.handleLogin(request, username, password, errors)){ //remember errors is reference type ArrayList() -> errors are passed by reference from called method to refernce object in memory "errors"
 
-                            session.setAttribute("username", username);
+                             session.setAttribute("username", username);
                              System.out.println("PublicController -> User " + username + " has logged in.");
                         }else{
                              System.out.println("A actor attempted to login.");
@@ -95,48 +99,29 @@ public class PublicController extends HttpServlet {
                     
                     errors.clear();
                     
-                    username = request.getParameter("username").trim();
-                    password = request.getParameter("password").trim();
-                    firstname = request.getParameter("firstname").trim();
-                    middlename = request.getParameter("middlename").trim();
-                    lastname = request.getParameter("lastname").trim();
-                    role = request.getParameter("role").trim();
-                    
-                    SecretKeyCredentialHandler sc = null;
-                    credential = null;
-                    
-                    try{
-                            sc = new SecretKeyCredentialHandler();
-                            sc.setAlgorithm("PBKDF2WithHmacSHA512");
-                            sc.setKeyLength(256);
-                            sc.setSaltLength(16);
-                            sc.setIterations(4096);
-                            
-                            credential = sc.mutate(password);
-                     }catch(NoSuchAlgorithmException ex){
-                         System.out.println("Exeception hasing password -> " + ex);
-                     }
+                    username = request.getParameter("username");
+                    password = request.getParameter("password");
+                    confirmPassword = request.getParameter("confPassword");
+                    firstname = request.getParameter("firstname");
+                    middlename = request.getParameter("middlename");
+                    lastname = request.getParameter("lastname");
+                    role = request.getParameter("role");
                     
                     User user = new User();
-                    user.setUsername(username);
-                    user.setCredential(credential);
+                    user.setUsername(username);;
                     user.setFirstname(firstname);
                     user.setMiddlename(middlename);
                     user.setLastname(lastname);
                     user.setRole(role);
                     
-                    if(UserDB.insertUserMember(user, errors)){
-                        System.out.println("New user successfully registered. -> in PublicController");
-                    }
-                    
-                    
+                     Utility.handleRegistration(user,  password, confirmPassword,  errors, messages);
+
                     url = "/public-authorization/register.jsp";
                     break;
             }
             
-            if(errors.size() > 0){
-                request.setAttribute("errors", errors);
-            }
+                    request.setAttribute("errors", errors);
+                    request.setAttribute("messages", messages);
 
              getServletContext()
                    .getRequestDispatcher(url)

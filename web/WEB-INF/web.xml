@@ -24,7 +24,7 @@
     
     <servlet>
         <servlet-name>Member</servlet-name>
-        <servlet-class>controller.MemberController</servlet-class>
+        <servlet-class>controllers.MemberController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Member</servlet-name>
@@ -68,6 +68,7 @@
         
         <auth-constraint>
             <role-name>MEMBER</role-name>
+            <role-name>ADMIN</role-name>
         </auth-constraint>
 
         <!--<user-data-constraint>

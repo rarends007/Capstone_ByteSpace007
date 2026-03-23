@@ -11,15 +11,17 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/global.css" />
     </head>
     <body>
         <div>
             <nav>
                 <ul>
-                    <li><a href="/bytespace/admin/index.jsp">Admin Portal</a></li>
-                    <li><a href="/bytespace/member/index.jsp">Member Portal</a></li>
-                    <li><a href="/bytespace/public-authorization/register.jsp">Register</a></li>
-                    <li><a href="/bytespace/public-authorization/login.jsp">Login</a></li>
+                    <li><a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Portal</a></li>
+                    <li><a href="${pageContext.request.contextPath}/Member">Member Portal</a></li>
+                    <li><a href="${pageContext.request.contextPath}/public-authorization/register.jsp">Register</a></li>
+                    <li><a href="${pageContext.request.contextPath}/public-authorization/login.jsp">Login</a></li>
+                    <li><a href="${pageContext.request.contextPath}/test_functionalities_links.jsp">test page</a></li>
                 </ul>
             </nav>
             <div>

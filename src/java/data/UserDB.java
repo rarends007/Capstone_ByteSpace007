@@ -9,6 +9,9 @@ import data.ConnectionPool;
 import java.sql.*;
 import data.DBUtil;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import business.bytespace.Super.User;
 
 
 /**
@@ -18,52 +21,13 @@ import java.util.ArrayList;
 
 public class UserDB {
     
-     private void copyPasteMeToEasyAddNewDBFunction()
-             throws SQLException{ //remember to catch the exception in the calling code, 
-         //OR you can just catch it in this func you are defining
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null; //remove if not USING a SELECT statement -> returning a resultset
-        
-        String query = """
-                       MySQL Here ?;
-                       """;
-        
-        ps = connection.prepareStatement(query);
-        //do stuff
-        //ps.setObject(1, obj));
-        
-        /*
-         ###if you update, insert, delete
-                int result = ps.executeUpdate(); returns a int for num rows affected
-        
-                return result; if null it failed. -> place where it needs to go \/
-        
-         ###if you SELECT
-                rs.executeQuery(); //put here
-                if(rs != null){
-                    while(rs.next()) { //greater than one RECORD/ROW returned from SELECT
-                        Integer userid = rs.getInt("userid");
-                    }
-               }
-               if(rs != null){
-                    exactly one RECORD/ROW -> follow this format
-                    Integer userid = rs.getInt("userid");
-                }
-                return user(s) or whatever value you are returning below \/
-        */
-        
-        rs = ps.executeQuery(); //remove if not using SELECT and thus returning a resultset, place in proper spot above /\
-        DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset
-        
-        DBUtil.closePreparedStatement(ps);
-        pool.freeConnection(connection);
-        
-        //put return statement here
-    }
-     
-    public static boolean insertUserMember(User user, ArrayList errors){
+    /**
+     * Accepts a user object that is used to process all user fields into the database as appropriate and insert the new user.
+     * @param user
+     * @param errors
+     * @return 
+     */
+    public static boolean insertUser(User user, ArrayList errors){
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -107,19 +71,17 @@ public class UserDB {
                     ps.setString(2, user.getRole());
              }
             System.out.println("New User added, and now User role added too.");
+            userRegistered = true;
             
         }catch(SQLException ex){
             System.out.println("\nUserDB -> insertUserMember() -> Need to update Validation, Malformed User -> \nExcetion -> " + ex) ;
-            if("java.sql.SQLIntegrityConstraintViolationException: Duplicate entry".equals(ex.toString().trim().substring(0, 66))){
+            //if("java.sql.SQLIntegrityConstraintViolationException: Duplicate entry".equals(ex.toString().trim().substring(0, 66))){ obsolete
+              if(ex.toString().contains("Duplicate entry")){
                 System.out.println("UserDB -> insertUserMember -> This username already exists.");
                 errors.add("Username already exists, choose another one.");
             }
             
         }
-        
-       
-        
-        
         
        
         DBUtil.closePreparedStatement(ps);
@@ -167,5 +129,134 @@ public class UserDB {
         
        return userID;
     }
+     
+     /**
+      * 
+      * @return HashMap<Integer, User> userHashMap -> returns a hash map of all users in the database 
+      */
+     public static HashMap<Integer, User> getAllUsers(){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null; 
+        
+        HashMap<Integer, User> userHashMap = new HashMap<>();
+        String query = """
+                       SELECT *
+                       FROM user;
+                       """;
+        
+        try{
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery(); 
+            
+            if(rs != null){
+               while(rs.next()){
+                   int userID = rs.getInt("user_id");
+                   String username = rs.getString("username");
+                   String firstname = rs.getString("firstname");
+                   String middlename = rs.getString("middlename");
+                   String lastname = rs.getString("lastname");
+                   String credential = rs.getString("credential");
+                   
+                   User user = new User(userID, username, firstname, middlename, lastname, credential);
+                   
+                   userHashMap.put(userID, user);
+               }
+               
+             }
+        }catch(SQLException ex){
+            System.out.println("error retrieving userID -> UserDB -> getAllUser()");
+        }
+     
+        DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset
+        
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+       return userHashMap;
+    }
+    
+    /**
+     * 
+     * @param userID int
+     * @return boolean indicating if deleted -> true if deleted, false if not
+     */
+    public static boolean deleteUser(int userID){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+       
+        int result = -1;
+        
+        boolean userDeleted = false; 
+        
+        String query = """
+                       DELETE FROM user
+                       WHERE user_id = ?;
+                       """;
+        try{
+            ImageDB.deleteAllImagesForUser(userID);
+            CommentDB.deleteAllCommentsForUser(userID);
+            PostDB.deleteAllPostsForUser(userID); //if a post is deleted I set the DB to delete all associated fk on cascade -> i.e. comments, becasue without a post comments are not needed, however, I left in the comment delete because I don't feel like removing it.
+            LogDB.deleteLogsForUser(userID);
+            MessageDB.deleteMessagesForUser(userID);
+            MessageDB.setAllRecieverMessageUserNamesBlankForUser(userID);
+            NotificationDB.deleteNotificationsForUser(userID);
+            ProfileDB.deleteUserProfile(userID);
+            ReportDB.deleteAllReportsForUser(userID); //must execute in order so all fk are deleted then then finally the parent user record
+            
+            
+            deleteRole(userID);
+            
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+
+            result = ps.executeUpdate();
+            System.out.println("UserDB -> deleteUser() -> Delete executed -> rows effected -> " + result);
+            userDeleted = true;
+
+        }catch(SQLException ex){
+            System.out.println("\nUserDB -> deleteUser() failed-> \nExcetion -> " + ex +"\n") ;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+        return userDeleted;
+    } 
+    
+     public static boolean deleteRole(int userID){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+       
+        int result = -1;
+        
+        boolean userDeleted = false; 
+        
+        String query = """
+                       DELETE FROM user_role
+                       WHERE user_id = ?;
+                       """;
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+
+            result = ps.executeUpdate();
+            System.out.println("UserDB -> deleteUser() -> Delete executed -> rows effected -> " + result);
+            userDeleted = true;
+
+        }catch(SQLException ex){
+            System.out.println("\nUserDB -> deleteUser() failed-> \nExcetion -> " + ex +"\n") ;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+        return userDeleted;
+    } 
+     
+     
     
 }

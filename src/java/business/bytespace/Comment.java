@@ -15,6 +15,7 @@ public class Comment implements Serializable {
     private Integer commentingUserID;
     private Integer postID;
     private String commentText;
+    private String commentingUsername;
 
     public Comment() {
         commentID = null;
@@ -24,11 +25,12 @@ public class Comment implements Serializable {
         
     }
 
-    public Comment(Integer commentID, Integer commentingUserID, Integer postID, String commentText) {
+    public Comment(Integer commentID, Integer commentingUserID, Integer postID, String commentText, String commentingUsername) {
         this.commentID = commentID;
         this.commentingUserID = commentingUserID;
         this.postID = postID;
         this.commentText = commentText;
+        this.commentingUsername = commentingUsername;
     }
 
     public Integer getCommentID() {
@@ -61,6 +63,14 @@ public class Comment implements Serializable {
 
     public void setCommentText(String commentText) {
         this.commentText = commentText;
+    }
+
+    public String getCommentingUsername() {
+        return commentingUsername;
+    }
+
+    public void setCommentingUsername(String commentingUsername) {
+        this.commentingUsername = commentingUsername;
     }
     
     
