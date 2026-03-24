@@ -11,4 +11,18 @@ This is a student created gaming social media website.
 - SSL
 - JSTL 1.2.7
 - Java EE 8
+- 
+-------------------------------------------------------
+                  Branch Rules
+-------------------------------------------------------
+Branch Creation Rules: 
+when creating new branches -> 
+Create them based on the Main branch.
+-> Naming ->  
+1. f = for feature
+2. user story number
+3. simplified name for the branch
+4. 
+example -> f-5-Post Images
 
+-------------------------------------------------------
