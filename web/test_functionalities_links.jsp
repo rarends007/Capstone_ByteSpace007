@@ -20,6 +20,7 @@
                     <li><a href="${pageContext.request.contextPath}/public-authorization/register.jsp">Register</a></li>
                     <li><a href="${pageContext.request.contextPath}/public-authorization/login.jsp">Login</a></li>
                     <li><a href="${pageContext.request.contextPath}/member/upload_member_profile_photo.jsp">upload photo</a></li>
+                    <li><a href="${pageContext.request.contextPath}/member/messages/send_recieve_message_admin_and_member.jsp">Messaging</a>
                 </ul>
             </nav>
     </body>
