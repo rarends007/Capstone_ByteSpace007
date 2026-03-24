@@ -33,7 +33,7 @@ public class IO {
      * @throws ServletException 
      * @return String  filepath to be stored in the db and then called in html Image tags
      */
-    public static String uploadFile(HttpServletRequest request, HttpServletResponse response, ArrayList<String> message, String username)
+    /*public static String uploadFile(HttpServletRequest request, HttpServletResponse response, ArrayList<String> message, String username)
                     throws ServletException{
         
         String fileName = null;
@@ -69,8 +69,19 @@ public class IO {
         }
         System.out.println("\nFile path is: " + path + " filename is: " + fileName + "\n\n");
         return path + fileName;
-    }
+    }*/
     
+    /**
+     * This utility function allows a photo to be uploaded to the file system at the designated directory.
+     *  The directory path is user based and follows the pattern -> 
+     *                                                                  username + "/" + UPLOAD_DIRECTORY + "/" +  fileName;
+     * @param request
+     * @param response
+     * @param message
+     * @param username
+     * @return (String) that is the new relative file path to the project that is to be inputted into the database for the uploading user.
+     * @throws ServletException 
+     */
     public static String uploadFileV2(HttpServletRequest request, HttpServletResponse response, ArrayList<String> message, String username) 
                     throws ServletException{
         
