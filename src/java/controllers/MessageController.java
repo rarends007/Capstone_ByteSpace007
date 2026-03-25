@@ -4,9 +4,12 @@
  */
 package controllers;
 
+import business.bytespace.Super.User;
+import data.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 //import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,16 +35,31 @@ public class MessageController extends HttpServlet {
             throws ServletException, IOException {
 
         String url = "/messages/index.jsp";
-
         ArrayList<String> messages = new ArrayList();
 
-        String action = request.getParameter("action");
+        
+        
 
+        
+        //this controls the option sent back to the jsp when the js submits the form on the select element value in messages/index.js is set to value  'send' or 'received'
         String option = request.getParameter("messaging_option");
-        if (option != null){
+        if (option != null) {
             request.setAttribute("option", option);
+            
+            if(option.equals("send")){
+                //ensures the list on send_message.jsp is populated with user choices
+                HashMap<Integer, User> users = UserDB.getAllUsers();
+                if(users != null){
+                    request.setAttribute("users", users);
+                }
+            }else if(option.equals("recieved")){
+                
+            }
+            
         }
 
+        
+        String action = request.getParameter("action");
         if (action != null) {
             switch (action) {
                 case "send_message":

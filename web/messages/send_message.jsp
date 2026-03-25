@@ -17,11 +17,11 @@
         <form action="${pageContext.request.contextPath}/Message" method="post">
             <input type="hidden" name="action" value="send-message"/>
 
-            <select name="selected_recipient" id="selected_recipient">
+            <select name="selected_recipient" id="selected_recipient"> 
                 <option value="">choose a recipient</option>
-                <!--TODO: Add foreach loop here --> 
+                <!--TODO: Take each recipient and load them into the messages_reciever db field in message table --> 
                 <c:forEach var="item" items="${users}">
-                    <option value="UserID">${item.toString()}</option>
+                    <option value="${item.key}">${item.value.getUsername()}</option>
                 </c:forEach>
             </select>
 
