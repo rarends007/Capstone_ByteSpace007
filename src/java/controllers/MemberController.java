@@ -5,6 +5,7 @@
 package controllers;
 
 import business.bytespace.Super.Post;
+import data.ImageDB;
 import data.PostDB;
 import data.ProfileDB;
 import data.UserDB;
@@ -28,17 +29,15 @@ import javax.servlet.http.Part;
 //self made classes
 import utilities.IO;
 
-
 /**
  *
  * @author raren
  */
 //@WebServlet(name = "MemberController", urlPatterns = {"/MemberController"})
-
-@MultipartConfig (   //Needed so that the servlet can process mulitipart files.
-      fileSizeThreshold = 1024 * 1024 * 1, //1MB 
-      maxFileSize = 1024 * 1024 *10, //10MB
-      maxRequestSize = 1024 * 1024 * 100 //100GB
+@MultipartConfig( //Needed so that the servlet can process mulitipart files.
+        fileSizeThreshold = 1024 * 1024 * 1, //1MB 
+        maxFileSize = 1024 * 1024 * 10, //10MB
+        maxRequestSize = 1024 * 1024 * 100 //100GB
 )
 public class MemberController extends HttpServlet {
 
@@ -122,8 +121,17 @@ public class MemberController extends HttpServlet {
                     
                     url = "/member/upload_member_profile_photo.jsp";
                     break;
-                case "placeholder case" :
-                    
+                case "getImageForUser" :
+                    ArrayList<String> photoFrilePaths = new ArrayList();
+                    try{
+                        photoFrilePaths = ImageDB.getUserImagePhotoPathsById(userID);
+                        System.out.print("Images retrieved");
+                    }catch (Exception ex) {
+                            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                            errors.add("Unable to get images.");                     
+                        }
+                    url = "/member/gallery.jsp";
+                    request.setAttribute("gallery", photoFrilePaths);
                     break;
                 case "updateStatus":
                         String inputtedStatus = request.getParameter("newStatus");
@@ -141,6 +149,7 @@ public class MemberController extends HttpServlet {
                         }
                         
                     break;
+                    
             }
             
             
