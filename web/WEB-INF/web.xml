@@ -4,6 +4,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
     <!--All Controller mapping-->
+    
+        <!--Users--> 
     <servlet>
         <servlet-name>Admin</servlet-name>
         <servlet-class>controllers.AdminController</servlet-class>
@@ -30,6 +32,16 @@
         <servlet-name>Member</servlet-name>
         <url-pattern>/Member</url-pattern>
     </servlet-mapping>
+    
+       <servlet>
+        <servlet-name>Message</servlet-name>
+        <servlet-class>controllers.MessageController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Message</servlet-name>
+        <url-pattern>/Message</url-pattern>
+    </servlet-mapping>
+    
     
     <!--Roles, Security Constraints, authenticaton config-->
     
@@ -64,6 +76,7 @@
         <web-resource-collection>
             <web-resource-name>Protected AreaM</web-resource-name>
             <url-pattern>/member/*</url-pattern>
+            <url-pattern>/messages/*</url-pattern>
         </web-resource-collection>
         
         <auth-constraint>
