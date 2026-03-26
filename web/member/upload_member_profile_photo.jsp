@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<div class="uplaod_image_form">
+<div class="uplaod_image_form hidden">
     <div class="uplaod_image_form_header">
         <h3>Upload Photo</h1>
             <button id="close_uplaod_image_form">✖️</button>
