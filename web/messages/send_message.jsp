@@ -15,7 +15,7 @@
     <body>
         <h1>Send Message</h1>
         <form action="${pageContext.request.contextPath}/Message" method="post">
-            <input type="hidden" name="action" value="send-message"/>
+            <input type="hidden" name="action" value="send_message"/>
 
             <select name="selected_recipient" id="selected_recipient"> 
                 <option value="">choose a recipient</option>

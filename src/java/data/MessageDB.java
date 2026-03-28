@@ -109,7 +109,9 @@ public class MessageDB {
             ps.setInt(2, message.getRecieverID());
             ps.setString(3, message.getMessageText());
             ps.setTimestamp(4, Timestamp.valueOf(message.getTimeStamp())); //https://docs.oracle.com/en/java/javase/17/docs/api/java.sql/java/sql/Timestamp.html
-
+            
+            ps.executeUpdate();
+                    
             System.out.println("MessageDB -> .insertMessage() -> message inserted");
             messageInserted = true;
         } catch (SQLException ex) {
