@@ -134,7 +134,7 @@ public class MessageDB {
     }
     
     /**
-     * Returns all of the messages for the current logged in user.
+     * Returns all of the recieved messages for the current logged in user.
      * @param userID int
      * @return Hashmap<Integer, Message>
      */
