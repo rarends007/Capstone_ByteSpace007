@@ -6,6 +6,7 @@ package controllers;
 
 
 import business.bytespace.Super.User;
+import data.UserDB;
 //import data.UserDB;
 import java.io.IOException;
 //import java.security.NoSuchAlgorithmException;
@@ -49,6 +50,7 @@ public class PublicController extends HttpServlet {
             String action = request.getParameter("action");
             String url = "/index.jsp";
             
+            Integer userID;
             String username;
             String firstname;
             String middlename;
@@ -73,6 +75,28 @@ public class PublicController extends HttpServlet {
                         if(Utility.handleLogin(request, username, password, errors)){ //remember errors is reference type ArrayList() -> errors are passed by reference from called method to refernce object in memory "errors"
 
                              session.setAttribute("username", username);
+                             session.setAttribute("userID", UserDB.getUserID(username));
+                             
+                             User loggedInUser = null;
+                             try{
+                                 loggedInUser = UserDB.getUser(username); 
+                             }catch(NullPointerException ex){
+                                 System.err.println("PublicController -> case login -> \nError: " + ex );
+                             }
+                             
+                             
+                             
+                             if(loggedInUser != null){
+                                 firstname = loggedInUser.getFirstname();
+                                 middlename = loggedInUser.getMiddlename();
+                                 lastname = loggedInUser.getLastname();
+                                 
+                                 //setting session attributes on login
+                                 session.setAttribute("firstname", firstname);
+                                 session.setAttribute("middlename", middlename);
+                                 session.setAttribute("lastname", lastname);
+                                 
+                             }
                              System.out.println("PublicController -> User " + username + " has logged in.");
                         }else{
                              System.out.println("A actor attempted to login.");

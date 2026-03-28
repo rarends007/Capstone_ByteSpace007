@@ -5,6 +5,7 @@
 package controllers;
 
 import business.bytespace.Super.Post;
+import data.ImageDB;
 import data.PostDB;
 import data.ProfileDB;
 import data.UserDB;
@@ -28,17 +29,15 @@ import javax.servlet.http.Part;
 //self made classes
 import utilities.IO;
 
-
 /**
  *
  * @author raren
  */
 //@WebServlet(name = "MemberController", urlPatterns = {"/MemberController"})
-
-@MultipartConfig (   //Needed so that the servlet can process mulitipart files.
-      fileSizeThreshold = 1024 * 1024 * 1, //1MB 
-      maxFileSize = 1024 * 1024 *10, //10MB
-      maxRequestSize = 1024 * 1024 * 100 //100GB
+@MultipartConfig( //Needed so that the servlet can process mulitipart files.
+        fileSizeThreshold = 1024 * 1024 * 1, //1MB 
+        maxFileSize = 1024 * 1024 * 10, //10MB
+        maxRequestSize = 1024 * 1024 * 100 //100GB
 )
 public class MemberController extends HttpServlet {
 
@@ -60,6 +59,7 @@ public class MemberController extends HttpServlet {
             ArrayList errors = new ArrayList();
             ArrayList messages = new ArrayList();
             HashMap<Integer, Post> posts = new HashMap<Integer, Post>();
+            String userStatus = "";
             
             String action = request.getParameter("action");
             if(action == null){
@@ -71,6 +71,11 @@ public class MemberController extends HttpServlet {
             boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
             int userID = UserDB.getUserID(username);
             
+            
+            
+            
+            
+            
            if(pageControllerIsMember){
                     String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
                     
@@ -81,9 +86,13 @@ public class MemberController extends HttpServlet {
                         request.setAttribute("profile_photo", profilePhotoPathLoad);
                         System.out.println("photo path is: " + profilePhotoPathLoad);
                     }
+                
+                    
+                
                     
                 try {
                     posts = PostDB.getUserPosts(userID);
+                    userStatus = ProfileDB.getUserStatus(userID);
                 } catch (SQLException ex) {
                     Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
                     errors.add("Unable to retrieve profile posts.");
@@ -112,11 +121,46 @@ public class MemberController extends HttpServlet {
                     
                     url = "/member/upload_member_profile_photo.jsp";
                     break;
-                case "placeholder case" :
-                    
+                case "getImageForUser" :
+                    ArrayList<String> photoFrilePaths = new ArrayList();
+                    try{
+                        photoFrilePaths = ImageDB.getUserImagePhotoPathsById(userID);
+                        System.out.print("Images retrieved");
+                    }catch (Exception ex) {
+                            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                            errors.add("Unable to get images.");                     
+                        }
+                    url = "/member/gallery.jsp";
+                    request.setAttribute("gallery", photoFrilePaths);
                     break;
+                case "updateStatus":
+                        String inputtedStatus = request.getParameter("newStatus");
+                        
+                        
+                        try {
+                            if (inputtedStatus != null) {
+                                ProfileDB.setUserStatus(userID, inputtedStatus);
+                            
+                                userStatus = ProfileDB.getUserStatus(userID);
+                            }
+                        } catch (Exception ex) {
+                            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                            errors.add("Unable to update Status.");                     
+                        }
+                        
+                    break;
+                    
             }
             
+            
+            
+            
+            
+            
+            
+            
+            request.setAttribute("userID", userID);
+            request.setAttribute("userStatus", userStatus);
             request.setAttribute("messages", messages);
             request.setAttribute("errors", errors);
             request.setAttribute("posts", posts);

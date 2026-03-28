@@ -8,6 +8,7 @@ import business.bytespace.Super.User;
 import data.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.ServletException;
@@ -15,6 +16,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import business.bytespace.Message;
+import data.MessageDB;
 
 /**
  *
@@ -39,7 +44,7 @@ public class MessageController extends HttpServlet {
 
         
         
-
+        HttpSession session = request.getSession();
         
         //this controls the option sent back to the jsp when the js submits the form on the select element value in messages/index.js is set to value  'send' or 'received'
         String option = request.getParameter("messaging_option");
@@ -63,6 +68,31 @@ public class MessageController extends HttpServlet {
         if (action != null) {
             switch (action) {
                 case "send_message":
+                    
+                    //values to pass to the message insert
+                    LocalDateTime timeStamp = LocalDateTime.now();
+
+                    String recieverUserID = request.getParameter("selected_recipient");
+                    String senderUserID = session.getAttribute("userID").toString();
+                    String message_text = request.getParameter("message_body");
+                    try{
+                        int recieverUserIDInt = Integer.parseInt(recieverUserID);
+                        int senderUserIDInt = Integer.parseInt(senderUserID);
+                        
+                        Message sendingMessage = new Message(senderUserIDInt, recieverUserIDInt, message_text, timeStamp);
+                        
+                        MessageDB.insertMessage(sendingMessage);
+                        System.out.println("Message successfully sent");
+                    }catch (Exception ex){
+                        System.err.println("Message Controller -> send_message -> Error sending message -> \nError Thrown: " + ex);
+                    }
+                   
+                    
+                    
+                    
+                            
+                    
+                    
                     break;
             }
         }

@@ -33,6 +33,14 @@ public class Message implements Serializable{
         this.recieverID = recieverID;
         this.timeStamp = timeStamp;
     }
+    
+    public Message(Integer senderID, Integer recieverID, String messageText, LocalDateTime timeStamp) {
+        this.messageID = messageID;
+        this.messageText = messageText;
+        this.senderID = senderID;
+        this.recieverID = recieverID;
+        this.timeStamp = timeStamp;
+    }
 
     public Integer getMessageID() {
         return messageID;
