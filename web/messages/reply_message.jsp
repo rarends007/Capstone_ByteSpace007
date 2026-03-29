@@ -13,6 +13,15 @@
         <title>Send Message</title>
     </head>
     <body>
+        <header>
+              <nav>
+                    <ul>
+                        <li>
+                            <a href="${pageContext.request.contextPath}/Message">Go back</a>
+                        </li>
+                    </ul>
+             </nav>
+        </header>
         <h1><strong>Reply to Message From: ${messageReplyingTo.getSenderOrReceiverUsername(messageReplyingTo.getSenderID())}</strong></h1>
         <form action="${pageContext.request.contextPath}/Message" method="post">
             <input type="hidden" name="action" value="reply_message"/>
@@ -20,7 +29,6 @@
             <input type="hidden" name="reciever_id" value="${messageReplyingTo.getRecieverID()}"/>
             <input type="hidden" name="sender_id" value  ="${messageReplyingTo.getSenderID()}"/>
             <div>    
-            
                 <p>${messageReplyingTo.getMessageText()}</p>
                 <textarea name="message_reply_body" rows="20" cols="100">insert message</textarea>
             </div>

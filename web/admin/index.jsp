@@ -17,6 +17,7 @@
         <nav>
             <ul>
                 <li><a href="./../Admin?action=getAllUsers">Manage Users</a></li>
+                <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
             </ul>
         </nav>
     </body>

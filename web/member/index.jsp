@@ -53,12 +53,12 @@
         </div>
         <nav>
             <ul>
-                <li>Profile</li>
+                <li><a href="${pageContext.request.contextPath}/Member">Profile</a></li>
                 <li>Friends</li>
-                <li>Messages</li>
+                <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
             </ul>
         </nav>
-        <a class="logout">Log out</a>
+        <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>
     </div>
     <div class="main_content">
         <div class="make_post_container">

@@ -103,6 +103,7 @@ public class MessageController extends HttpServlet {
                           int messageIDToReplyTo  = Integer.parseInt(request.getParameter("message_id"));
                           
                           Message message = MessageDB.getMessageByID(messageIDToReplyTo);
+                          String doGoback = request.getParameter("go_back");
                           
                           if (message != null){
                               request.setAttribute("messageReplyingTo", message);
@@ -122,13 +123,13 @@ public class MessageController extends HttpServlet {
                         
                         timestamp = LocalDateTime.now();
                         
-                        Message message = new Message(recieverID, senderID, messageReplyText, timestamp ); //the reciever is the person replying to the message here, "you"
+                        Message responseMessage = new Message(recieverID, senderID, messageReplyText, timestamp ); //the reciever is the person replying to the message here, "you"
                         
-                        MessageDB.insertMessage(message);
-                        messages.add("Replied to message from " + UserDB.getUsername(senderID));
+                        MessageDB.insertMessage(responseMessage);
+                        messages.add("Replied to message from " + UserDB.getUsername(senderID)); //the sender is the one that sent the message to us here
                         
                         request.setAttribute("messages", messages);
-                        url = "/messages/reply_message.jsp";
+                        url = "/messages/recieved_message.jsp";
                     }catch(Exception ex){
                         System.err.println("MessageController -> case reply_message\nException: " + ex);
                     }

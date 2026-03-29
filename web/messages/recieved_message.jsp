@@ -53,6 +53,6 @@
 
             </tbody>
         </table> 
-        
+        ${messages}
     </body>
 </html>
