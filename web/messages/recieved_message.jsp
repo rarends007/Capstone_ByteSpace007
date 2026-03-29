@@ -20,13 +20,31 @@
                     <th>from</th>
                     <th>message</th>
                     <th>date</th>
+                    <th></th>
+                    <th></th>
                 </thead>
                 <tbody>
                 
                 <c:forEach var="message" items="${messagesForLoggedInUser}">
                     <tr>
                         <td>${message.value.getSenderID()}</td>
+                        <td>${message.value.getMessageText()}</td>
+                        <td>${message.value.getTimeStamp()}</td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/Message" method="post">
+                                <input type="hidden" name="action" value="reply_message"/>
+                                <input type="submit" value="Reply"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/Message" method="post">
+                                <input type="hidden" name="action" value="delete_message"/>
+                                <input type="submit" value="Delete"/>
+                            </form>
+                        </td>
                     </tr>
+                    
+              
                 </c:forEach>
 
             </tbody>

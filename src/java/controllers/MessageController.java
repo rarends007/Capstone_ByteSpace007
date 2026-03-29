@@ -44,15 +44,6 @@ public class MessageController extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        try {
-            int userID = Integer.parseInt(session.getAttribute("userID").toString());
-            String firstname = session.getAttribute("firstname").toString();
-            String lastname = session.getAttribute("lastname").toString();
-            String username = session.getAttribute("username").toString();
-        } catch (Exception ex) {
-            System.err.println("Message DB near line 50 -> poppulating logged in user values from session -> \nException Error " + ex);
-        }
-
         //this controls the option sent back to the jsp when the js submits the form on the select element value in messages/index.js is set to value  'send' or 'received'
         String option = request.getParameter("messaging_option");
         if (option != null) {
@@ -71,6 +62,8 @@ public class MessageController extends HttpServlet {
                     messagesForLoggedInUser = MessageDB.retrieveAllMessagesForUser(userID);
 
                     request.setAttribute("messagesForLoggedInUser", messagesForLoggedInUser);
+                    
+                    
                 } catch (NullPointerException ex) {
                     System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
                 } catch (Exception ex) {
