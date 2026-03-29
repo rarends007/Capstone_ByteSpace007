@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.sql.Timestamp; //needed to make the timestamp work from LocalDateTime to the mysql DATETIME datatype, and insert it using JDBC
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 
@@ -187,6 +188,52 @@ public class MessageDB {
 
         return messagesForUser;
 
+    }
+    
+    /**
+     * Gets the message context given the message ID.
+     * @param messageID
+     * @return Message or Null
+     */
+    public static Message getMessageByID(int messageID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Message message = null;
+        
+        String query = """
+                        SELECT *
+                        FROM Message
+                        WHERE message_id = ?;
+                       """;
+        
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, messageID);
+            rs = ps.executeQuery();
+            
+            if(rs != null){
+                while(rs.next()){
+                    message = new Message();
+                    message.setMessageID(messageID);
+                    message.setMessageText(rs.getString("message_text"));
+                    message.setSenderID(rs.getInt("sender_id"));
+                    message.setRecieverID(rs.getInt("reciever_id"));
+                    message.setTimeStamp(rs.getTimestamp("timestamp").toLocalDateTime());
+                }
+            }
+        }catch (SQLException ex){
+            System.err.println("getMessageByID() -> \nSQLException: " + ex);
+        }catch (Exception ex){
+              System.err.println("getMessageByID() -> \nException: " + ex);
+        }finally{
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        
+        return message;
     }
 
 }

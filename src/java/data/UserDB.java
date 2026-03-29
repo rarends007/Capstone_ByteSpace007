@@ -128,6 +128,45 @@ public class UserDB {
     }
     
     /**
+     * Gets the username for the specific user given the userID
+     * @param userID
+     * @return String username
+     */
+     public static String getUsername(int userID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String username = "";
+
+        String query = """
+                       SELECT username
+                       FROM user
+                       WHERE user_id = ?;
+                       """;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+            rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.next();
+                username = rs.getString("username");
+            }
+        } catch (SQLException ex) {
+            System.out.println("error retrieving username -> UserDB -> getUsername()");
+        }finally{
+             DBUtil.closeResultSet(rs);
+
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        return username;
+    }
+    
+    /**
      * gets a user object based on the username.
      * @param usernamePassed
      * @return User

@@ -77,9 +77,10 @@ public class MessageController extends HttpServlet {
         if (action != null) {
             switch (action) {
                 case "send_message":
+                    System.out.println("send_message hit");
 
                     //values to pass to the message insert
-                    LocalDateTime timeStamp = LocalDateTime.now();
+                    LocalDateTime timestamp = LocalDateTime.now();
 
                     String recieverUserID = request.getParameter("selected_recipient");
                     String senderUserID = session.getAttribute("userID").toString();
@@ -88,7 +89,7 @@ public class MessageController extends HttpServlet {
                         int recieverUserIDInt = Integer.parseInt(recieverUserID);
                         int senderUserIDInt = Integer.parseInt(senderUserID);
 
-                        Message sendingMessage = new Message(senderUserIDInt, recieverUserIDInt, message_text, timeStamp);
+                        Message sendingMessage = new Message(senderUserIDInt, recieverUserIDInt, message_text, timestamp);
 
                         MessageDB.insertMessage(sendingMessage);
                         System.out.println("Message successfully sent");
@@ -96,8 +97,46 @@ public class MessageController extends HttpServlet {
                         System.err.println("Message Controller -> send_message -> Error sending message -> \nError Thrown: " + ex);
                     }
                     break;
-                case "reply":
-
+                case "reply_message_load":
+                    System.out.println("reply_message_load hit");
+                    try{
+                          int messageIDToReplyTo  = Integer.parseInt(request.getParameter("message_id"));
+                          
+                          Message message = MessageDB.getMessageByID(messageIDToReplyTo);
+                          
+                          if (message != null){
+                              request.setAttribute("messageReplyingTo", message);
+                              url = "/messages/reply_message.jsp";
+                          }
+                    }catch (NumberFormatException ex){
+                        System.err.println("MessageController -> case send_message -> \nExcettion: " + ex);
+                    }catch (Exception ex){
+                           System.err.println("MessageController -> case send_message -> \nExcettion: " + ex);
+                    }
+                    break;
+                case "reply_message":
+                    try{
+                        String messageReplyText = request.getParameter("message_reply_body");
+                        int senderID = Integer.parseInt(request.getParameter("sender_id"));
+                        int recieverID = Integer.parseInt(request.getParameter("reciever_id"));
+                        
+                        timestamp = LocalDateTime.now();
+                        
+                        Message message = new Message(recieverID, senderID, messageReplyText, timestamp ); //the reciever is the person replying to the message here, "you"
+                        
+                        MessageDB.insertMessage(message);
+                        messages.add("Replied to message from " + UserDB.getUsername(senderID));
+                        
+                        request.setAttribute("messages", messages);
+                        url = "/messages/reply_message.jsp";
+                    }catch(Exception ex){
+                        System.err.println("MessageController -> case reply_message\nException: " + ex);
+                    }
+                    
+                    
+                    break;
+                case "delete_message":
+                    
                     break;
 
             }

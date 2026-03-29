@@ -13,24 +13,19 @@
         <title>Send Message</title>
     </head>
     <body>
-        <h1>Send Message</h1>
+        <h1><strong>Reply to Message From: ${messageReplyingTo.getSenderOrReceiverUsername(messageReplyingTo.getSenderID())}</strong></h1>
         <form action="${pageContext.request.contextPath}/Message" method="post">
-            <input type="hidden" name="action" value="send_message"/>
-
-            <select name="selected_recipient" id="selected_recipient"> 
-                <option value="">choose a recipient</option>
-                <!--TODO: Take each recipient and load them into the messages_receiver db field in message table --> 
-                <c:forEach var="item" items="${users}">
-                    <option value="${item.key}">${item.value.getUsername()}</option>
-                </c:forEach>
-            </select>
-
+            <input type="hidden" name="action" value="reply_message"/>
+            <!--<input type="hidden" name="messageIDReplyingTo" value="${messageReplyingTo.getMessageID()}"/>-->
+            <input type="hidden" name="reciever_id" value="${messageReplyingTo.getRecieverID()}"/>
+            <input type="hidden" name="sender_id" value  ="${messageReplyingTo.getSenderID()}"/>
             <div>    
-                <textarea id="message_body" name="message_body" rows="20" cols="100">
-                </textarea>
+            
+                <p>${messageReplyingTo.getMessageText()}</p>
+                <textarea name="message_reply_body" rows="20" cols="100">insert message</textarea>
             </div>
             <div>
-                <input type="submit" value="Send"/>
+                <input type="submit" value="Reply"/>
             </div>
         </form>
         <span>${messages}</span>

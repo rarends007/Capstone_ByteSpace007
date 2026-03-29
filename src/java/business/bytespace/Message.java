@@ -4,6 +4,7 @@
  */
 package business.bytespace;
 
+import data.UserDB;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -98,6 +99,16 @@ public class Message implements Serializable{
 
     public void setTimeStamp(LocalDateTime timeStamp) {
         this.timeStamp = timeStamp;
+    }
+    
+    public String getSenderOrReceiverUsername(int id){
+        String username = "";
+        try{
+            username = UserDB.getUsername(id);
+        }catch(Exception ex){
+            System.err.println("Message.java biz class -> getSendername Exception: " + ex);
+        }
+        return username;
     }
     
     
