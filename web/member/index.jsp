@@ -62,11 +62,17 @@
     </div>
     <div class="main_content">
         <div class="make_post_container">
-            <div class="make_post_input">
-                <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
-                <textarea name="make_post" id="make_post" placeholder="What’s Happening?"></textarea>
-            </div>
-            <button class="button_primary">Post</button>
+            <form action="${pageContext.request.contextPath}/Member" method="post">
+                <div class="make_post_input">
+                    <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
+
+                    <input type="hidden" name="action" value="makePost">
+                    <input type="hidden" id="userID" name="userID" value="${userID}">
+                    <textarea name="postText" id="make_post" placeholder="What’s Happening?"></textarea>
+
+                </div>
+                <input type="submit" class="button_primary" value="Post">
+            </form>
         </div>
 
         <!--<span id="changeImage" class="alterSpan"></span>-->

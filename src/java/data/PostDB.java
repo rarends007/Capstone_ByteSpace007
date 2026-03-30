@@ -158,4 +158,37 @@ public class PostDB {
         
         return posts;
     }
+    
+    public static boolean makePost(int userID, String imageURL, String postText) {        
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+       
+        int result = -1;
+        boolean success = false;
+        
+                String query = """
+                       INSERT INTO post (user_id, image_file_path, post_text)
+                       VALUES(?, ?, ?);
+                       """;
+      
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+            ps.setString(2, imageURL);
+            ps.setString(3, postText);
+
+            result = ps.executeUpdate();
+            System.out.println("PostDB -> makePost() -> post inserted");
+            success = true;
+
+        }catch(SQLException ex){
+            System.out.println("\nPostDB -> makePost() failed-> \nExcetion -> " + ex +"\n") ;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+        return success;
+    }
 }
