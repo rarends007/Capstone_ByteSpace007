@@ -122,10 +122,13 @@ public class AdminController extends HttpServlet {
                 
                 break;
             case "getUserList":
+               // loginLog = LogDB.getUserLogs;
+                
                 
                 request.setAttribute("usersHashMap", userHashMap);
-                url = "/admin/.jsp";
                 
+                
+                url = "/admin/user_login_log.jsp";
                 break;
         }
         

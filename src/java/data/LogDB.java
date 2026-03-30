@@ -4,10 +4,12 @@
  */
 package data;
 
+import business.bytespace.Log;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  *
@@ -47,7 +49,7 @@ public class LogDB {
     } 
      
      
-    public static void createLoginLog(int logID, int userID, int actionID, String logText) {
+    public static void createLoginLog(int userID, int actionID, String logText) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -58,18 +60,17 @@ public class LogDB {
         String query =
                 """
                 INSERT INTO log
-                (log_id, logged_user_id, logged_action_id, log_text)
+                (logged_user_id, logged_action_id, log_text)
                 values
-                (?, ?, ?, ?)
+                (?, ?, ?)
                 """;
               
         try 
         {      
             ps = connection.prepareStatement(query);
-            ps.setInt(1, logID);
-            ps.setInt(2, userID);
-            ps.setInt(3, actionID);
-            ps.setString(4, logText);
+            ps.setInt(1, userID);
+            ps.setInt(2, actionID);
+            ps.setString(3, logText);
                         
             result = ps.executeUpdate();
             System.out.println("LogDB -> createLoginLog() -> Creation Executed -> rows effected -> " + result);
@@ -79,5 +80,52 @@ public class LogDB {
             System.out.println("LogDB -> createLoginLog() failed-> \nExcetion -> " + ex +"\n") ;
         }
     }
+    
+    
+    public static void getAllLogs () {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+         
+        int result = -1;
+        ResultSet rs = null;
+        HashMap<Integer,Log> logHashMap = new HashMap<>();
+        
+        String query =
+                """
+                SELECT *
+                FROM log
+                """;        
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    int logID = rs.getInt("log_id");
+                    int logUserID = rs.getInt("logged_user_id");
+                    int logActionID = rs.getInt("logged_action_id");                                     
+                    String logText = rs.getString("log_text");
+
+                    Log log = new Log(logID, logUserID, logActionID, logText);
+
+                    logHashMap.put(logID, user);
+                }
+            }} 
+            catch (SQLException ex) 
+            {
+            System.out.println("LogDB -> createLoginLog() failed-> \nExcetion -> " + ex +"\n") ;
+            }
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
      
 }

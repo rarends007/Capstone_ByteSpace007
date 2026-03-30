@@ -6,6 +6,7 @@ package controllers;
 
 
 import business.bytespace.Super.User;
+import data.LogDB;
 import data.UserDB;
 //import data.UserDB;
 import java.io.IOException;
@@ -73,7 +74,7 @@ public class PublicController extends HttpServlet {
                     
                     if(session.getAttribute("username") == null){ //protects the current logged in user until they click logout
                         if(Utility.handleLogin(request, username, password, errors)){ //remember errors is reference type ArrayList() -> errors are passed by reference from called method to refernce object in memory "errors"
-
+                             userID = UserDB.getUserID(username);
                              session.setAttribute("username", username);
                              session.setAttribute("userID", UserDB.getUserID(username));
                              
@@ -96,6 +97,8 @@ public class PublicController extends HttpServlet {
                                  session.setAttribute("middlename", middlename);
                                  session.setAttribute("lastname", lastname);
                                  
+                                 String loggingUser = String.format("user %s has logged in", username);
+                                 LogDB.createLoginLog(userID, 1, loggingUser);
                              }
                              System.out.println("PublicController -> User " + username + " has logged in.");
                         }else{

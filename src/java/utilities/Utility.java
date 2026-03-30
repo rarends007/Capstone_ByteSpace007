@@ -10,6 +10,7 @@ package utilities;
  */
 
 import business.bytespace.Super.User;
+import data.LogDB;
 import data.ProfileDB;
 import data.UserDB;
 import java.security.NoSuchAlgorithmException;
