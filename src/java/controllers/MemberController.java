@@ -52,123 +52,131 @@ public class MemberController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-            HttpSession session = request.getSession();
-            String username = session.getAttribute("username").toString();
-            
-            ArrayList errors = new ArrayList();
-            ArrayList messages = new ArrayList();
-            HashMap<Integer, Post> posts = new HashMap<Integer, Post>();
-            String userStatus = "";
-            
-            String action = request.getParameter("action");
-            if(action == null){
-                action = "No action";
+
+        HttpSession session = request.getSession();
+        String username = session.getAttribute("username").toString();
+
+        ArrayList errors = new ArrayList();
+        ArrayList messages = new ArrayList();
+        HashMap<Integer, Post> posts = new HashMap<Integer, Post>();
+        String userStatus = "";
+
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "No action";
+        }
+
+        String url = "/member/index.jsp";
+
+        boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
+        int userID = UserDB.getUserID(username);
+
+        if (pageControllerIsMember) {
+            String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
+
+            if (profilePhotoPathLoad == null) {
+                profilePhotoPathLoad = "";
+            } else {
+                request.setAttribute("profile_photo", profilePhotoPathLoad);
+                System.out.println("photo path is: " + profilePhotoPathLoad);
             }
-            
-            String url = "/member/index.jsp";
-            
-            boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
-            int userID = UserDB.getUserID(username);
-            
-            
-            
-            
-            
-            
-           if(pageControllerIsMember){
-                    String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
-                    
-                    
-                    if(profilePhotoPathLoad == null){
-                        profilePhotoPathLoad = "";
-                    }else{
-                        request.setAttribute("profile_photo", profilePhotoPathLoad);
-                        System.out.println("photo path is: " + profilePhotoPathLoad);
-                    }
-                
-                    
-                
-                    
-                try {
-                    posts = PostDB.getUserPosts(userID);
-                    userStatus = ProfileDB.getUserStatus(userID);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
-                    errors.add("Unable to retrieve profile posts.");
+
+            try {
+                posts = PostDB.getUserPosts(userID);
+                userStatus = ProfileDB.getUserStatus(userID);
+            } catch (SQLException ex) {
+                Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                errors.add("Unable to retrieve profile posts.");
+            }
+        }
+
+        switch (action) { //post
+            case "uploadProfilePhoto":
+
+                //Part 1 add photo to file system in C:/bytespace/photos/username/file.jpg
+                String profilePhotoFilePath = "";
+                try { 
+                    //profilePhotoFilePath =  IO.uploadFile(request, response, messages, ""); //replace "" with the members username later retrieved from the session object
+                    profilePhotoFilePath = IO.uploadFileV2(request, response, messages, username); //new version of function
+                    System.out.println("The profile photo path adding to db is: " + profilePhotoFilePath);
+                } catch (ServletException ex) {
+                    System.out.println("Issue with Servlet file parts -> \nError thrown:" + ex);
                 }
-            }
-            
-            switch (action){ //post
-                case "uploadProfilePhoto": 
-                    
-                    //Part 1 add photo to file system in C:/bytespace/photos/username/file.jpg
-                    String profilePhotoFilePath = "";
-                    try{
-                      //profilePhotoFilePath =  IO.uploadFile(request, response, messages, ""); //replace "" with the members username later retrieved from the session object
-                      profilePhotoFilePath =  IO.uploadFileV2(request, response, messages, username); //new version of function
-                      System.out.println("The profile photo path adding to db is: " + profilePhotoFilePath);
-                    }catch(ServletException ex){
-                        System.out.println("Issue with Servlet file parts -> \nError thrown:" + ex);
+
+                //part 2, submit photo path string to the database in the profile table
+                if (ProfileDB.updateProfilePhoto(userID, profilePhotoFilePath)) {
+                    messages.add("Profile photo updated");
+                } else {
+                    errors.add("Unable to update profile photo, try again later.");
+                }
+
+                url = "/member/upload_member_profile_photo.jsp";
+                break;
+            case "getImageForUser":
+                ArrayList<String> photoFrilePaths = new ArrayList();
+                try {
+                    photoFrilePaths = ImageDB.getUserImagePhotoPathsById(userID);
+                    System.out.print("Images retrieved");
+                } catch (Exception ex) {
+                    Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    errors.add("Unable to get images.");
+                }
+                url = "/member/gallery.jsp";
+                request.setAttribute("gallery", photoFrilePaths);
+                break;
+            case "updateStatus":
+                String inputtedStatus = request.getParameter("newStatus");
+
+                try {
+                    if (inputtedStatus != null) {
+                        ProfileDB.setUserStatus(userID, inputtedStatus);
+
+                        userStatus = ProfileDB.getUserStatus(userID);
                     }
-                    
-                    //part 2, submit photo path string to the database in the profile table
-                    if(ProfileDB.updateProfilePhoto(userID, profilePhotoFilePath)){
-                        messages.add("Profile photo updated");
-                    }else{
-                        errors.add("Unable to update profile photo, try again later.");
-                    }
-                    
-                    url = "/member/upload_member_profile_photo.jsp";
-                    break;
-                case "getImageForUser" :
-                    ArrayList<String> photoFrilePaths = new ArrayList();
-                    try{
-                        photoFrilePaths = ImageDB.getUserImagePhotoPathsById(userID);
-                        System.out.print("Images retrieved");
-                    }catch (Exception ex) {
-                            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
-                            errors.add("Unable to get images.");                     
-                        }
-                    url = "/member/gallery.jsp";
-                    request.setAttribute("gallery", photoFrilePaths);
-                    break;
-                case "updateStatus":
-                        String inputtedStatus = request.getParameter("newStatus");
-                        
-                        
-                        try {
-                            if (inputtedStatus != null) {
-                                ProfileDB.setUserStatus(userID, inputtedStatus);
-                            
-                                userStatus = ProfileDB.getUserStatus(userID);
-                            }
-                        } catch (Exception ex) {
-                            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
-                            errors.add("Unable to update Status.");                     
-                        }
-                        
-                    break;
-                    
-            }
-            
-            
-            
-            
-            
-            
-            
-            
-            request.setAttribute("userID", userID);
-            request.setAttribute("userStatus", userStatus);
-            request.setAttribute("messages", messages);
-            request.setAttribute("errors", errors);
-            request.setAttribute("posts", posts);
-       
-            getServletContext()
-                     .getRequestDispatcher(url)
-                     .forward(request, response);
-        
+                } catch (Exception ex) {
+                    Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    errors.add("Unable to update Status.");
+                }
+
+                break;
+            case "makePost":
+                String postText = request.getParameter("postText");
+                String imageURL = "";
+                try { 
+                    imageURL = IO.uploadFileV2(request, response, messages, username);
+                    System.out.println("The profile photo path adding to db is: " + imageURL);
+                } catch (ServletException ex) {
+                    System.out.println("Issue with Servlet file parts -> \nError thrown:" + ex);
+                }
+
+                int postId = PostDB.makePost(userID, imageURL, postText);
+                boolean success = false;
+                if(postId != -1){
+                    success = PostDB.createPostImage(imageURL, postId, userID);
+                }
+                if (success) {
+                    try {
+                        posts = PostDB.getUserPosts(userID);
+                    } catch (Exception ex) {
+                    Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    errors.add("Unable to Make Post.");
+                }
+
+                }
+                break;
+
+        }
+
+        request.setAttribute("userID", userID);
+        request.setAttribute("userStatus", userStatus);
+        request.setAttribute("messages", messages);
+        request.setAttribute("errors", errors);
+        request.setAttribute("posts", posts);
+
+        getServletContext()
+                .getRequestDispatcher(url)
+                .forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
