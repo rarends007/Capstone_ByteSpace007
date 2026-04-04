@@ -40,13 +40,13 @@
         <div class="follow_container">
             <div class="following_container">
                 <div class="follow_num">
-                    5,432
+                    ${numFollowing}
                 </div>
                 <p><a href="Friends?action=getFollowing">Following</a></p>
             </div>
             <div class="following_container">
                 <div class="follow_num">
-                    7,345
+                    ${numFollowers}
                 </div>
                 <p><a href="Friends?action=getFollowers">Followers</a></p>
             </div>

@@ -5,6 +5,7 @@
 package controllers;
 
 import business.bytespace.Super.Post;
+import data.FollowersDB;
 import data.ImageDB;
 import data.PostDB;
 import data.ProfileDB;
@@ -14,6 +15,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -88,7 +90,15 @@ public class MemberController extends HttpServlet {
                     }
                 
                     
-                
+                try {
+                    LinkedHashMap<Integer, String> following = FollowersDB.getFollowing(userID);
+                    LinkedHashMap<Integer, String> followers = FollowersDB.getFollowers(userID);
+                    
+                    request.setAttribute("numFollowing", following.size());
+                    request.setAttribute("numFollowers", followers.size());
+                } catch (SQLException ex) {
+                    errors.add("Unable to retrieve following numbers.");
+                }
                     
                 try {
                     posts = PostDB.getUserPosts(userID);
