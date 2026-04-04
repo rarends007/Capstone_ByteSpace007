@@ -42,6 +42,15 @@
         <url-pattern>/Message</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>Friends</servlet-name>
+        <servlet-class>controllers.FriendsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Friends</servlet-name>
+        <url-pattern>/Friends</url-pattern>
+    </servlet-mapping>
+    
     
     <!--Roles, Security Constraints, authenticaton config-->
     

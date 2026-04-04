@@ -5,6 +5,7 @@
 package controllers;
 
 import business.bytespace.Super.Post;
+import data.FollowersDB;
 import data.ImageDB;
 import data.PostDB;
 import data.ProfileDB;
@@ -14,6 +15,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -80,6 +82,39 @@ public class MemberController extends HttpServlet {
                 request.setAttribute("profile_photo", profilePhotoPathLoad);
                 System.out.println("photo path is: " + profilePhotoPathLoad);
             }
+            
+            String url = "/member/index.jsp";
+            
+            boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
+            int userID = UserDB.getUserID(username);
+            
+            
+            
+            
+            
+            
+           if(pageControllerIsMember){
+                    String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
+                    
+                    
+                    if(profilePhotoPathLoad == null){
+                        profilePhotoPathLoad = "";
+                    }else{
+                        request.setAttribute("profile_photo", profilePhotoPathLoad);
+                        System.out.println("photo path is: " + profilePhotoPathLoad);
+                    }
+                
+                    
+                try {
+                    LinkedHashMap<Integer, String> following = FollowersDB.getFollowing(userID);
+                    LinkedHashMap<Integer, String> followers = FollowersDB.getFollowers(userID);
+                    
+                    request.setAttribute("numFollowing", following.size());
+                    request.setAttribute("numFollowers", followers.size());
+                } catch (SQLException ex) {
+                    errors.add("Unable to retrieve following numbers.");
+                }
+                    
 
             try {
                 posts = PostDB.getUserPosts(userID);
