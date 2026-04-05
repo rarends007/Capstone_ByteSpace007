@@ -181,7 +181,8 @@ public class UserDB {
 
         String query = """
                        SELECT *
-                       FROM user
+                       FROM User AS u JOIN user_role AS ur
+                       	ON u.user_id = ur.User_id
                        WHERE username = ?;
                        """;
 
@@ -199,14 +200,15 @@ public class UserDB {
                     String middlename = rs.getString("middlename");
                     String lastname = rs.getString("lastname");
                     String credential = rs.getString("credential");
+                    String role = rs.getString("rolename");
 
-                    user = new User(userID, username, firstname, middlename, lastname, credential);
+                    user = new User(userID, username, firstname, middlename, lastname, credential, role);
 
                 }
 
             }
         } catch (SQLException ex) {
-            System.out.println("error retrieving userID -> UserDB -> getAllUser()");
+            System.out.println("error retrieving userID -> UserDB -> getAllUser() -> " + ex);
         }
 
         DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset

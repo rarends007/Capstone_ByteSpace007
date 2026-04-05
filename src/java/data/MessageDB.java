@@ -20,7 +20,45 @@ import java.util.HashMap;
  * @author raren
  */
 public class MessageDB {
+    
+    /**
+     * This fn receives a messageID and then uses it to plug into the db message table and delete a single message
+     * given the message id provided. If it fails returns false, if it succeeds returns true, representing 1 row affected
+     * in the database.
+     * @param messageID int
+     * @return (boolean)
+     */
+    public static boolean deleteMessage(int messageID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
 
+        boolean userDeleted = false;
+        
+        int rowsAffected = -1;
+
+        String query = """
+                       DELETE FROM message
+                       WHERE message_id = ?;
+                       """;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, messageID);
+
+            rowsAffected = ps.executeUpdate();
+            
+            System.out.println("MessageDB -> deleteMessage() -> Delete executed -> rows effected -> " + rowsAffected);
+            userDeleted = true;
+
+        } catch (SQLException ex) {
+            System.out.println("MessageDB -> deleteMessage() failed-> \nExcetion -> " + ex + "\n");
+        }finally{
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        return userDeleted;
+    }
+    
     /**
      * Deletes all messages for a user form the database. if message deleted,
      * returns true.
@@ -235,5 +273,9 @@ public class MessageDB {
         
         return message;
     }
+    
+    
+    
+    
 
 }

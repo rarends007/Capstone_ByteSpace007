@@ -86,15 +86,17 @@ public class PublicController extends HttpServlet {
                              
                              
                              
-                             if(loggedInUser != null){
+                             if(loggedInUser == null){
                                  firstname = loggedInUser.getFirstname();
                                  middlename = loggedInUser.getMiddlename();
                                  lastname = loggedInUser.getLastname();
+                                 role = loggedInUser.getRole();
                                  
                                  //setting session attributes on login
                                  session.setAttribute("firstname", firstname);
                                  session.setAttribute("middlename", middlename);
                                  session.setAttribute("lastname", lastname);
+                                 session.setAttribute("role", role);
                                  
                              }
                              System.out.println("PublicController -> User " + username + " has logged in.");
