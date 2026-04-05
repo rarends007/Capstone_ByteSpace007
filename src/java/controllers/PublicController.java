@@ -86,7 +86,7 @@ public class PublicController extends HttpServlet {
                              
                              
                              
-                             if(loggedInUser == null){
+                             if(loggedInUser != null){
                                  firstname = loggedInUser.getFirstname();
                                  middlename = loggedInUser.getMiddlename();
                                  lastname = loggedInUser.getLastname();

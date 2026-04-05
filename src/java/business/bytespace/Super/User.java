@@ -57,6 +57,7 @@ public class User implements Serializable{
         this.middlename = middlename;
         this.lastname = lastname;
         this.credential = credential;
+        this.role = role;
     }
     
     
