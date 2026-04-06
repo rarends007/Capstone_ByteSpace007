@@ -5,6 +5,7 @@
 package controllers;
 
 import business.bytespace.Super.Post;
+import data.CommentDB;
 import data.FollowersDB;
 import data.ImageDB;
 import data.PostDB;
@@ -175,6 +176,21 @@ public class MemberController extends HttpServlet {
                     }
 
                 }
+                break;
+            case "post_comment":
+                
+                String commentText = request.getParameter("comment_text");
+                
+                try{
+                    int postID = Integer.parseInt(request.getParameter("post_id")); 
+                    
+                    CommentDB.insertComment(userID, postID, commentText);
+                }catch(NumberFormatException ex){
+                    System.err.println("issue converting postID memberController case post_comment -> " +  ex);
+                }catch(NullPointerException ex){
+                    System.err.println("postID is NULL memberController case post_comment");
+                }
+               
                 break;
 
         }

@@ -67,7 +67,7 @@ public class CommentDB {
                       """;
        
        try{
-           connection.prepareStatement(query);
+           ps = connection.prepareStatement(query);
            ps.setInt(1, userID);
            ps.setInt(2, postID);
            ps.setString(3, commentText);

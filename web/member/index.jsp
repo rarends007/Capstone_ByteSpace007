@@ -84,13 +84,23 @@
                     <img src="${image.value.imagePath}" class="post_img"/>
                 </c:forEach>
                 <button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
+
                 <div class="comments_container hidden">
-                    <c:forEach var="comment" items="${post.value.comments}">
+                    <c:forEach var="comment" items="${post.value.comments}"><button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
                         <div class="comment_container ">
                             <div class="comment_heading"><h4>${comment.value.commentingUsername}</h4> <button id="close_comments">✖️</button></div>
-                            <p>${comment.value.commentText}</p>
+                            <p>${comment.value.commentText} </p>   
+                            <form action="${pageContext.request.contextPath}/Member" method="post">
+                                <input type="hidden" name="action" value="post_comment"/>
+                                <input type="hidden" name="post_id" value="${post.value.postID}"/>
+                                <textarea name="comment_text" rows="5" cols="35"></textarea>
+                                <div>
+                                    <button type="submit" value="reply"/>
+                                </div>
+                            </form>
                         </div>
                     </c:forEach>
+                    
                 </div>
             </div>
         </c:forEach>
