@@ -508,6 +508,10 @@ nav li {
 }
 
 .make_post_container {
+    position: relative;
+}
+
+.post_container, .make_post_container{
     background-color: #141124;
     display: flex;
     flex-direction: column;
@@ -548,3 +552,4 @@ nav li {
     text-transform: uppercase;
     align-self: flex-end;
 }
+

@@ -123,7 +123,7 @@ public class MemberController extends HttpServlet {
                     errors.add("Unable to update profile photo, try again later.");
                 }
 
-                url = "/member/upload_member_profile_photo.jsp";
+                url = "/member/index.jsp";
                 break;
             case "getImageForUser":
                 ArrayList<String> photoFrilePaths = new ArrayList();

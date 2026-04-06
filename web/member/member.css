@@ -98,6 +98,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     transform: translate(-50%,-50%);
     left: 50%;
     border-radius: 15px;
+    box-shadow: 0 0 120px 6px #1AA7A7;
 }
 
 .uplaod_image_form_header{
@@ -112,6 +113,23 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     height: auto;
     align-self: flex-start;
 }
+.file-upload{
+    display: none;
+}
+
+.custom-file-upload{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 10px;
+}
+.custom-file-upload:hover{
+    cursor: pointer;
+}
+
+.custom-file-upload> img{
+    height: 100%;
+}
 
 .uplaod_image_form_header button:hover{
     cursor:pointer;
@@ -119,6 +137,12 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 
 .post_img{
     max-width: 100%;
+}
+.post_header{
+    display: flex;
+    align-items: center;
+    gap:30px;
+    margin-bottom: 20px;
 }
 
 .ui_btn{
@@ -137,7 +161,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     cursor: pointer;
 }
 
-.comment_container {
+.comments_container {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -146,7 +170,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 0 1px 100000px #009688ab;
-    max-height: 40%;
+    max-height: 60%;
     overflow-y: auto;
 }
 
@@ -163,10 +187,26 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     justify-content: space-between;
     margin-bottom: 20px;
 }
+.comment_container{
+    margin: 20px 0;
+    border-bottom: 1px solid #1aa7a7;
+    padding-bottom: 10px;
+}
+
+.comment_text_input{
+    width: 100%;
+    color:white;
+}
 
 #close_comments{
     background: none;
     border: none;
+    position: absolute;
+    right: 20px;
+    width: 40px;
+}
+#close_comments>img{
+    width: 100%;
 }
 
 #close_comments:hover{
@@ -198,4 +238,31 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 
 .main_content>div {
     margin-bottom: 15px;
+}
+
+
+.comments_container::-webkit-scrollbar {
+    width: .5em;
+}
+
+.comments_container::-webkit-scrollbar-track{
+    background: transparent;
+
+}
+
+.comments_container::-webkit-scrollbar-thumb{
+    background: #1AA7A7;
+    border-radius: 25px;
+}
+
+.gallery {
+  max-width: 1200px;
+  margin: 0 auto;
+  column-count: 4;
+  font-family: arial;
+}
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  width: 100%;
 }

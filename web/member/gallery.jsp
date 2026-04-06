@@ -17,9 +17,9 @@
         <input type="submit" value="get" class="button_primary"/>
     </form>
 
-    <div>
+    <div class="gallery">
         <c:forEach var="image" items="${gallery}">                     
-            <img src="${image}"/>
+            <img src="${image}" class="gallery-item"/>
         </c:forEach>
     </div>
 
