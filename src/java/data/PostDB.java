@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- *
+*
  * @author raren
  */
 public class PostDB {
