@@ -83,8 +83,12 @@
                 <c:forEach var="image" items="${post.value.images}">
                     <img src="${image.value.imagePath}" class="post_img"/>
                 </c:forEach>
+                <form action="${pageContext.request.contextPath}/Member" method="POST"/>
+                    <input type="hidden" name="action" value="delete_post"/>
+                    <input type="hidden" name="post_id" value="${post.value.postID}"/>
+                </form><!-- deletes a post on click -->
                 <button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
-
+                
                 <div class="comments_container hidden">
                     <c:forEach var="comment" items="${post.value.comments}"><button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
                         <div class="comment_container ">
