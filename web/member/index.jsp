@@ -40,13 +40,31 @@
         <div class="follow_container">
             <div class="following_container">
                 <div class="follow_num">
-                    ${numFollowing}
+                    <p>
+                        <c:choose>
+                            <c:when test="${follow_num != null}">
+                                ${numFollowing}
+                            </c:when>
+                            <c:otherwise>
+                                0
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
                 </div>
                 <p><a href="Friends?action=getFollowing">Following</a></p>
             </div>
             <div class="following_container">
                 <div class="follow_num">
-                    ${numFollowers}
+                    <p>
+                        <c:choose>
+                            <c:when test="${numFollowers != null}">
+                                ${numFollowers}
+                            </c:when>
+                            <c:otherwise>
+                                0
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
                 </div>
                 <p><a href="Friends?action=getFollowers">Followers</a></p>
             </div>
@@ -69,26 +87,36 @@
                     <input type="hidden" name="action" value="makePost">
                     <input type="hidden" id="userID" name="userID" value="${userID}">
                     <textarea name="postText" id="make_post" placeholder="What’s Happening?"></textarea>
-                    <input type="file" name="file"  />
+                    <label for="file-upload" class="custom-file-upload"><img src="${pageContext.request.contextPath}/img/image.svg"/></label>
+                    <input type="file" name="file"  class="file-upload" id="file-upload"/>
                 </div>
                 <input type="submit" class="button_primary" value="Post">
             </form>
         </div>
 
         <c:forEach var="post" items="${posts}">
-            <div class="post_container make_post_container">
+            <div class="post_container">
                 <div class="post_header">
+                    <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
+                    <h4>${username}</h4>
                 </div>
                 <p class="post_text"><c:out value="${post.value.postText}"/></p>
                 <c:forEach var="image" items="${post.value.images}">
                     <img src="${image.value.imagePath}" class="post_img"/>
                 </c:forEach>
+                <form action="${pageContext.request.contextPath}/Member" method="POST"/>
+                    <input type="hidden" name="action" value="delete_post"/>
+                    <input type="hidden" name="post_id" value="${post.value.postID}"/>
+                    
+                    <input type="submit" value="delete post"/>
+                </form><!-- deletes a post on click -->
                 <button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
-
+                
                 <div class="comments_container hidden">
-                    <c:forEach var="comment" items="${post.value.comments}"><button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
-                        <div class="comment_container ">
-                            <div class="comment_heading"><h4>${comment.value.commentingUsername}</h4> <button id="close_comments">✖️</button></div>
+                    <button id="close_comments"><img src="${pageContext.request.contextPath}/img/close.svg"/></button>
+                    <c:forEach var="comment" items="${post.value.comments}">
+                        <div class="comment_container">
+                            <h4 class="comment_heading">${comment.value.commentingUsername}</h4>
                             <p>${comment.value.commentText} </p>   
                             <form action="${pageContext.request.contextPath}/Member" method="post">
                                 <input type="hidden" name="action" value="post_comment"/>
@@ -98,9 +126,25 @@
                                     <button type="submit" value="reply"/>
                                 </div>
                             </form>
+                            <form action="${pageContext.request.contextPath}/Member" method="POST">
+                                <input type="hidden" name="action" value="delete_comment"/>
+                                <input type="hidden" name="comment_id" value="${comment.value.commentID}"/>
+                                <div>
+                                    <button type="submit" value="Delete"/>
+                                </div><!-- delete a comment on click -->
+                            </form>
                         </div>
                     </c:forEach>
-                    
+                    <form action="${pageContext.request.contextPath}/Member" method="post">
+                        <input type="hidden" name="action" value="post_comment"/>
+                        <input type="hidden" name="post_id" value="${post.value.postID}"/>
+                        <textarea name="comment_text" rows="5" cols="35" class="comment_text_input"></textarea>
+                        <div>
+                            <button type="submit" value="reply" class="button_primary">Reply</button>
+                        </div>
+                    </form>
+
+
                 </div>
             </div>
         </c:forEach>

@@ -85,6 +85,38 @@ public class CommentDB {
        } 
        return commentAdded;
    }
+   
+    public static boolean deleteCommentByID(int commentID){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+       
+        int result = -1;
+        
+        boolean commentDeleted = false; 
+        
+        String query = """
+                       DELETE FROM comment
+                       WHERE comment_id = ?;
+                       """;
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, commentID);
+
+            result = ps.executeUpdate();
+            System.out.println("CommentsDB -> deleteCommentByID() -> Delete executed -> rows effected -> " + result);
+            commentDeleted = true;
+
+        }catch(SQLException ex){
+            System.err.println("CommentsDB -> deleteAllCommentsForUser() failed-> \nExcetion -> " + ex +"\n") ;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+        return commentDeleted;
+    } 
+     
      
      
 }

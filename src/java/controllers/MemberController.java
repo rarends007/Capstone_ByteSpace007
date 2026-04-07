@@ -123,7 +123,7 @@ public class MemberController extends HttpServlet {
                     errors.add("Unable to update profile photo, try again later.");
                 }
 
-                url = "/member/upload_member_profile_photo.jsp";
+                url = "/member/index.jsp";
                 break;
             case "getImageForUser":
                 ArrayList<String> photoFrilePaths = new ArrayList();
@@ -190,7 +190,26 @@ public class MemberController extends HttpServlet {
                 }catch(NullPointerException ex){
                     System.err.println("postID is NULL memberController case post_comment");
                 }
+                
+                
                
+                break;
+                
+            case "delete_comment":
+                
+                try{
+                   int commentID = Integer.parseInt(request.getParameter("comment_id"));
+                   CommentDB.deleteCommentByID(commentID);
+                   messages.add("comment deleted");
+                   System.out.println("comment id deleted is -> " + commentID);
+                }catch(NumberFormatException ex){
+                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \nNumberFormatExcetion " + ex);
+                }catch(NullPointerException ex){
+                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \nNullPointerException " + ex);
+                }finally{
+                    System.out.println("commentID successfully converted to int");
+                }
+                
                 break;
 
         }

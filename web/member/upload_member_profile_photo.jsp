@@ -4,6 +4,7 @@
     Author     : raren
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="uplaod_image_form hidden">
@@ -20,7 +21,7 @@
 
     </form>
     <div>
-        <span>${messages}</span>
+        <c:if test="${messages} != '[]' "><span>${messages}</span></c:if>
     </div>
 
 </div>
