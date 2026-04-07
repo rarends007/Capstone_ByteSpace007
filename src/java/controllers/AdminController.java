@@ -4,11 +4,14 @@
  */
 package controllers;
 
+import business.bytespace.Log;
 import business.bytespace.Super.User;
+import data.LogDB;
 import utilities.Utility;
 
 import data.UserDB;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,6 +123,15 @@ public class AdminController extends HttpServlet {
                
                 url = "/admin/admin_level_add_delete_users.jsp";
                 
+                break;
+            case "getUserList":
+                HashMap<Integer, Log> loginLog = LogDB.getAllLoginLogs();
+                
+                
+                request.setAttribute("usersHashMap", userHashMap);
+                request.setAttribute("loginMap", loginLog);
+                
+                url = "/admin/user_login_log.jsp";
                 break;
         }
         

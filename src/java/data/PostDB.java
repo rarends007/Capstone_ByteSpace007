@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.sql.Statement;
 
 /**
- *
+*
  * @author raren
  */
 public class PostDB {

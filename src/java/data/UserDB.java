@@ -181,7 +181,7 @@ public class UserDB {
 
         String query = """
                        SELECT *
-                       FROM User AS u JOIN user_role AS ur
+                       FROM user AS u JOIN user_role AS ur
                        	ON u.user_id = ur.User_id
                        WHERE u.username = ?;
                        """;
