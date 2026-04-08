@@ -55,22 +55,21 @@
                     <button id="close_comments"><img src="${pageContext.request.contextPath}/img/close.svg"/></button>
                         <c:forEach var="comment" items="${post.value.comments}">
                         <div class="comment_container">
-                            <h4 class="comment_heading">${comment.value.commentingUsername}</h4>
+                            <div class="comment_header">
+                                <h4 class="comment_heading">${comment.value.commentingUsername}</h4>
+                                <form action="${pageContext.request.contextPath}/Member" method="POST">
+                                    <input type="hidden" name="action" value="delete_comment"/>
+                                    <input type="hidden" name="comment_id" value="${comment.value.commentID}"/>
+                                    <button type="submit" value="Delete" class="delete_comment_btn"> <img src="${pageContext.request.contextPath}/img/delete.svg"/> </button>
+                                    <!-- delete a comment on click -->
+                                </form>
+                            </div>
                             <p>${comment.value.commentText} </p>   
                             <form action="${pageContext.request.contextPath}/Member" method="post">
                                 <input type="hidden" name="action" value="post_comment"/>
                                 <input type="hidden" name="post_id" value="${post.value.postID}"/>
-                                <textarea name="comment_text" rows="5" cols="35"></textarea>
-                                <div>
-                                    <button type="submit" value="Reply"/>
-                                </div>
-                            </form>
-                            <form action="${pageContext.request.contextPath}/Member" method="POST">
-                                <input type="hidden" name="action" value="delete_comment"/>
-                                <input type="hidden" name="comment_id" value="${comment.value.commentID}"/>
-                                <div>
-                                    <button type="submit" value="Delete"/>
-                                </div><!-- delete a comment on click -->
+                                <textarea name="comment_text" rows="5" cols="35" class="reply_text" ></textarea>
+                                <button type="submit" class="reply_btn button_primary">Reply</button>
                             </form>
                         </div>
                     </c:forEach>
