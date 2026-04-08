@@ -141,8 +141,12 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 .post_header{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap:30px;
     margin-bottom: 20px;
+}
+.post_header h4{
+    flex: 1;
 }
 
 .ui_btn{
@@ -265,4 +269,15 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
   break-inside: avoid;
   margin-bottom: 16px;
   width: 100%;
+}
+.delete_post_btn{
+    width: 30px;
+    height: 30px;
+    background: url(../img/delete.svg) no-repeat;
+    background-size: contain;
+    border: none;
+}
+
+.delete_post_btn:hover{
+    cursor: pointer;
 }

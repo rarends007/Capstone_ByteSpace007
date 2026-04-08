@@ -161,10 +161,18 @@ public class MemberController extends HttpServlet {
                 } catch (ServletException ex) {
                     System.out.println("Issue with Servlet file parts -> \nError thrown:" + ex);
                 }
-
-                int postId = PostDB.makePost(userID, imageURL, postText);
+                
+                String test = username + "/upload/";
+                int postId = -1;
                 boolean success = false;
-                if (postId != -1) {
+                if(!test.equals(imageURL) ){
+                    postId= PostDB.makePost(userID, imageURL, postText);
+                }
+                else{
+                    postId= PostDB.makePost(userID, null, postText);
+                    success = true;
+                }
+                if (postId != -1 && !test.equals(imageURL)) {
                     success = PostDB.createPostImage(imageURL, postId, userID);
                 }
                 if (success) {
