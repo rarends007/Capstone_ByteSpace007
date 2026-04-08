@@ -219,6 +219,30 @@ public class MemberController extends HttpServlet {
                 }
                 
                 break;
+            case "delete_post":
+                System.out.print("MemberController -> delete_post logic hit\n");
+                
+                try{
+                    int postID = Integer.parseInt(request.getParameter("post_id"));
+                    System.out.println("postID to delete is: " + postID + "\n");
+                    PostDB.deletePostByPostID(postID);
+                    messages.add("Post Deleted");
+                    try{
+                        posts = PostDB.getUserPosts(userID);
+                    }catch (SQLException ex){
+                        System.out.println("MemberController -> case delete_post -> getting posts after delete -> SQLException: " + ex);
+                    }
+                    
+                    request.setAttribute("posts", url);
+                    
+                }catch(NumberFormatException ex){
+                    System.err.println("MemberController -> case delete_post -> converting commentID to int -> \nNumberFormatExcetion " + ex);
+                }catch(NullPointerException ex){
+                    System.err.println("MemberController -> case delete_post -> converting commentID to int -> \nNullPointerException " + ex);
+                }finally{
+                    System.out.println("postID successfully converted to int");
+                }
+                break;
 
         }
 

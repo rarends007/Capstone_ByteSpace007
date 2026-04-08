@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.sql.Statement;
 
+import data.CommentDB;
+import data.ImageDB;
+
 /**
 *
  * @author raren
@@ -50,6 +53,48 @@ public class PostDB {
         
         return postsDeleted;
     } 
+    
+    /**
+     * Deletes all comments for a post and then the post made for the logged in user based on postID. 
+     * Returns true if successful, false if not.
+     * @param postID
+     * @return (boolean)
+     */
+    public static boolean deletePostByPostID(int postID){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        
+        int result = -1;
+        
+        boolean postDeleted = false;
+        
+        String query = """
+                       DELETE FROM post
+                       WHERE post_id = ?;
+                       """;
+     
+        try{
+            if(CommentDB.deleteAllCommentsByPostID(postID)){
+                ImageDB.deleteAllImagesByPostID(postID);
+                ps = connection.prepareStatement(query);
+                ps.setInt(1, postID);
+                result = ps.executeUpdate();
+
+                System.out.println("PostDB -> .deletePostByPostID() -> num post deleted: " + result);
+                postDeleted = true;
+            }
+        }catch(SQLException ex){
+            System.err.println("PostDB -> .deletePostByPostID() -> \nSQLExceptoin: " + ex);
+        }finally{
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        
+        return postDeleted;
+        
+        
+    }
     
     public static HashMap<Integer, Image> getPostImages(int postID)
             throws SQLException{
