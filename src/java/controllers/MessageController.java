@@ -42,59 +42,125 @@ public class MessageController extends HttpServlet {
         String url = "/messages/index.jsp";
         ArrayList<String> messages = new ArrayList();
 
-        
-        
         HttpSession session = request.getSession();
-        
+
         //this controls the option sent back to the jsp when the js submits the form on the select element value in messages/index.js is set to value  'send' or 'received'
         String option = request.getParameter("messaging_option");
+
         if (option != null) {
             request.setAttribute("option", option);
-            
-            if(option.equals("send")){
+
+            if (option.equals("send")) {
                 //ensures the list on send_message.jsp is populated with user choices
                 HashMap<Integer, User> users = UserDB.getAllUsers();
-                if(users != null){
+                if (users != null) {
                     request.setAttribute("users", users);
                 }
-            }else if(option.equals("recieved")){
-                
+            } else if (option.equals("received")) {
+                try {
+                    int userID = Integer.parseInt(session.getAttribute("userID").toString());
+                    HashMap<Integer, Message> messagesForLoggedInUser = new HashMap();
+                    messagesForLoggedInUser = MessageDB.retrieveAllMessagesForUser(userID);
+
+                    request.setAttribute("messagesForLoggedInUser", messagesForLoggedInUser);
+                } catch (NullPointerException ex) {
+                    System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
+                } catch (Exception ex) {
+                    System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
+                }
             }
-            
+
         }
 
-        
         String action = request.getParameter("action");
         if (action != null) {
             switch (action) {
                 case "send_message":
-                    
+                    System.out.println("send_message hit");
+
                     //values to pass to the message insert
-                    LocalDateTime timeStamp = LocalDateTime.now();
+                    LocalDateTime timestamp = LocalDateTime.now();
 
                     String recieverUserID = request.getParameter("selected_recipient");
                     String senderUserID = session.getAttribute("userID").toString();
                     String message_text = request.getParameter("message_body");
-                    try{
+                    try {
                         int recieverUserIDInt = Integer.parseInt(recieverUserID);
                         int senderUserIDInt = Integer.parseInt(senderUserID);
-                        
-                        Message sendingMessage = new Message(senderUserIDInt, recieverUserIDInt, message_text, timeStamp);
-                        
+
+                        Message sendingMessage = new Message(senderUserIDInt, recieverUserIDInt, message_text, timestamp);
+
                         MessageDB.insertMessage(sendingMessage);
                         System.out.println("Message successfully sent");
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         System.err.println("Message Controller -> send_message -> Error sending message -> \nError Thrown: " + ex);
                     }
-                   
-                    
-                    
-                    
-                            
-                    
-                    
                     break;
+                case "reply_message_load":
+                    System.out.println("reply_message_load hit");
+                    try {
+                        int messageIDToReplyTo = Integer.parseInt(request.getParameter("message_id"));
+
+                        Message message = MessageDB.getMessageByID(messageIDToReplyTo);
+                        String doGoback = request.getParameter("go_back");
+
+                        if (message != null) {
+                            request.setAttribute("messageReplyingTo", message);
+                            url = "/messages/reply_message.jsp";
+                        }
+                    } catch (NumberFormatException ex) {
+                        System.err.println("MessageController -> case send_message -> \nExcettion: " + ex);
+                    } catch (Exception ex) {
+                        System.err.println("MessageController -> case send_message -> \nExcettion: " + ex);
+                    }
+                    break;
+                case "reply_message":
+                    try {
+                        String messageReplyText = request.getParameter("message_reply_body");
+                        int senderID = Integer.parseInt(request.getParameter("sender_id"));
+                        int recieverID = Integer.parseInt(request.getParameter("reciever_id"));
+
+                        timestamp = LocalDateTime.now();
+
+                        Message responseMessage = new Message(recieverID, senderID, messageReplyText, timestamp); //the reciever is the person replying to the message here, "you"
+
+                        MessageDB.insertMessage(responseMessage);
+                        messages.add("Replied to message from " + UserDB.getUsername(senderID)); //the sender is the one that sent the message to us here
+
+                        request.setAttribute("messages", messages);
+                        url = "/messages/index.jsp";
+                    } catch (Exception ex) {
+                        System.err.println("MessageController -> case reply_message\nException: " + ex);
+                    }
+
+                    break;
+                case "delete_message":
+                    System.out.println("MessageController -> case delete_message logic executed");
+
+                    try {
+                        int message_id = Integer.parseInt(request.getParameter("message_id"));
+                        MessageDB.deleteMessage(message_id);
+                        
+                        //update messages displayed
+                        int userID = Integer.parseInt(session.getAttribute("userID").toString());
+                        HashMap<Integer, Message> messagesForLoggedInUser = new HashMap();
+                        messagesForLoggedInUser = MessageDB.retrieveAllMessagesForUser(userID);
+
+                        request.setAttribute("messagesForLoggedInUser", messagesForLoggedInUser);
+                        
+                        //ensures the option for recieved messages stays selected on "received"
+                        request.setAttribute("option", "received");
+
+                    } catch (NumberFormatException ex) {
+                        System.err.println("MessageDB -> case delete_message -> \nNumberFormatException: " + ex);
+                    } catch (Exception ex) {
+                        System.err.println("MessageDB -> case delete_message -> \nException: " + ex);
+                    }
+
+                    break;
+
             }
+
         }
 
         getServletContext()

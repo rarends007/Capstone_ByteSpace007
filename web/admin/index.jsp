@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,8 +17,11 @@
     <body>
         <nav>
             <ul>
-                <li><a href="./../Admin?action=getAllUsers">Manage Users</a></li>
+                <li><a href="${pageContext.request.contextPath}/Admin?action=getAllUsers">Manage Users</a></li>
+                <li><a href="./../Admin?action=getUserList">User List</a></li>
+                <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
             </ul>
+            
         </nav>
     </body>
 </html>

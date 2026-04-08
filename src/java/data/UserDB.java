@@ -128,6 +128,45 @@ public class UserDB {
     }
     
     /**
+     * Gets the username for the specific user given the userID
+     * @param userID
+     * @return String username
+     */
+     public static String getUsername(int userID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String username = "";
+
+        String query = """
+                       SELECT username
+                       FROM user
+                       WHERE user_id = ?;
+                       """;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+            rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.next();
+                username = rs.getString("username");
+            }
+        } catch (SQLException ex) {
+            System.out.println("error retrieving username -> UserDB -> getUsername()");
+        }finally{
+             DBUtil.closeResultSet(rs);
+
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        return username;
+    }
+    
+    /**
      * gets a user object based on the username.
      * @param usernamePassed
      * @return User
@@ -142,8 +181,9 @@ public class UserDB {
 
         String query = """
                        SELECT *
-                       FROM user
-                       WHERE username = ?;
+                       FROM user AS u JOIN user_role AS ur
+                       	ON u.user_id = ur.User_id
+                       WHERE u.username = ?;
                        """;
 
         try {
@@ -160,14 +200,15 @@ public class UserDB {
                     String middlename = rs.getString("middlename");
                     String lastname = rs.getString("lastname");
                     String credential = rs.getString("credential");
+                    String role = rs.getString("rolename");
 
-                    user = new User(userID, username, firstname, middlename, lastname, credential);
+                    user = new User(userID, username, firstname, middlename, lastname, credential, role);
 
                 }
 
             }
         } catch (SQLException ex) {
-            System.out.println("error retrieving userID -> UserDB -> getAllUser()");
+            System.out.println("error retrieving userID -> UserDB -> getAllUser() -> " + ex);
         }
 
         DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset

@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
     <!--All Controller mapping-->
     
-        <!--Users--> 
+    <!--Users--> 
     <servlet>
         <servlet-name>Admin</servlet-name>
         <servlet-class>controllers.AdminController</servlet-class>
@@ -33,13 +33,31 @@
         <url-pattern>/Member</url-pattern>
     </servlet-mapping>
     
-       <servlet>
+    <servlet>
         <servlet-name>Message</servlet-name>
         <servlet-class>controllers.MessageController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Message</servlet-name>
         <url-pattern>/Message</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Friends</servlet-name>
+        <servlet-class>controllers.FriendsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Friends</servlet-name>
+        <url-pattern>/Friends</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Comment</servlet-name>
+        <servlet-class>controllers.CommentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Comment</servlet-name>
+        <url-pattern>/Comment</url-pattern>
     </servlet-mapping>
     
     
@@ -72,11 +90,12 @@
         </user-data-constraint>-->
     </security-constraint>
     
-       <security-constraint>
+    <security-constraint>
         <web-resource-collection>
             <web-resource-name>Protected AreaM</web-resource-name>
             <url-pattern>/member/*</url-pattern>
             <url-pattern>/messages/*</url-pattern>
+            <url-pattern>/comments/*</url-pattern>
         </web-resource-collection>
         
         <auth-constraint>

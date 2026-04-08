@@ -14,7 +14,7 @@
     </head>
     <body>
         <form id="form" action="${pageContext.request.contextPath}/Message" method="get" name="message_form">
-            <select name="messaging_option" id="messaging_option" >
+            <select name="messaging_option" id="messaging_option" > <!--value of select gets passed to controller as a parameter.-->
                 <option value="">--Choose and Option--</option>
                 <option value="send">Send Message</option>
                 <option value="received">Received Message(s)</option>
@@ -31,6 +31,7 @@
         </c:choose>
     </c:if>
 
+<span>${messages}</span>
 </body>        
 <script>
     //   --- https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit 
@@ -41,6 +42,15 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         console.log("value of select_value: " + select_value);
+        
+         select_value = document.querySelector("#messaging_option").value;
+        console.log("\nvalue of select_value: " + select_value);
+
+        if (select_value === "send" || select_value === "received") {
+            console.log("loading send or recieve form");
+
+            document.querySelector("#form").submit();
+        }
 
     });
 
@@ -59,10 +69,11 @@
 
     });
     
+
+</script>
 <!-- Example for easier way to grab form elements
     forms.formname.inputName
     
 -->
-</script>
 
 </html>

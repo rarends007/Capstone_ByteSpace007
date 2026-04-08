@@ -4,6 +4,7 @@
  */
 package business.bytespace;
 
+import data.UserDB;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +19,9 @@ public class Message implements Serializable{
    private  Integer recieverID;
    private LocalDateTime timeStamp;
        
+   /**
+    * 
+    */
     public Message(){
         messageID = null;
         messageText = null;
@@ -26,6 +30,14 @@ public class Message implements Serializable{
         timeStamp = null;
     }
     
+    /**
+     * 
+     * @param messageID
+     * @param messageText
+     * @param senderID
+     * @param recieverID
+     * @param timeStamp 
+     */
     public Message(Integer messageID, String messageText, Integer senderID, Integer recieverID, LocalDateTime timeStamp) {
         this.messageID = messageID;
         this.messageText = messageText;
@@ -34,6 +46,13 @@ public class Message implements Serializable{
         this.timeStamp = timeStamp;
     }
     
+    /**
+     * 
+     * @param senderID
+     * @param recieverID
+     * @param messageText
+     * @param timeStamp 
+     */
     public Message(Integer senderID, Integer recieverID, String messageText, LocalDateTime timeStamp) {
         this.messageID = messageID;
         this.messageText = messageText;
@@ -80,6 +99,16 @@ public class Message implements Serializable{
 
     public void setTimeStamp(LocalDateTime timeStamp) {
         this.timeStamp = timeStamp;
+    }
+    
+    public String getSenderOrReceiverUsername(int id){
+        String username = "";
+        try{
+            username = UserDB.getUsername(id);
+        }catch(Exception ex){
+            System.err.println("Message.java biz class -> getSendername Exception: " + ex);
+        }
+        return username;
     }
     
     
