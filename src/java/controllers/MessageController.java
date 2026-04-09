@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import business.bytespace.Message;
 import data.MessageDB;
+import java.util.Map;
 
 /**
  *
@@ -44,32 +45,51 @@ public class MessageController extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        //this controls the option sent back to the jsp when the js submits the form on the select element value in messages/index.js is set to value  'send' or 'received'
-        String option = request.getParameter("messaging_option");
+        HashMap<Integer, User> users = UserDB.getAllUsers();
+        if (users != null) {
+            request.setAttribute("users", users);
+        }
+        try {
+            int userID = Integer.parseInt(session.getAttribute("userID").toString());
+            HashMap<Integer, Message> messagesForLoggedInUser = new HashMap();
+            messagesForLoggedInUser = MessageDB.retrieveAllMessagesForUser(userID);
 
-        if (option != null) {
-            request.setAttribute("option", option);
+            HashMap<Integer, User> chatUsers = new HashMap();
 
-            if (option.equals("send")) {
-                //ensures the list on send_message.jsp is populated with user choices
-                HashMap<Integer, User> users = UserDB.getAllUsers();
-                if (users != null) {
-                    request.setAttribute("users", users);
-                }
-            } else if (option.equals("received")) {
-                try {
-                    int userID = Integer.parseInt(session.getAttribute("userID").toString());
-                    HashMap<Integer, Message> messagesForLoggedInUser = new HashMap();
-                    messagesForLoggedInUser = MessageDB.retrieveAllMessagesForUser(userID);
-
-                    request.setAttribute("messagesForLoggedInUser", messagesForLoggedInUser);
-                } catch (NullPointerException ex) {
-                    System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
-                } catch (Exception ex) {
-                    System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
+            for (Map.Entry<Integer, User> entry : users.entrySet()) {
+                for (Message message : messagesForLoggedInUser.values()) {
+                    if (entry.getKey() == message.getSenderID()) {
+                        chatUsers.put(entry.getKey(), entry.getValue());
+                    }
                 }
             }
-
+            
+            HashMap<Integer, ArrayList<Message> > messagesByUser = new HashMap<>();
+            
+            for (Message message : messagesForLoggedInUser.values()){
+                int userId = message.getSenderID();
+                
+                boolean isExists = messagesByUser.containsKey(userId);
+                
+                if(!isExists){
+                    ArrayList <Message> array = new ArrayList<>();
+                    array.add(messagesForLoggedInUser.get(message.getMessageID())); 
+                    messagesByUser.put(userId, array);
+                }
+                else{
+                    ArrayList <Message> array = messagesByUser.get(userId);
+                    array.add(messagesForLoggedInUser.get(message.getMessageID()));
+                    messagesByUser.put(userId, array);
+                }
+            }
+            
+            request.setAttribute("messagesByUser", messagesByUser);
+            request.setAttribute("chatUsers", chatUsers);
+            request.setAttribute("messagesForLoggedInUser", messagesForLoggedInUser);
+        } catch (NullPointerException ex) {
+            System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
+        } catch (Exception ex) {
+            System.err.println("Message DB case retrieve_messages -> Null -> \nNull Exception Error " + ex);
         }
 
         String action = request.getParameter("action");
@@ -140,14 +160,14 @@ public class MessageController extends HttpServlet {
                     try {
                         int message_id = Integer.parseInt(request.getParameter("message_id"));
                         MessageDB.deleteMessage(message_id);
-                        
+
                         //update messages displayed
                         int userID = Integer.parseInt(session.getAttribute("userID").toString());
                         HashMap<Integer, Message> messagesForLoggedInUser = new HashMap();
                         messagesForLoggedInUser = MessageDB.retrieveAllMessagesForUser(userID);
 
                         request.setAttribute("messagesForLoggedInUser", messagesForLoggedInUser);
-                        
+
                         //ensures the option for recieved messages stays selected on "received"
                         request.setAttribute("option", "received");
 

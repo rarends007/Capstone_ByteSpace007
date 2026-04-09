@@ -47,3 +47,35 @@ profileImg?.addEventListener('click', () => {
 closeUploadForm?.addEventListener('click', () => {
     uploadForm.classList.add('hidden');
 });
+
+
+let select_value = document.querySelector("#messaging_option").value;
+
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("value of select_value: " + select_value);
+
+    select_value = document.querySelector("#messaging_option").value;
+    console.log("\nvalue of select_value: " + select_value);
+
+    if (select_value === "send" || select_value === "received") {
+        console.log("loading send or recieve form");
+
+        document.querySelector("#form").submit();
+    }
+
+});
+
+
+document.querySelector("#messaging_option").addEventListener("click", () => {
+    console.log("message form selector cycled");
+
+    select_value = document.querySelector("#messaging_option").value;
+    console.log("\nvalue of select_value: " + select_value);
+
+    if (select_value === "send" || select_value === "received") {
+        console.log("loading send or recieve form");
+
+        document.querySelector("#form").submit();
+    }
+
+});
