@@ -16,68 +16,7 @@
     <nav></nav>
 </head>
 <body>
-    <div class="left_panel">
-        <div class="profile_info_container">
-            <img src="${pageContext.request.contextPath}/img/profile_bg.png" alt="Profile Background" class="profile_background">
-            <img src="${profile_photo}" alt="Profile Image" class="profile_image" id="profilePicShape">
-            <c:import url="upload_member_profile_photo.jsp" />
-            <h5 class="profile_name">${username}</h5>
-            <c:choose>
-                <c:when test="${!''.equals(userStatus)}">
-                    <p class="status">${userStatus}</p>
-                </c:when>
-                <c:otherwise>
-                    <p class="status">Click Here to set a Status</p>
-                </c:otherwise>
-            </c:choose>
-            <form action="${pageContext.request.contextPath}/Member" method="post" class="hidden status_form">
-                <input type="hidden" name="action" value="updateStatus">
-                <input type="hidden" id="userID" name="userID" value="${userID}">
-                <input type="text" id="newStatus" name="newStatus">
-                <input type="submit" value="">
-            </form>
-        </div>
-        <div class="follow_container">
-            <div class="following_container">
-                <div class="follow_num">
-                    <p>
-                        <c:choose>
-                            <c:when test="${follow_num != null}">
-                                ${numFollowing}
-                            </c:when>
-                            <c:otherwise>
-                                0
-                            </c:otherwise>
-                        </c:choose>
-                    </p>
-                </div>
-                <p><a href="Friends?action=getFollowing">Following</a></p>
-            </div>
-            <div class="following_container">
-                <div class="follow_num">
-                    <p>
-                        <c:choose>
-                            <c:when test="${numFollowers != null}">
-                                ${numFollowers}
-                            </c:when>
-                            <c:otherwise>
-                                0
-                            </c:otherwise>
-                        </c:choose>
-                    </p>
-                </div>
-                <p><a href="Friends?action=getFollowers">Followers</a></p>
-            </div>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="${pageContext.request.contextPath}/Member">Profile</a></li>
-                <li>Friends</li>
-                <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
-            </ul>
-        </nav>
-        <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>
-    </div>
+    <c:import url="left_panel.jsp" />
     <div class="main_content">
         <div class="make_post_container">
             <form action="${pageContext.request.contextPath}/Member" method="post" enctype='multipart/form-data'>
@@ -99,39 +38,38 @@
                 <div class="post_header">
                     <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
                     <h4>${username}</h4>
+                    <form action="${pageContext.request.contextPath}/Member" method="POST"/>
+                    <input type="hidden" name="action" value="delete_post"/>
+                    <input type="hidden" name="post_id" value="${post.value.postID}"/>
+
+                    <input type="submit" value="" class="delete_post_btn"/>
+                    </form><!-- deletes a post on click -->
                 </div>
                 <p class="post_text"><c:out value="${post.value.postText}"/></p>
                 <c:forEach var="image" items="${post.value.images}">
                     <img src="${image.value.imagePath}" class="post_img"/>
                 </c:forEach>
-                <form action="${pageContext.request.contextPath}/Member" method="POST"/>
-                    <input type="hidden" name="action" value="delete_post"/>
-                    <input type="hidden" name="post_id" value="${post.value.postID}"/>
-                    
-                    <input type="submit" value="Delete Post"/>
-                </form><!-- deletes a post on click -->
-                <button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
-                
-                <div class="comments_container hidden">
+                <button id="commentsBtn-${post.value.postID}" class="ui_btn commentsBtn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
+
+                <div class="comments_container hidden" id="commentsContainer-${post.value.postID}">
                     <button id="close_comments"><img src="${pageContext.request.contextPath}/img/close.svg"/></button>
-                    <c:forEach var="comment" items="${post.value.comments}">
+                        <c:forEach var="comment" items="${post.value.comments}">
                         <div class="comment_container">
-                            <h4 class="comment_heading">${comment.value.commentingUsername}</h4>
+                            <div class="comment_header">
+                                <h4 class="comment_heading">${comment.value.commentingUsername}</h4>
+                                <form action="${pageContext.request.contextPath}/Member" method="POST">
+                                    <input type="hidden" name="action" value="delete_comment"/>
+                                    <input type="hidden" name="comment_id" value="${comment.value.commentID}"/>
+                                    <button type="submit" value="Delete" class="delete_comment_btn"> <img src="${pageContext.request.contextPath}/img/delete.svg"/> </button>
+                                    <!-- delete a comment on click -->
+                                </form>
+                            </div>
                             <p>${comment.value.commentText} </p>   
                             <form action="${pageContext.request.contextPath}/Member" method="post">
                                 <input type="hidden" name="action" value="post_comment"/>
                                 <input type="hidden" name="post_id" value="${post.value.postID}"/>
-                                <textarea name="comment_text" rows="5" cols="35"></textarea>
-                                <div>
-                                    <button type="submit" value="Reply"/>
-                                </div>
-                            </form>
-                            <form action="${pageContext.request.contextPath}/Member" method="POST">
-                                <input type="hidden" name="action" value="delete_comment"/>
-                                <input type="hidden" name="comment_id" value="${comment.value.commentID}"/>
-                                <div>
-                                    <button type="submit" value="Delete"/>
-                                </div><!-- delete a comment on click -->
+                                <textarea name="comment_text" rows="5" cols="35" class="reply_text" ></textarea>
+                                <button type="submit" class="reply_btn button_primary">Reply</button>
                             </form>
                         </div>
                     </c:forEach>
@@ -151,49 +89,7 @@
 
     </div>
     <div class="right_panel"></div>
-
-    <script>
-        const profileImg = document.querySelector('#profilePicShape'); // or '.hover'
-        const textElem = document.querySelector('#changeImage');
-        const uploadForm = document.querySelector('.uplaod_image_form');
-        const closeUploadForm = document.querySelector("#close_uplaod_image_form");
-        const commentsBtn = document.querySelector("#commentsBtn");
-        const commentsContainer = document.querySelector(".comments_container");
-        const closeCommentsBtn = document.querySelector("#close_comments");
-        const status = document.querySelector(".status");
-        const statusForm = document.querySelector(".status_form");
-
-        status.addEventListener('click', () => {
-            status.classList.add('hidden');
-            statusForm.classList.remove('hidden');
-
-
-        });
-
-        commentsBtn.addEventListener('click', () => {
-            commentsContainer.classList.remove('hidden');
-        });
-
-        closeCommentsBtn.addEventListener('click', () => {
-            commentsContainer.classList.add('hidden');
-        });
-
-        profileImg.addEventListener('click', () => {
-            console.log('Profile photo clicked!');
-            uploadForm.classList.remove('hidden');
-            //window.location.href = "https://www.gfg.com/";
-            //                    document.location.href = "${pageContext.request.contextPath}/Member?action=uploadProfilePhoto"; //https://coderanch.com/t/351229/java/calling-servlet-javascript-function
-
-            //https://www.geeksforgeeks.org/html/how-to-get-browser-to-navigate-url-in-javascript/
-            //https://www.w3schools.com/js/js_events_mouse.asp
-        });
-
-        closeUploadForm.addEventListener('click', () => {
-            uploadForm.classList.add('hidden');
-        });
-
-    </script>
-
+    <script src="${pageContext.request.contextPath}/member/script.js"></script>
 
 </body>
 </html>
