@@ -28,7 +28,9 @@
                 <c:if test="${messages} != '[]' "><span>${messages}</span></c:if>
             </div>
         </div>
-        <h5 class="profile_name">${username}</h5>
+        <c:import url="/includes/notification.jsp" /><!--<!-- Modded to add new notification.jsp - RA -->
+        <h5 class="profile_name">${username}</h5> 
+                 
         <c:choose>
             <c:when test="${!''.equals(userStatus)}">
                 <p class="status">${userStatus}</p>

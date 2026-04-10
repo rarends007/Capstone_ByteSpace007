@@ -102,6 +102,7 @@ public class MemberController extends HttpServlet {
                 Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
                 errors.add("Unable to retrieve profile posts.");
             }
+            
         }
 
         switch (action) { //post
@@ -314,6 +315,19 @@ public class MemberController extends HttpServlet {
                 } finally {
                     System.out.println("postID successfully converted to int");
                 }
+                break;
+            case "display_notifications":
+                /*
+                TODO:
+                    POST
+                    1. populate a collection of notifications when jsp notification icon clicked
+                    2. pass that collection back to the jsp using a variable called notificationsHashMap type <Integer, Notfication>
+                
+                    GET
+                    1. In the top get area declare a try/catch block to load notifications and set the JSP is_unseen_notification value to true if notifications are returned from 
+                        getAllUnviewedNotificationsByUserID DB function
+                    2. Pass the boolean value of isUnseenNotifications back to the nofication.jsp
+                */
                 break;
 
         }

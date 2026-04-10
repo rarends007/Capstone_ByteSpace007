@@ -22,7 +22,7 @@
             <form action="${pageContext.request.contextPath}/Member" method="post" enctype='multipart/form-data'>
                 <div class="make_post_input">
                     <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
-
+                     
                     <input type="hidden" name="action" value="makePost">
                     <input type="hidden" id="userID" name="userID" value="${userID}">
                     <textarea name="postText" id="make_post" placeholder="What’s Happening?"></textarea>
@@ -37,7 +37,7 @@
             <div class="post_container">
                 <div class="post_header">
                     <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
-                    <h4>${username}</h4>
+                    <h4>${username}</h4> 
                     <form action="${pageContext.request.contextPath}/Member" method="POST"/>
                     <input type="hidden" name="action" value="delete_post"/>
                     <input type="hidden" name="post_id" value="${post.value.postID}"/>
