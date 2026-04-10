@@ -5,6 +5,7 @@
 package controllers;
 
 import business.bytespace.Super.Post;
+import business.bytespace.Super.User;
 import data.CommentDB;
 import data.FollowersDB;
 import data.ImageDB;
@@ -152,6 +153,79 @@ public class MemberController extends HttpServlet {
                 }
 
                 break;
+            case "get_all_users":
+                System.out.println("Member -> case 'get_all_users' hit");
+                HashMap allUsersHashMap = new HashMap();
+                allUsersHashMap = UserDB.getAllUsers();
+                System.out.println(allUsersHashMap);
+                request.setAttribute("allUsersHashMap", allUsersHashMap);
+
+                url = "/member/show_all_profiles.jsp";
+                break;
+
+            case "load_other_profile":
+                System.out.println("Member -> case 'load_other_profile' hit");
+
+                /*DONE: RA
+                //create a new jsp to put the viewed user data into based on the other user profile selected
+                //pull the other users profile data using DB functions. -> profile data needed -> 
+                            //status, user info, profile_picture, posts, images associated to posts, 
+                            //number following and followers(NOT the actual usernames of them for privacy)
+                //add that pulled data to the request object passing to the jsp
+                //ensure the request object variables are correct in the JSP
+                //Test the shit out of it.
+                 */
+                try {
+                    HashMap<Integer, Post> loadedProfilePosts = new HashMap<Integer, Post>();
+                    String loadedProfileStatus = "";
+                        
+                    //get other users ID coming in from the show_all_profiles.jsp page request object
+                    int loadedProfileUserID = Integer.parseInt(request.getParameter("userID"));
+                    
+                    User loadedUserFromProfileselected = UserDB.getUser(loadedProfileUserID);
+                    
+                    if (loadedUserFromProfileselected != null){
+                        request.setAttribute("loadedProfileUsername", loadedUserFromProfileselected.getUsername());
+                    }
+                    
+                    //get the follower and "following" and "followers" values for  loaded profile
+                    try {
+                        LinkedHashMap<Integer, String> following = FollowersDB.getFollowing(loadedProfileUserID);
+                        LinkedHashMap<Integer, String> followers = FollowersDB.getFollowers(loadedProfileUserID);
+
+                        request.setAttribute("numFollowing", following.size());
+                        request.setAttribute("numFollowers", followers.size());
+                    } catch (SQLException ex) {
+                        errors.add("Unable to retrieve following numbers.");
+                    }
+
+                    //get the posts and user status for the loaded profile
+                    try {
+                        posts = PostDB.getUserPosts(loadedProfileUserID);
+                        loadedProfileStatus = ProfileDB.getUserStatus(loadedProfileUserID);
+                        
+                        request.setAttribute("posts", posts);
+                        request.setAttribute("loadedProfileStatus", loadedProfileStatus);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                        errors.add("Unable to retrieve profile posts.");
+                    }
+
+                    //Get the profile photo for the loaded profile
+                    String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(loadedProfileUserID);
+
+                    if (profilePhotoPathLoad == null) {
+                        profilePhotoPathLoad = "";
+                    } else {
+                        request.setAttribute("loaded_profile_profile_photo", profilePhotoPathLoad);
+                        System.out.println("photo path is: " + profilePhotoPathLoad);
+                    }
+                    url = "/member/otherProfile.jsp";
+                } catch (NumberFormatException ex) {
+                    System.out.println("Member -> load_other_profile -> \nNumberFormatException: " + ex);
+                }
+
+                break;
             case "makePost":
                 String postText = request.getParameter("postText");
                 String imageURL = "";
@@ -186,60 +260,58 @@ public class MemberController extends HttpServlet {
                 }
                 break;
             case "post_comment":
-                
+
                 String commentText = request.getParameter("comment_text");
-                
-                try{
-                    int postID = Integer.parseInt(request.getParameter("post_id")); 
-                    
+
+                try {
+                    int postID = Integer.parseInt(request.getParameter("post_id"));
+
                     CommentDB.insertComment(userID, postID, commentText);
-                }catch(NumberFormatException ex){
-                    System.err.println("issue converting postID memberController case post_comment -> " +  ex);
-                }catch(NullPointerException ex){
+                } catch (NumberFormatException ex) {
+                    System.err.println("issue converting postID memberController case post_comment -> " + ex);
+                } catch (NullPointerException ex) {
                     System.err.println("postID is NULL memberController case post_comment");
                 }
-                
-                
-               
+
                 break;
-                
+
             case "delete_comment":
-                
-                try{
-                   int commentID = Integer.parseInt(request.getParameter("comment_id"));
-                   CommentDB.deleteCommentByID(commentID);
-                   messages.add("comment deleted");
-                   System.out.println("comment id deleted is -> " + commentID);
-                }catch(NumberFormatException ex){
+
+                try {
+                    int commentID = Integer.parseInt(request.getParameter("comment_id"));
+                    CommentDB.deleteCommentByID(commentID);
+                    messages.add("comment deleted");
+                    System.out.println("comment id deleted is -> " + commentID);
+                } catch (NumberFormatException ex) {
                     System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \nNumberFormatExcetion " + ex);
-                }catch(NullPointerException ex){
+                } catch (NullPointerException ex) {
                     System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \nNullPointerException " + ex);
-                }finally{
+                } finally {
                     System.out.println("commentID successfully converted to int");
                 }
-                
+
                 break;
             case "delete_post":
                 System.out.print("MemberController -> delete_post logic hit\n");
-                
-                try{
+
+                try {
                     int postID = Integer.parseInt(request.getParameter("post_id"));
                     System.out.println("postID to delete is: " + postID + "\n");
                     PostDB.deletePostByPostID(postID);
                     messages.add("Post Deleted");
-                    try{
+                    try {
                         posts = PostDB.getUserPosts(userID);
-                    }catch (SQLException ex){
+                    } catch (SQLException ex) {
                         System.out.println("MemberController -> case delete_post -> getting posts after delete -> SQLException: " + ex);
                     }
-                    
+
                     request.setAttribute("posts", url);
-                    
-                }catch(NumberFormatException ex){
+
+                } catch (NumberFormatException ex) {
                     System.err.println("MemberController -> case delete_post -> converting commentID to int -> \nNumberFormatExcetion " + ex);
-                }catch(NullPointerException ex){
+                } catch (NullPointerException ex) {
                     System.err.println("MemberController -> case delete_post -> converting commentID to int -> \nNullPointerException " + ex);
-                }finally{
+                } finally {
                     System.out.println("postID successfully converted to int");
                 }
                 break;

@@ -218,6 +218,59 @@ public class UserDB {
 
         return user;
     }
+    
+    /**
+     * gets a user object based on the userID.
+     * @param passedInUserID (int)
+     * @return User
+     */
+    public static User getUser(int passedInUserID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        User user = null;
+
+        String query = """
+                       SELECT *
+                       FROM user AS u JOIN user_role AS ur
+                       	ON u.user_id = ur.User_id
+                       WHERE u.username = ?;
+                       """;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, passedInUserID);
+            
+            rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    int userID = rs.getInt("user_id");
+                    String username = rs.getString("username");
+                    String firstname = rs.getString("firstname");
+                    String middlename = rs.getString("middlename");
+                    String lastname = rs.getString("lastname");
+                    String credential = rs.getString("credential");
+                    String role = rs.getString("rolename");
+
+                    user = new User(userID, username, firstname, middlename, lastname, credential, role);
+
+                }
+
+            }
+        } catch (SQLException ex) {
+            System.out.println("error retrieving userID -> UserDB -> getAllUser() -> " + ex);
+        }
+
+        DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return user;
+    }
 
     /**
      *
