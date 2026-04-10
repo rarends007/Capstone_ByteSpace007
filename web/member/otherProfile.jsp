@@ -20,7 +20,6 @@
         <div class="profile_info_container">
             <img src="${pageContext.request.contextPath}/img/profile_bg.png" alt="Profile Background" class="profile_background">
             <img src="${loaded_profile_profile_photo}" alt="Profile Image" class="profile_image" id="profilePicShape">
-            <c:import url="upload_member_profile_photo.jsp" />
             <h5 class="profile_name">${loadedProfileUsername}</h5>
             
             <p class="loaded_profile_status">${loadedProfileStatus}</p> 
