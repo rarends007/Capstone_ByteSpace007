@@ -141,8 +141,12 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 .post_header{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap:30px;
     margin-bottom: 20px;
+}
+.post_header h4{
+    flex: 1;
 }
 
 .ui_btn{
@@ -181,11 +185,15 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 .hidden{
     display: none;
 }
-
-.comment_heading{
+.comment_header{
     display: flex;
     justify-content: space-between;
+}
+
+.comment_heading{
+    justify-content: space-between;
     margin-bottom: 20px;
+    flex: 1;
 }
 .comment_container{
     margin: 20px 0;
@@ -202,6 +210,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     background: none;
     border: none;
     position: absolute;
+    top: 15px;
     right: 20px;
     width: 40px;
 }
@@ -260,11 +269,12 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 }
 
 .gallery {
-  max-width: 1200px;
-  margin: 0 auto;
-  column-count: 4;
-  font-family: arial;
+    max-width: 1200px;
+    margin: 0 auto;
+    column-count: 4;
+    font-family: arial;
 }
+
 .gallery-item {
   break-inside: avoid;
   margin-bottom: 16px;
@@ -274,4 +284,43 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 .loaded_other_profile_posts_heading{
     font-size: 24px;
     font-family: sans-serif;
+    break-inside: avoid;
+    margin-bottom: 16px;
+    width: 100%;
+}
+.delete_post_btn{
+    width: 30px;
+    height: 30px;
+    background: url(../img/delete.svg) no-repeat;
+    background-size: contain;
+    border: none;
+}
+
+.delete_post_btn:hover{
+    cursor: pointer;
+}
+
+.reply_text {
+    width: 100%;
+    margin: 20px 0;
+    height: 30px;
+    border-radius: 15px;
+    color: white;
+}
+
+.delete_comment_btn {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+}
+
+.delete_comment_btn > img{
+    width: 100%;
+}
+
+.reply_btn{
+    font-size: 16px;
+    padding: 5px;
+    width: auto;
 }
