@@ -187,6 +187,7 @@ public class MemberController extends HttpServlet {
                     if (loadedUserFromProfileselected != null){
                         request.setAttribute("loadedProfileUsername", loadedUserFromProfileselected.getUsername());
                     }
+                    request.setAttribute("loadedProfileUserID", loadedProfileUserID);
                     
                     //get the follower and "following" and "followers" values for  loaded profile
                     try {

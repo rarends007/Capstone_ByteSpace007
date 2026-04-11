@@ -99,6 +99,18 @@ public class FriendsController extends HttpServlet {
                     message = "Unable to remove user from list.";
                 }
             }
+            case "followUser" -> {
+                int followingID = Integer.parseInt(request.getParameter("followingID"));
+                
+                try {
+                    FollowersDB.addFollow(userID, followingID);
+                    System.out.println("Successfully followed user");
+                } catch (Exception ex) {
+                    System.out.println("Unable follow user");
+                }
+                
+                url = "/Member?action=load_other_profile&userID=" + followingID;
+            }
         }
         request.setAttribute("message", message);
 

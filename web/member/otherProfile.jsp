@@ -21,16 +21,16 @@
             <img src="${pageContext.request.contextPath}/img/profile_bg.png" alt="Profile Background" class="profile_background">
             <img src="${loaded_profile_profile_photo}" alt="Profile Image" class="profile_image" id="profilePicShape">
             <h5 class="profile_name">${loadedProfileUsername}</h5>
-            
+
             <p class="loaded_profile_status">${loadedProfileStatus}</p> 
-    
+
         </div>
         <div class="follow_container">
             <div class="following_container">
                 <div class="follow_num">
                     <p>
                         <c:choose>
-                            <c:when test="${follow_num != null}">
+                            <c:when test="${numFollowing != null}">
                                 ${numFollowing}
                             </c:when>
                             <c:otherwise>
@@ -67,6 +67,11 @@
         <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>
     </div>
     <div class="main_content">
+        <form action="${pageContext.request.contextPath}/Friends" method="post">
+            <input type="hidden" name="action" value="followUser">
+            <input type="hidden" name="followingID" value="${loadedProfileUserID}">
+            <input type="submit" class="button_primary" value="Follow">
+        </form>
         <div>
             <!-- could add functionality to post to another users profile using this form, likely won't -RA
             <form action="${pageContext.request.contextPath}/Member" method="post" enctype='multipart/form-data'>
@@ -95,12 +100,12 @@
                 <c:forEach var="image" items="${post.value.images}">
                     <img src="${image.value.imagePath}" class="post_img"/>
                 </c:forEach>
-                
+
                 <button id="commentsBtn" class="ui_btn"> <img src="${pageContext.request.contextPath}/img/comment.svg"/>${post.value.comments.size()} Comments </button>
-                
+
                 <div class="comments_container hidden">
                     <button id="close_comments"><img src="${pageContext.request.contextPath}/img/close.svg"/></button>
-                    <c:forEach var="comment" items="${post.value.comments}">
+                        <c:forEach var="comment" items="${post.value.comments}">
                         <div class="comment_container">
                             <h4 class="comment_heading">${comment.value.commentingUsername}</h4>
                             <p>${comment.value.commentText} </p>   
