@@ -49,7 +49,7 @@
             <div class="follow_num">
                 <p>
                 <c:choose>
-                    <c:when test="${follow_num != null}">
+                    <c:when test="${numFollowing != null}">
                         ${numFollowing}
                     </c:when>
                     <c:otherwise>
@@ -80,7 +80,11 @@
         <ul>
             <li><a href="${pageContext.request.contextPath}/Member">Profile</a></li>
             <li><a href="${pageContext.request.contextPath}/Member?action=get_all_users">All Site Users</a></li>
+            <c:if test="${role.equals('ADMIN')}">
+            <li><a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Portal</a></li>
+            </c:if>
             <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
+            <li><a href="${pageContext.request.contextPath}/Member?action=getImageForUser">Gallery</a></li>
         </ul>
     </nav>
     <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>

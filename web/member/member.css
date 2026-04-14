@@ -231,7 +231,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 }
 
 .loaded_profile_status{ /*RA added*/
-       padding: 0 15px;
+    padding: 0 15px;
 }
 
 .status_form input[type='submit'] {
@@ -269,6 +269,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 }
 
 .gallery {
+    background: #141124;
     max-width: 1200px;
     margin: 0 auto;
     column-count: 4;
@@ -276,9 +277,9 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 }
 
 .gallery-item {
-  break-inside: avoid;
-  margin-bottom: 16px;
-  width: 100%;
+    break-inside: avoid;
+    margin-bottom: 16px;
+    width: 100%;
 }
 
 .loaded_other_profile_posts_heading{
@@ -323,15 +324,72 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     font-size: 16px;
     padding: 5px;
     width: auto;
-}    
-    
+}
+
 .follow_list {
-   list-style-type: none;
-   font-size: 40px;
+    list-style-type: none;
+    font-size: 40px;
 }
 
 .follow_list li {
-   display: flex;
-   align-items: center;
-   gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.suggestion_container {
+    background: #141124;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.suggestion_list {
+    padding: 0;
+    list-style: none;
+}
+
+.suggestion_list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.follow_btn {
+    background: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+}
+.follow_btn:hover{
+    cursor: pointer;
+}
+
+.follow_btn >img {
+    width: 100%;
+    height: 100%;
+}
+
+.user_avatar {
+    width: 40px;
+    background: #1aa7a7;
+    border-radius: 50%;
+    display: flex;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestion_content{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.uplaod_image_form.gallery_form{
+    position: unset;
+    transform: none;
+    box-shadow: none;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
 }

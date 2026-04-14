@@ -58,7 +58,7 @@ public class MessageController extends HttpServlet {
             HashMap<Integer, User> chatUsers = new HashMap();
             for (Map.Entry<Integer, User> entry : users.entrySet()) {
                 for (Message message : messagesForLoggedInUser.values()) {
-                    if (entry.getKey() == message.getSenderID()) {
+                    if (entry.getKey()== message.getSenderID() || entry.getKey()== message.getRecieverID()) {
                         chatUsers.put(entry.getKey(), entry.getValue());
                     }
                 }

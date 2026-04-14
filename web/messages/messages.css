@@ -25,6 +25,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 .user_list_container{
     border-right: 1px solid #1aaed1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .user_list_container h4{
     margin-bottom: 15px;
@@ -118,4 +121,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     padding: 10px;
     border-radius: 15px;
     margin-bottom: 5px;
+}
+
+.new_chat{
+    width: 45px;
+    height: 45px;
+    border-radius: 50px;
+    border: none;
+    background: #EEAD23;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.send_message_container {
+    background: #141124;
+}
+
+.recipient_selector{
+    margin: 20px;
+    height: 30px;
+    background-color: #eead23
 }

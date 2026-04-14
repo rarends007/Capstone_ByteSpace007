@@ -88,7 +88,7 @@
         </c:forEach>
 
     </div>
-    <div class="right_panel"></div>
+    <c:import url="right_panel.jsp" />
     <script src="${pageContext.request.contextPath}/member/script.js"></script>
 
 </body>

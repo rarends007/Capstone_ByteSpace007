@@ -132,3 +132,18 @@ messageTime.forEach(block => {
     const date = new Date(block.textContent);
     block.textContent = date.toLocaleString();
 });
+
+
+const newChatBtn = document.querySelector('.new_chat');
+
+newChatBtn?.addEventListener('click', ()=>{
+    document.querySelector('.send_message_container').classList.remove('hidden');
+});
+
+const userAvatar = document.querySelectorAll(".user_avatar");
+
+userAvatar.forEach(avatar => {
+    const array = avatar.textContent.split(',');
+    const abbreviation = array.map(name => name.at(0));
+    avatar.textContent = abbreviation.toString().replace(',', '');
+});

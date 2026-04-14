@@ -23,18 +23,21 @@
                     <ul class="user_list">
                         <c:forEach var="item" items="${chatUsers}">  
                             <c:if test="${item.key != userID}">
-                                  <li id="user-${item.key}" class="chat_user"><div class="chat_avatar">${item.value.getFirstname()},${item.value.getLastname()}</div> ${item.value.getUsername()}</li>
-                            </c:if>
-                        </c:forEach>
-                </ul>
+                                <li id="user-${item.key}" class="chat_user"><div class="chat_avatar">${item.value.getFirstname()},${item.value.getLastname()}</div> ${item.value.getUsername()}</li>
+                                </c:if>
+                            </c:forEach>
+                    </ul>
+                    <button class="new_chat">+</button>
+                </div>
+                <c:import url="/messages/recieved_message.jsp"/>
             </div>
-            <c:import url="/messages/recieved_message.jsp"/>
+            <div class="send_message_container hidden">
+                <c:import url="/messages/send_message.jsp"/>
+            </div>
+            <span>${messages}</span>
         </div>
-        <c:import url="/messages/send_message.jsp"/>
-        <span>${messages}</span>
-    </div>
-    <div class="right_panel"></div>
-</body>       
-<script src="${pageContext.request.contextPath}/member/script.js"></script>
+        <div class="right_panel"></div>
+    </body>       
+    <script src="${pageContext.request.contextPath}/member/script.js"></script>
 
 </html>
