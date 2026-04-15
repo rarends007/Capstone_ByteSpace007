@@ -43,6 +43,15 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>Block</servlet-name>
+        <servlet-class>controllers.BlockController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Block</servlet-name>
+        <url-pattern>/Block</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>Friends</servlet-name>
         <servlet-class>controllers.FriendsController</servlet-class>
     </servlet>
