@@ -55,7 +55,7 @@ public class BlockedDB {
         boolean success = false;
 
         String query = """
-                        REMOVE FROM user_blocked 
+                        DELETE FROM user_blocked 
                         WHERE user_id = ? 
                         AND user_blocked_id = ?
                       """;

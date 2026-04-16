@@ -67,11 +67,18 @@
         <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>
     </div>
     <div class="main_content">
+        <div style="display: inline-block">
         <form action="${pageContext.request.contextPath}/Friends" method="post">
             <input type="hidden" name="action" value="followUser">
             <input type="hidden" name="followingID" value="${loadedProfileUserID}">
             <input type="submit" class="button_primary" value="Follow">
         </form>
+        <form action="${pageContext.request.contextPath}/Block" method="post">
+            <input type="hidden" name="action" value="blockUser">
+            <input type="hidden" name="blockedUserID" value="${loadedProfileUserID}">
+            <input type="submit" class="button_secondary" value="Block">
+        </form>
+        </div>
         <div>
             <!-- could add functionality to post to another users profile using this form, likely won't -RA
             <form action="${pageContext.request.contextPath}/Member" method="post" enctype='multipart/form-data'>

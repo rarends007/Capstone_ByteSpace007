@@ -80,6 +80,7 @@
         <ul>
             <li><a href="${pageContext.request.contextPath}/Member">Profile</a></li>
             <li><a href="${pageContext.request.contextPath}/Member?action=get_all_users">All Site Users</a></li>
+            <li><a href="${pageContext.request.contextPath}/Block?action=getBlockedUsers">Blocked Users</a></li>
             <c:if test="${role.equals('ADMIN')}">
             <li><a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Portal</a></li>
             </c:if>
