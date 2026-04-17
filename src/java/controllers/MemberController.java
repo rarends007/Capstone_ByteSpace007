@@ -6,6 +6,7 @@ package controllers;
 
 import business.bytespace.Super.Post;
 import business.bytespace.Super.User;
+import data.BlockedDB;
 import data.CommentDB;
 import data.FollowersDB;
 import data.ImageDB;
@@ -224,6 +225,15 @@ public class MemberController extends HttpServlet {
                         request.setAttribute("loadedProfileUsername", loadedUserFromProfileselected.getUsername());
                     }
                     request.setAttribute("loadedProfileUserID", loadedProfileUserID);
+                    
+                    try {
+                    if (BlockedDB.isUserBlocked(userID, loadedProfileUserID)) {
+                        url = "/Block?action=getBlockedUsers";
+                        break;
+                    }
+                    } catch (Exception ex) {
+                        Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                     //get the follower and "following" and "followers" values for  loaded profile
                     try {

@@ -44,10 +44,10 @@ public class BlockedDB {
 
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
-        
+
         return success;
     }
-    
+
     public static boolean unblockUser(int userID, int blockedUserID) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -72,10 +72,10 @@ public class BlockedDB {
 
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
-        
+
         return success;
     }
-    
+
     public static LinkedHashMap<Integer, String> getBlockedUsers(int userID) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -106,12 +106,44 @@ public class BlockedDB {
                 users.put(blockedUserID, blockedUsername);
             }
         }
-        
+
         DBUtil.closeResultSet(rs);
 
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
-        
+
         return users;
+    }
+
+    public static boolean isUserBlocked(int userID, int blockedUserID) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean blocked = false;
+
+        String query = """
+                       SELECT * 
+                       FROM user_blocked 
+                       WHERE user_id = ? 
+                       AND user_blocked_id = ?
+                       """;
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, userID);
+        ps.setInt(2, blockedUserID);
+
+        rs = ps.executeQuery();
+
+        if (rs != null) {
+            blocked = true;
+        }
+
+        DBUtil.closeResultSet(rs);
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return blocked;
     }
 }
