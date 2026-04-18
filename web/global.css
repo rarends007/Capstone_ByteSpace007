@@ -554,6 +554,19 @@ nav li {
     align-self: flex-end;
 }
 
+.button_secondary {
+    background-color: #7731cc;
+    color: #FFF;
+    font-size: 20px;
+    text-align: center;
+    width: 136px;
+    height: 40px;
+    border: none;
+    border-radius: 15px;
+    text-transform: uppercase;
+    align-self: flex-end;
+}
+
 .under_text{
     font-size: 14px;
     font-weight: normal;

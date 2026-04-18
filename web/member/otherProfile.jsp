@@ -18,6 +18,34 @@
 <body>
     <c:import url="left_panel_other_profile.jsp" />
     <div class="main_content">
+        <div class="button-container">
+        <form action="${pageContext.request.contextPath}/Friends" method="post">
+            <input type="hidden" name="action" value="followUser">
+            <input type="hidden" name="followingID" value="${loadedProfileUserID}">
+            <input type="submit" class="button_primary" value="Follow">
+        </form>
+        <form action="${pageContext.request.contextPath}/Block" method="post">
+            <input type="hidden" name="action" value="blockUser">
+            <input type="hidden" name="blockedUserID" value="${loadedProfileUserID}">
+            <input type="submit" class="button_secondary" value="Block">
+        </form>
+        </div>
+        <div>
+            <!-- could add functionality to post to another users profile using this form, likely won't -RA
+            <form action="${pageContext.request.contextPath}/Member" method="post" enctype='multipart/form-data'>
+                <div class="make_post_input">
+                    <img src="${profile_photo}" alt="Profile Image" class="profile_image make_post_img">
+
+                    <input type="hidden" name="action" value="makePost">
+                    <input type="hidden" id="userID" name="userID" value="${userID}">
+                    <textarea name="postText" id="make_post" placeholder="What’s Happening?"></textarea>
+                    <label for="file-upload" class="custom-file-upload"><img src="${pageContext.request.contextPath}/img/image.svg"/></label>
+                    <input type="file" name="file"  class="file-upload" id="file-upload"/>
+                </div>
+                <input type="submit" class="button_primary" value="Post">
+            </form>
+            -->
+            <h5 class="loaded_other_profile_posts_heading">Posts</h5>
         <div class="make_post_container">
             <p><strong>Posts</strong></p>
         </div>

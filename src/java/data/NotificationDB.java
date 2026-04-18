@@ -119,7 +119,7 @@ public class NotificationDB {
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         
-        
+        return false;
     }
 
 }
