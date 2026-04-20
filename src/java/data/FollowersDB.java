@@ -4,12 +4,19 @@
  */
 package data;
 
+import business.bytespace.Comment;
+import business.bytespace.Image;
+import business.bytespace.Super.Post;
 import business.bytespace.Super.User;
+import static data.PostDB.getPostComments;
+import static data.PostDB.getPostImages;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -56,7 +63,7 @@ public class FollowersDB {
 
         return following;
     }
-    
+
     //retrieve list of users that are following this user
     public static LinkedHashMap<Integer, String> getFollowers(int userID)
             throws SQLException {
@@ -96,7 +103,7 @@ public class FollowersDB {
 
         return followers;
     }
-    
+
     public static int removeFollow(int userID, int followingID)
             throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -120,7 +127,7 @@ public class FollowersDB {
 
         return rows;
     }
-    
+
     public static int addFollow(int userID, int followingID)
             throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
