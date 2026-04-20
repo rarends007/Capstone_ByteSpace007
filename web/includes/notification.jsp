@@ -9,12 +9,15 @@
 <!DOCTYPE html>
 <html>
     <div>
-        <form action="${pageContext.request.contextPath}/Notification" method="POST" name="toggle_notifications_button">
+        <form action="${pageContext.request.contextPath}/Notification" method="GET">
             <!--<!-- https://stackoverflow.com/questions/14199788/how-do-i-use-an-image-as-a-submit-button -->
 
             <input type="hidden" name="action" value="display_notifications"/>
 
-            <c:choose> 
+        </form>
+            
+            <div  id="toggle_notifications_button">
+                <c:choose> 
                 <c:when test="${unviewedNotificationsExist}">
                     <input type="image" name="submit" src="${pageContext.request.contextPath}/img/notification_icon_50px_Green.png" 
                            border="0" alt="viewNotification" style="width:50px; height: 50px"/>
@@ -24,13 +27,12 @@
                            border="0" alt="viewNotification" style="width:50px; height: 50px"/>
                 </c:otherwise>
             </c:choose>
-
-        </form>
+            </div>
     </div>
     <div class="hidden" id="notification_view">
         <c:forEach var="map" items="${notificationsMap}">
             <div>
-                <p>${map.value.getNotificationInfo()}</p>
+                <p>${map.value.getNotificationInfo()}<br></p>
             </div>
         </c:forEach>
     </div>
@@ -38,8 +40,16 @@
     <script>
             "use strict";
              const notificationsView = document.querySelector("#notification_view");
-             const toggleNotificationsButton = document.querySelector("toggle_notifications_button");
+             const toggleNotificationsButton = document.querySelector("#toggle_notifications_button");
              
+             toggleNotificationsButton.addEventListener("click", () => {
+                 console.log("toggle notifications button clicked");
+                 if(notificationsView.classList.contains("hidden")){
+                     notificationsView.classList.remove("hidden");
+                 }else{
+                     notificationsView.classList.add("hidden");
+                 }
+             });
 
     </script>
 
