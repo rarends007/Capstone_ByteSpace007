@@ -1,0 +1,88 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package data;
+
+import business.bytespace.Super.User;
+import static data.UserDB.getUserID;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.naming.NamingException;
+
+/**
+ *
+ * @author se757706
+ */
+public class LikeDB {
+
+    public static boolean insertLike(int postID, int commentID, int likingUserID) throws SQLException, NamingException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        int result = -1;
+
+        boolean success = false;
+
+        //todo, make a function to insert Admins later, in the JSP there needs, getting the role from the User user obj
+        //to be a hidden field that passes MEMBER or ADMIN and then it is passed to user in the PublicController -> 
+        //Register Switch differentiated by an if() in the switch and then calls either insertAdmin, or insertMember
+        //only the admin portal will have a hidden input role assigned to "ADMIN" when passed to the PublicController
+        String query = """
+                       INSERT INTO like
+                       (post_ID, comment_ID, liking_user_ID)
+                       VALUES
+                       (?, ?, ?);
+                       """;
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, postID);
+        ps.setInt(2, commentID);
+        ps.setInt(3, likingUserID);
+
+        result = ps.executeUpdate();
+
+        if (result != -1) {
+            success = true;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return success;
+    }
+    
+    public static boolean deleteLike(int likeID) throws SQLException, NamingException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        int result = -1;
+
+        boolean success = false;
+
+        //todo, make a function to insert Admins later, in the JSP there needs, getting the role from the User user obj
+        //to be a hidden field that passes MEMBER or ADMIN and then it is passed to user in the PublicController -> 
+        //Register Switch differentiated by an if() in the switch and then calls either insertAdmin, or insertMember
+        //only the admin portal will have a hidden input role assigned to "ADMIN" when passed to the PublicController
+        String query = """
+                       REMOVE FROM like
+                       WHERE like_ID = ?
+                       """;
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, likeID);
+
+        result = ps.executeUpdate();
+
+        if (result != -1) {
+            success = true;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return success;
+    }
+}
