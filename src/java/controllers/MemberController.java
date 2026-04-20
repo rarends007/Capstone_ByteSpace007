@@ -113,37 +113,38 @@ public class MemberController extends HttpServlet {
             }
 
         }
-        
+
         //Notifications init retreival 
         /**
-         * GET
-                    1. In the top get area declare a try/catch block to load notifications and set the JSP is_unseen_notification value to true if notifications are returned from 
-                        getAllUnviewedNotificationsByUserID DB function
-                    2. Pass the boolean value of isUnseenNotifications back to the nofication.jsp
+         * GET 1. In the top get area declare a try/catch block to load
+         * notifications and set the JSP is_unseen_notification value to true if
+         * notifications are returned from getAllUnviewedNotificationsByUserID
+         * DB function 2. Pass the boolean value of isUnseenNotifications back
+         * to the nofication.jsp
          */
-       try{
+        try {
             HashMap<Integer, Notification> AllNotificationsMap = NotificationDB.getAllNotificationsForUserByUserID(userID);
             request.setAttribute("notificationsMap", AllNotificationsMap);
             System.out.println("MemberController -> Notifications map loaded.");
-            
+
             //Checks if there are any pending notifications, currently they occure for either the user was '
             //sent a message or the user was followed. This can be expanded easily by use of the 
             //InserNotificationByUserID() function.
             boolean unviewedNotificationsExist = false;
-            for ( Notification notification : AllNotificationsMap.values()){
+            for (Notification notification : AllNotificationsMap.values()) {
                 if (notification.getIsViewed() == false) {
-                      unviewedNotificationsExist = true;
-                      System.out.println("There are unviewed notifications for user " + username);
-                      
-                      //set this map only if there are unviewed notifications, so that only 
-                      //the unviewed notifications display to the user.
-                      HashMap<Integer, Notification> AllUnviewedNotificationsMap = NotificationDB.getAllViewedORUnviewedNotificationsByUserID(userID, false);
-                      request.setAttribute("notificationsMap", AllUnviewedNotificationsMap);
+                    unviewedNotificationsExist = true;
+                    System.out.println("There are unviewed notifications for user " + username);
+
+                    //set this map only if there are unviewed notifications, so that only 
+                    //the unviewed notifications display to the user.
+                    HashMap<Integer, Notification> AllUnviewedNotificationsMap = NotificationDB.getAllViewedORUnviewedNotificationsByUserID(userID, false);
+                    request.setAttribute("notificationsMap", AllUnviewedNotificationsMap);
                 }
                 request.setAttribute("unviewedNotificationsExist", unviewedNotificationsExist);
             }
-        }catch(Exception ex){
-            System.err.println("Exception getting all notifications for user " + username + "NotificationController -> \n\txception: "  + ex);
+        } catch (Exception ex) {
+            System.err.println("Exception getting all notifications for user " + username + "NotificationController -> \n\txception: " + ex);
         }
 
         switch (action) { //post
@@ -166,6 +167,15 @@ public class MemberController extends HttpServlet {
                     errors.add("Unable to update profile photo, try again later.");
                 }
 
+                String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
+
+                if (profilePhotoPathLoad == null) {
+                    profilePhotoPathLoad = "";
+                } else {
+                    session.setAttribute("profile_photo", profilePhotoPathLoad);
+                    System.out.println("photo path is: " + profilePhotoPathLoad);
+                }
+
                 url = "/member/index.jsp";
                 break;
 
@@ -181,8 +191,7 @@ public class MemberController extends HttpServlet {
                 success = PostDB.uploadImage(image, userID);
                 if (success) {
                     action = "getImageForUser";
-                }
-                else{
+                } else {
                     break;
                 }
             case "getImageForUser":
@@ -246,15 +255,15 @@ public class MemberController extends HttpServlet {
                         request.setAttribute("loadedProfileUsername", loadedUserFromProfileselected.getUsername());
                     }
                     request.setAttribute("loadedProfileUserID", loadedProfileUserID);
-                    
+
                     try {
-                    if (BlockedDB.isUserBlocked(userID, loadedProfileUserID)) { //checks if user has other user blocked
-                        url = "/Block?action=getBlockedUsers";
-                        break;
-                    } else if (BlockedDB.isUserBlocked(loadedProfileUserID, userID)) { //checks if other user has current user blocked
-                        url = "/Member?action=get_all_users";
-                        break;
-                    }
+                        if (BlockedDB.isUserBlocked(userID, loadedProfileUserID)) { //checks if user has other user blocked
+                            url = "/Block?action=getBlockedUsers";
+                            break;
+                        } else if (BlockedDB.isUserBlocked(loadedProfileUserID, userID)) { //checks if other user has current user blocked
+                            url = "/Member?action=get_all_users";
+                            break;
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -283,7 +292,7 @@ public class MemberController extends HttpServlet {
                     }
 
                     //Get the profile photo for the loaded profile
-                    String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(loadedProfileUserID);
+                    profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(loadedProfileUserID);
 
                     if (profilePhotoPathLoad == null) {
                         profilePhotoPathLoad = "";

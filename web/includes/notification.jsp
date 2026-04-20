@@ -8,6 +8,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <head>
+           <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}includes/notificationStyle.css" />
+    </head>
     <div>
          <!--<!-- https://stackoverflow.com/questions/14199788/how-do-i-use-an-image-as-a-submit-button -->
         <div  id="toggle_notifications_button">
@@ -26,16 +29,17 @@
     <div class="hidden" id="notification_view">
 
     <div>
-        <textarea rows="5" cols="40" readonly="true">
+        <textarea rows="10" cols="40" readonly="true" placeholder="No Notifications yet. We'll keep you posted!" wrap="soft" >
         <c:forEach var="map" items="${notificationsMap}">
         ${map.value.getNotificationInfo()}
+       --------------------------
+       --------------------------
         </c:forEach>
         </textarea>
         <form action="${pageContext.request.contextPath}/Notification" method="POST" 
-              id="hidden_set_notifcations_viewed">
-
+              id="hidden_set_notifcations_viewed" ><!--<!-- When the notfication is clicked twice the JS calls 
+                                                   the forms submit method which is not overridden by a submit button or element with the name submit. -->
             <input type="hidden" name="action" value="set_noficiations_viewed"/>
-            <input type="hidden" name="submit">
         </form>
     </div>
 
