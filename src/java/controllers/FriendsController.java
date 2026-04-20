@@ -6,6 +6,7 @@ package controllers;
 
 import business.bytespace.Super.User;
 import data.FollowersDB;
+import data.NotificationDB;
 import data.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -101,6 +102,12 @@ public class FriendsController extends HttpServlet {
             }
             case "followUser" -> {
                 int followingID = Integer.parseInt(request.getParameter("followingID"));
+                
+                //This ensures that when a user follows another user that the user will be notified they followed them.
+                if (NotificationDB.insertNotificationForUserByUserID(followingID, username +  " started following you.")){ 
+                    System.out.println("Notification successfully sent to the followed user.");
+                }
+                //End notification
                 
                 try {
                     FollowersDB.addFollow(userID, followingID);
