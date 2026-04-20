@@ -9,13 +9,7 @@
 <!DOCTYPE html>
 <html>
     <div>
-        <form action="${pageContext.request.contextPath}/Notification" method="GET">
-            <!--<!-- https://stackoverflow.com/questions/14199788/how-do-i-use-an-image-as-a-submit-button -->
-
-            <input type="hidden" name="action" value="display_notifications"/>
-
-        </form>
-
+         <!--<!-- https://stackoverflow.com/questions/14199788/how-do-i-use-an-image-as-a-submit-button -->
         <div  id="toggle_notifications_button">
             <c:choose> 
                 <c:when test="${unviewedNotificationsExist}">
@@ -37,6 +31,12 @@
         ${map.value.getNotificationInfo()}
         </c:forEach>
         </textarea>
+        <form action="${pageContext.request.contextPath}/Notification" method="POST" 
+              id="hidden_set_notifcations_viewed">
+
+            <input type="hidden" name="action" value="set_noficiations_viewed"/>
+            <input type="hidden" name="submit">
+        </form>
     </div>
 
     </div>
@@ -45,13 +45,15 @@
         "use strict";
         const notificationsView = document.querySelector("#notification_view");
         const toggleNotificationsButton = document.querySelector("#toggle_notifications_button");
-
+        const form = document.querySelector("#hidden_set_notifcations_viewed");
+        
         toggleNotificationsButton.addEventListener("click", () => {
             console.log("toggle notifications button clicked");
             if (notificationsView.classList.contains("hidden")) {
                 notificationsView.classList.remove("hidden");
             } else {
                 notificationsView.classList.add("hidden");
+                form.submit(); //https://www.w3schools.com/jsref/met_form_submit.asp
             }
         });
 

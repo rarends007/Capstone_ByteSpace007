@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+import data.NotificationDB;
+import business.bytespace.Notification;
 /**
  *
  * @author raren
@@ -58,9 +61,8 @@ public class NotficationController extends HttpServlet {
         
         String action = request.getParameter("action");
         
-        
+        HashMap<Integer, Notification> AllNotificationsMap = NotificationDB.getAllNotificationsForUserByUserID(loggedInUserIDInt);
         try{
-            HashMap<Integer, Notification> AllNotificationsMap = NotificationDB.getAllNotificationsForUserByUserID(loggedInUserIDInt);
             request.setAttribute("notificationsMap", AllNotificationsMap);
             System.out.println("NotificationController -> Notifications map loaded.");
         }catch(Exception ex){
@@ -68,7 +70,7 @@ public class NotficationController extends HttpServlet {
         }
 
         switch (action) {
-            case "display_notifications":
+            case "set_noficiations_viewed":
                 System.out.println("entered display_notificatoins switch case.");
                 /*
                 TODO:
@@ -79,13 +81,23 @@ public class NotficationController extends HttpServlet {
                     2. pass that collection back to the jsp using a variable called notificationsMap type <Integer, Notfication> - DONE
                 
                     * Now in this case display_notificatoins -> 
-                     1. On click remove hide CSS, on click notifications button again, readd hide CSS to notification list div using JS
-                     2. Anytime notification icon clicked, set all notifications is_viewed value to false for the user. 
-                            Use CSS to make it look different based on that value -> consult Oleksandr about what he 
-                                wants to do for that CSS
-                
-                
+                     1. On click remove hide CSS, on click notifications button again, readd hide CSS to notification list div using JS - DONE
+                     2. Anytime notification icon clicked twice, set all notifications is_viewed value to true for the user. 
+                     3.  Use CSS to make it look different based on that value -> consult Oleksandr about what he 
+                                wants to do for that CSS - May go a different direction for step 3
                  */
+                boolean unviewedExist = false;
+                for(Notification notification : AllNotificationsMap.values()){
+                    if(notification.getIsViewed() == false){
+                        unviewedExist = true;
+                        break;
+                    }
+                }
+                try{
+                    NotificationDB.setNotificationViewedByUserID(loggedInUserIDInt);
+                }catch(Exception ex){
+                    System.out.println("set nofications seen to true -> "+ ex);
+                }
                 break;
 
         }

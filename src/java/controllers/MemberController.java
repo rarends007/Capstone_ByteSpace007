@@ -126,11 +126,19 @@ public class MemberController extends HttpServlet {
             request.setAttribute("notificationsMap", AllNotificationsMap);
             System.out.println("MemberController -> Notifications map loaded.");
             
+            //Checks if there are any pending notifications, currently they occure for either the user was '
+            //sent a message or the user was followed. This can be expanded easily by use of the 
+            //InserNotificationByUserID() function.
             boolean unviewedNotificationsExist = false;
             for ( Notification notification : AllNotificationsMap.values()){
                 if (notification.getIsViewed() == false) {
                       unviewedNotificationsExist = true;
                       System.out.println("There are unviewed notifications for user " + username);
+                      
+                      //set this map only if there are unviewed notifications, so that only 
+                      //the unviewed notifications display to the user.
+                      HashMap<Integer, Notification> AllUnviewedNotificationsMap = NotificationDB.getAllViewedORUnviewedNotificationsByUserID(userID, false);
+                      request.setAttribute("notificationsMap", AllUnviewedNotificationsMap);
                 }
                 request.setAttribute("unviewedNotificationsExist", unviewedNotificationsExist);
             }

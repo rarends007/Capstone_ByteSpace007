@@ -186,7 +186,7 @@ public class NotificationDB {
      * @param isViewed
      * @return HashMap<Integer, Notification>
      */
-    public HashMap<Integer, Notification> getAllViewedORUnviewedNotificationsByUserID(int userID, boolean isViewed) {
+    public static HashMap<Integer, Notification> getAllViewedORUnviewedNotificationsByUserID(int userID, boolean isViewed) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -213,10 +213,10 @@ public class NotificationDB {
 
                 int notificationID = rs.getInt("notification_id");
 
-                notification.setNotificationID(rs.getInt(notificationID));
+                notification.setNotificationID(notificationID);
                 notification.setNotificationInfo(rs.getString("notification_text"));
                 notification.setIsViewed(rs.getBoolean("is_viewed"));
-                notification.setNotifiedUserID(rs.getInt("user_id"));
+                notification.setNotifiedUserID(rs.getInt("notified_user_id"));
 
                 notificationsMap.put(notificationID, notification);
 
