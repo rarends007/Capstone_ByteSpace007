@@ -6,34 +6,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : Apr 8, 2026, 6:05:21 PM
     Author     : mrjel
 */
-.user_list{
+.user_list {
     list-style: none;
     padding-left: 0;
 }
 
-.messages_container
-{
+.messages_container {
     display: flex;
     background: #141124;
     min-height: 500px;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
 }
-.message_container{
+
+.message_container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
 }
-.user_list_container{
+
+.user_list_container {
     border-right: 1px solid #1aaed1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
-.user_list_container h4{
+
+.user_list_container h4 {
     margin-bottom: 15px;
 }
 
-.chat_user{
+.chat_user {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -41,12 +46,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     padding-right: 30px;
 }
 
-.chat_user.current{
+.chat_user.current {
     background-color: #2a2742;
     border-left: 4px solid #00ceff
 }
 
-.chat_user:hover{
+.chat_user:hover {
     background-color: #242239;
     cursor: pointer
 }
@@ -60,6 +65,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     align-items: center;
     justify-content: center;
 }
+
 .chat_messages {
     display: flex;
     flex-direction: column;
@@ -67,9 +73,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     padding-left: 15px;
 }
 
-.chat_messages > li{
+.chat_messages>li {
     max-width: 90%;
 }
+
 .recieved_message {
     background: #2A2742;
     padding: 10px;
@@ -77,11 +84,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     margin-bottom: 5px;
 }
 
-.message_time{
+.message_time {
     color: #adadad;
 }
 
-.message_actions{
+.message_actions {
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
@@ -98,32 +105,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     cursor: pointer;
     color: #00ceff;
 }
-.reply_message_container{
+
+.reply_message_container {
     margin-left: 15px;
 }
 
-.reply_message_container textarea{
+.reply_message_container textarea {
     border-radius: 15px;
     padding: 10px;
     color: white;
     height: 100px;
 }
 
-.my_message_container{
-    align-self:  flex-end;
+.my_message_container {
+    align-self: flex-end;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-.my_message{
+.my_message {
     background-color: #1aa7a7;
     padding: 10px;
     border-radius: 15px;
     margin-bottom: 5px;
 }
 
-.new_chat{
+.new_chat {
     width: 45px;
     height: 45px;
     border-radius: 50px;
@@ -135,9 +143,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .send_message_container {
     background: #141124;
+    border-radius: 15px;
+    padding: 20px;
 }
 
-.recipient_selector{
+.recipient_selector {
     margin: 20px;
     height: 30px;
     background-color: #eead23

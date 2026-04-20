@@ -84,7 +84,7 @@ public class MemberController extends HttpServlet {
         LinkedHashMap<String, HashMap<Integer, Post>> feed = new LinkedHashMap<>();
 
         SuggestedUsersHashMap = UserDB.getSuggestedUsers(userID);
-        request.setAttribute("SuggestedUsersHashMap", SuggestedUsersHashMap);
+        session.setAttribute("SuggestedUsersHashMap", SuggestedUsersHashMap);
 
         if (pageControllerIsMember) {
             String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well

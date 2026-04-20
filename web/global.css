@@ -23,6 +23,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     background-color: black;
     color: greenyellow;
 }
+
 .container {
     display: flex;
     justify-content: center;
@@ -30,9 +31,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     height: 500px;
 }
 
-.userList {
-
-}
+.userList {}
 
 .solidborder {
     border-width: 5px;
@@ -131,7 +130,8 @@ a {
     font-weight: bold;
 }
 
-label {  /* lign up the labels */
+label {
+    /* lign up the labels */
     margin-right: 25px;
     display: inline-block;
     width: 140px;
@@ -330,38 +330,42 @@ label[for='agreement'] {
 .login_btn {
     margin-top: 60px;
 }
-.login-form_container .error_message{
+
+.login-form_container .error_message {
     font-size: 16px;
     color: red;
 }
 
-.login-form_container .success_message{
+.login-form_container .success_message {
     font-size: 16px;
     color: #1AA7A7;
 }
 
 
-.register-form label{
+.register-form label {
     margin: 0;
     font-size: 20px;
 }
 
-.register-form input:not(input[type='submit']){
+.register-form input:not(input[type='submit']) {
     margin: 0;
     height: 40px;
     font-size: 20px;
 }
 
-#confPassword{
+#confPassword {
     margin-bottom: 10px;
 }
 
-.register-form input[type='submit']{
+.register-form input[type='submit'] {
     margin: 0;
 }
-.success_message, .error_message{
+
+.success_message,
+.error_message {
     margin-bottom: 10px;
 }
+
 /*==============================================================================Main Content ============================================================================ */
 body:has(.main_content) {
     padding: 15px;
@@ -479,25 +483,29 @@ nav li {
 
 .logout {
     display: block;
-    background: none;
+    background: #56142b;
+    border-radius: 15px;
     text-align: center;
     margin: 0 auto;
-    width: 100%;
+    width: 200px;
+    padding: 5px 30px;
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     color: #FFF;
     font-family: 'Koulen', sans-serif;
-    font-weight: bold;
+    /* font-weight: bold; */
     text-transform: uppercase;
-    font-size: 30px;
+    font-size: 26px;
 }
 
 .main_content {
     flex: 1;
 }
 
-.main_content> section>div {
-    
+.main_content>section>div {
+
     margin-bottom: 15px;
     padding: 30px;
     border-radius: 15px;
@@ -514,7 +522,8 @@ nav li {
     position: relative;
 }
 
-.post_container, .make_post_container{
+.post_container,
+.make_post_container {
     background-color: #141124;
     display: flex;
     flex-direction: column;
@@ -569,9 +578,18 @@ nav li {
     align-self: flex-end;
 }
 
-.under_text{
+.under_text {
     font-size: 14px;
     font-weight: normal;
     color: white;
 }
 
+.view_all_btn {
+    border-radius: 0;
+    align-self: center;
+}
+
+.view_all_btn a {
+    color: white;
+    font-size: 16px;
+}

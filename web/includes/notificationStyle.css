@@ -8,8 +8,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 */
 
 /*https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/textarea*/
-textarea {
+#notification_view textarea {
     resize: none;
-    color: greenyellow;
-    background-color: black;
+    color: white;
+    background-color: #141124;
+}
+
+#notification_view {
+    background: #141124;
+    padding: 10px;
+    border-radius: 15px;
 }
