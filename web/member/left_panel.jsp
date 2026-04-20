@@ -28,7 +28,9 @@
                 <c:if test="${messages} != '[]' "><span>${messages}</span></c:if>
             </div>
         </div>
-        <h5 class="profile_name">${username}</h5>
+        <c:import url="/includes/notification.jsp" /><!--<!-- Modded to add new notification.jsp - RA -->
+        <h5 class="profile_name">${username}</h5> 
+                 
         <c:choose>
             <c:when test="${!''.equals(userStatus)}">
                 <p class="status">${userStatus}</p>
@@ -80,6 +82,7 @@
         <ul>
             <li><a href="${pageContext.request.contextPath}/Member">Profile</a></li>
             <li><a href="${pageContext.request.contextPath}/Member?action=get_all_users">All Site Users</a></li>
+            <li><a href="${pageContext.request.contextPath}/Block?action=getBlockedUsers">Blocked Users</a></li>
             <c:if test="${role.equals('ADMIN')}">
             <li><a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Portal</a></li>
             </c:if>

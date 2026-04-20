@@ -236,7 +236,7 @@ public class UserDB {
                        SELECT *
                        FROM user AS u JOIN user_role AS ur
                        	ON u.user_id = ur.User_id
-                       WHERE u.username = ?;
+                       WHERE u.user_id = ?;
                        """;
 
         try {

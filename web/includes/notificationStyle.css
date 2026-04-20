@@ -1,0 +1,15 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Apr 20, 2026, 12:25:53 PM
+    Author     : raren
+*/
+
+/*https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/textarea*/
+textarea {
+    resize: none;
+    color: greenyellow;
+    background-color: black;
+}

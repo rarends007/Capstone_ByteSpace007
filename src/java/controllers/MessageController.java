@@ -16,11 +16,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import business.bytespace.Message;
 import data.MessageDB;
+import data.NotificationDB;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -39,7 +40,7 @@ public class MessageController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String url = "/messages/index.jsp";
         ArrayList<String> messages = new ArrayList();
 
@@ -118,6 +119,9 @@ public class MessageController extends HttpServlet {
 
                         MessageDB.insertMessage(sendingMessage);
                         System.out.println("Message successfully sent");
+                        if(NotificationDB.insertNotificationForUserByUserID(recieverUserIDInt, "New message from " + session.getAttribute("username"))){
+                            System.out.println("\nMessage notificatoin made to receiving user.");
+                        }
                     } catch (Exception ex) {
                         System.err.println("Message Controller -> send_message -> Error sending message -> \nError Thrown: " + ex);
                     }
