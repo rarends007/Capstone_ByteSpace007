@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.naming.NamingException;
+import java.sql.ResultSet;
 
 /**
  *
@@ -84,5 +85,69 @@ public class LikeDB {
         pool.freeConnection(connection);
 
         return success;
+    }
+    
+    public static int getPostLikes(int likeID) throws SQLException, NamingException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        ResultSet rs = null;
+        ArrayList<Integer> likes = new ArrayList<>();
+
+        //todo, make a function to insert Admins later, in the JSP there needs, getting the role from the User user obj
+        //to be a hidden field that passes MEMBER or ADMIN and then it is passed to user in the PublicController -> 
+        //Register Switch differentiated by an if() in the switch and then calls either insertAdmin, or insertMember
+        //only the admin portal will have a hidden input role assigned to "ADMIN" when passed to the PublicController
+        String query = """
+                       SELECT * 
+                       FROM `like` 
+                       WHERE post_ID = ?
+                       """;
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, likeID);
+
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            likes.add(likeID);
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return likes.size();
+    }
+    
+    public static int getCommentLikes(int commentID) throws SQLException, NamingException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        ResultSet rs = null;
+        ArrayList<Integer> likes = new ArrayList<>();
+
+        //todo, make a function to insert Admins later, in the JSP there needs, getting the role from the User user obj
+        //to be a hidden field that passes MEMBER or ADMIN and then it is passed to user in the PublicController -> 
+        //Register Switch differentiated by an if() in the switch and then calls either insertAdmin, or insertMember
+        //only the admin portal will have a hidden input role assigned to "ADMIN" when passed to the PublicController
+        String query = """
+                       SELECT * 
+                       FROM `like` 
+                       WHERE comment_ID = ?
+                       """;
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, commentID);
+
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            likes.add(commentID);
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return likes.size();
     }
 }
