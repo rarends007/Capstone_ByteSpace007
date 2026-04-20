@@ -69,6 +69,15 @@
         <url-pattern>/Comment</url-pattern>
     </servlet-mapping>
     
+     <servlet>
+        <servlet-name>Notification</servlet-name>
+        <servlet-class>controllers.NotficationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Notification</servlet-name>
+        <url-pattern>/Notification</url-pattern>
+    </servlet-mapping>
+    
     
     <!--Roles, Security Constraints, authenticaton config-->
     

@@ -7,8 +7,11 @@ package data;
 import business.bytespace.Notification;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+
+import business.bytespace.Notification;
 
 /**
  *
@@ -39,36 +42,20 @@ public class NotificationDB {
 
         } catch (SQLException ex) {
             System.out.println("NotificationsDB -> deleteNotificationsForUser() failed-> \nExcetion -> " + ex + "\n");
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
         }
-
-        DBUtil.closePreparedStatement(ps);
-        pool.freeConnection(connection);
 
         return notificationsDeleted;
     }
 
-    public HashMap<Integer, Notification> getAllUnviewedNotificationsByUserID(int UserID) {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        PreparedStatement ps = null;
-
-        int result = -1;
-
-        HashMap notificationsHashMap = new HashMap();
-
-        //TODO: finish function
-        String query = """
-                       """;
-
-        return notificationsHashMap;
-
-    }
-
     /**
+     * Insert a notification for a user based on user ID.
      *
      * @param UserID
      * @param text
-     * @return
+     * @return (boolean) true if successful
      */
     public static boolean insertNotificationForUserByUserID(int UserID, String text) { //call anytime a message is sent or a user follows another user(for the user followed)
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -94,11 +81,20 @@ public class NotificationDB {
             notificationInserted = true;
         } catch (SQLException ex) {
             System.err.println(".insertNotificationForUserByUserID() -> \n\tSQL Error: " + ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
         }
         return notificationInserted;
     }
 
-    public static boolean setNotificationViewedByNotificationID(int NotificationID) { //call when user clicks notification icon
+    /**
+     * Sets all notifications to viewed based on the user ID.
+     *
+     * @param userID
+     * @return (boolean) true if successful
+     */
+    public static boolean setNotificationViewedByUserID(int userID) { //call when user clicks notification icon
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -108,18 +104,131 @@ public class NotificationDB {
         boolean notificationViewedSetTrue = false;
 
         String query = """
-                     
+                     UPDATE notification
+                     SET is_viewed = true
+                     WHERE notified_user_id = ?;
                      """;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+
+            result = ps.executeUpdate();
+
+            if (result != -1 && result != 0) {
+                notificationViewedSetTrue = true;
+            }
+        } catch (SQLException ex) {
+            System.err.println(".setNotificationViewedByUserID() -> \n\tSQLException: " + ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+
         return notificationViewedSetTrue;
 
     }
 
-    public static boolean getAllNotificationsForUserByUserID(int userID) {
+    /**
+     * Fetches a HashMap of notifications by type  <Integer, Notification> from
+     * the database.
+     *
+     * @param userID
+     * @return HashMap<Integer, Notification>
+     */
+    public static HashMap<Integer, Notification> getAllNotificationsForUserByUserID(int userID) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
-        
-        return false;
+
+        boolean notificationFetched = false;
+        HashMap<Integer, Notification> notificationsMap = new HashMap();
+
+        ResultSet rs = null;
+
+        String query = """
+                       SELECT notification_id, notification_text, is_viewed, notified_user_id
+                       FROM notification
+                       WHERE notified_user_id = ?;
+                       """;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Notification notification = new Notification();
+
+                int notificationID = rs.getInt("notification_id");
+
+                notification.setNotificationID(rs.getInt(notificationID));
+                notification.setNotificationInfo(rs.getString("notification_text"));
+                notification.setIsViewed(rs.getBoolean("is_viewed"));
+                notification.setNotifiedUserID(rs.getInt("user_id"));
+
+                notificationsMap.put(notificationID, notification);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(".getAllNotificationsForUserByUserID() -> \n\tSQLException: " + ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        return notificationsMap;
+    }
+    
+    /**
+     * fetches all Viewed or Unviewed notifications for a user by user ID. Supply Param isViewed with
+     * false -> unviewed
+     * true -> viewed
+     * @param UserID
+     * @param isViewed
+     * @return HashMap<Integer, Notification>
+     */
+    public HashMap<Integer, Notification> getAllViewedORUnviewedNotificationsByUserID(int userID, boolean isViewed) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        HashMap<Integer, Notification> notificationsMap = new HashMap();
+
+        ResultSet rs = null;
+
+        String query = """
+                       SELECT notification_id, notification_text, is_viewed, notified_user_id
+                       FROM notification
+                       WHERE notified_user_id = ? AND is_viewed = ?;;
+                       """;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+            ps.setBoolean(2, isViewed);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Notification notification = new Notification();
+
+                int notificationID = rs.getInt("notification_id");
+
+                notification.setNotificationID(rs.getInt(notificationID));
+                notification.setNotificationInfo(rs.getString("notification_text"));
+                notification.setIsViewed(rs.getBoolean("is_viewed"));
+                notification.setNotifiedUserID(rs.getInt("user_id"));
+
+                notificationsMap.put(notificationID, notification);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(".getAllNotificationsForUserByUserID() -> \n\tSQLException: " + ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+        return notificationsMap;
     }
 
 }

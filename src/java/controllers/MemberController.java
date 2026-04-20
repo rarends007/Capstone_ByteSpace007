@@ -367,19 +367,6 @@ public class MemberController extends HttpServlet {
                     System.out.println("postID successfully converted to int");
                 }
                 break;
-            case "display_notifications":
-                System.out.println("entered display_notificatoins switch case.");
-                /*
-                TODO:
-                    insertNotificatoin fires if user messages another user
-                    Later if we create a way for user to follow another user, then insert a notification to the followed user in that event.
-                    POST
-                    1. populate a collection of notifications when jsp notification icon clicked
-                    2. pass that collection back to the jsp using a variable called notificationsHashMap type <Integer, Notfication>
-                    
-                    
-                 */
-                break;
 
         }
 

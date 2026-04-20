@@ -14,10 +14,14 @@ import java.io.Serializable;
 public class Notification extends User implements Serializable{
     private Integer notificationID;
     private String notificationInfo;
+    private boolean isViewed;
+    private Integer notifiedUserID; 
     
     public Notification(){
         notificationID = null;
         notificationInfo = null;
+        isViewed = true;
+        notifiedUserID = null;
     }
 
     public Notification(Integer notificationID, String notificationInfo) {
@@ -40,6 +44,24 @@ public class Notification extends User implements Serializable{
     public void setNotificationInfo(String notificationInfo) {
         this.notificationInfo = notificationInfo;
     }
+
+    public boolean getIsViewed() {
+        return isViewed;
+    }
+
+    public Integer getNotifiedUserID() {
+        return notifiedUserID;
+    }
+    
+    public void setIsViewed(boolean isViewed) {
+        this.isViewed = isViewed;
+    }
+
+    public void setNotifiedUserID(Integer notifiedUserID) {
+        this.notifiedUserID = notifiedUserID;
+    }
+    
+    
     
     
     
