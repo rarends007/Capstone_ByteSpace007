@@ -106,13 +106,13 @@ function showHideChatByUser(id) {
         const p = document.querySelector('.reply_message_container p');
         if (p)
             p.textContent = "";
-        
+
         const span = document.querySelector('.reply_message_container span');
         if (span)
             span.textContent = "";
     }
     if (replyId !== id && !replyId) {
-       document.forms.reply_message.sender_id.value = id;
+        document.forms.reply_message.sender_id.value = id;
     }
     messageСontainers.forEach(chat => chat.classList.add('hidden'));
     chatUsersList.forEach(user => user.classList.remove('current'));
@@ -136,7 +136,7 @@ messageTime.forEach(block => {
 
 const newChatBtn = document.querySelector('.new_chat');
 
-newChatBtn?.addEventListener('click', ()=>{
+newChatBtn?.addEventListener('click', () => {
     document.querySelector('.send_message_container').classList.remove('hidden');
 });
 
@@ -147,3 +147,23 @@ userAvatar.forEach(avatar => {
     const abbreviation = array.map(name => name.at(0));
     avatar.textContent = abbreviation.toString().replace(',', '');
 });
+
+feedUsers = document.querySelectorAll(".feed_user");
+
+feedUsers.forEach(avatar => {
+    username = avatar.textContent.trim()[0] + avatar.textContent.trim()[1];
+    avatar.textContent = username;
+});
+
+const feedToggle = document.querySelector('.feed_toggle');
+feedToggle?.addEventListener('click', () => {
+    feedToggle.classList.toggle('toggled')
+    document.querySelector('#posts')?.classList.toggle('hidden');
+    document.querySelector('#feed')?.classList.toggle('hidden');
+});
+
+
+const nav = document.querySelector('nav');
+nav?.addEventListener('click', (e) => {
+    e.currentTarget.classList.add('current');
+})

@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-           <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}includes/notificationStyle.css" />
+           <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/includes/notificationStyle.css" />
     </head>
     <div>
          <!--<!-- https://stackoverflow.com/questions/14199788/how-do-i-use-an-image-as-a-submit-button -->
