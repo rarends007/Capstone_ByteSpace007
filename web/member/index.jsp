@@ -83,7 +83,7 @@
                                                 <input type="hidden" name="action" value="post_comment" />
                                                 <input type="hidden" name="post_id" value="${post.value.postID}" />
                                                 <textarea name="comment_text" rows="5" cols="35"
-                                                    class="reply_text"></textarea>
+                                                    class="reply_text hidden"></textarea>
                                                 <button type="submit" class="reply_btn button_primary">Reply</button>
                                             </form>
                                         </div>

@@ -105,8 +105,8 @@ public class MemberController extends HttpServlet {
                      feed.put(entry.getValue(), followingPosts);                    
                 }
 
-                request.setAttribute("numFollowing", following.size());
-                request.setAttribute("numFollowers", followers.size());
+                session.setAttribute("numFollowing", following.size());
+                session.setAttribute("numFollowers", followers.size());
                 request.setAttribute("Following", feed);
             } catch (SQLException ex) {
                 errors.add("Unable to retrieve following numbers.");
