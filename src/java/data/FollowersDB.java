@@ -152,4 +152,18 @@ public class FollowersDB {
 
         return rows;
     }
+    
+    /**
+     * 
+     * @param userID
+     * @return 
+     */
+    public static boolean deleteAllFolloweringByUserID(User userID){
+        //TODO: 
+        //1. write the logic to delete all of the followers for a user to be deleted
+        // 2. Call that function in the UserDB function that is called when an admin wants to delete a user from the database on the user to be deleted.
+        // There will be a database error when an admin attempts to do so until i do.
+        
+        return false;
+    }
 }
