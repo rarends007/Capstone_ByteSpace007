@@ -31,4 +31,8 @@
                     <button class="button_primary view_all_btn"><a href="${pageContext.request.contextPath}/Member?action=get_all_users">View all</a></button>
                 </div>
                 <c:import url="/includes/notification.jsp" /><!--<!-- Modded to add new notification.jsp - RA -->
+                
+                <div>
+                    <c:import url="/includes/search.jsp"/><!--<!-- Adds functionality to search for users by username dynamically -->
+                </div>
             </div>

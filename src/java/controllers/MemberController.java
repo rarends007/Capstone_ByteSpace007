@@ -105,8 +105,8 @@ public class MemberController extends HttpServlet {
                      feed.put(entry.getValue(), followingPosts);                    
                 }
 
-                request.setAttribute("numFollowing", following.size());
-                request.setAttribute("numFollowers", followers.size());
+                session.setAttribute("numFollowing", following.size());
+                session.setAttribute("numFollowers", followers.size());
                 request.setAttribute("Following", feed);
             } catch (SQLException ex) {
                 errors.add("Unable to retrieve following numbers.");
@@ -154,6 +154,19 @@ public class MemberController extends HttpServlet {
             }
         } catch (Exception ex) {
             System.err.println("Exception getting all notifications for user " + username + "NotificationController -> \n\txception: " + ex);
+        }
+        
+        //Username Search Feature -> Load all users into a hashmap at page start
+        try{
+            HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
+            if(userNameSearchMap != null) {
+                
+            }else{
+                userNameSearchMap = new HashMap<>();
+            }
+            request.setAttribute("userNameSearchMap", userNameSearchMap);
+        }catch(Exception ex){
+            System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
         }
 
         switch (action) { //post
@@ -257,7 +270,7 @@ public class MemberController extends HttpServlet {
 
                     //get other users ID coming in from the show_all_profiles.jsp page request object
                     int loadedProfileUserID = Integer.parseInt(request.getParameter("userID"));
-
+                    
                     User loadedUserFromProfileselected = UserDB.getUser(loadedProfileUserID);
 
                     if (loadedUserFromProfileselected != null) {

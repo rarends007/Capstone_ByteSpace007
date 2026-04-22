@@ -14,7 +14,7 @@
     <input type="hidden" name="sender_id" value  ="${messageReplyingTo.getSenderID()}"/>
     <div class="reply_message_container">    
         <p>${messageReplyingTo.getMessageText()}</p>
-        <textarea name="message_reply_body" rows="20" cols="100">insert message</textarea>
+        <textarea name="message_reply_body" rows="20" cols="100" placeholder="insert message"></textarea>
     </div>
     <div>
         <input type="submit" value="Reply" class="button_primary"/>
