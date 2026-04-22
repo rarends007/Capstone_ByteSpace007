@@ -31,7 +31,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     height: 500px;
 }
 
-.userList {}
+.userList {
+}
 
 .solidborder {
     border-width: 5px;
@@ -612,3 +613,12 @@ nav li {
     border-radius: 15px;
     background-color: #141124;
 }
+
+.search_container{
+    padding: 15px;
+    background-color: #141124;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    max-height: 45vh;
+}
+
