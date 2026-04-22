@@ -59,7 +59,12 @@ public class UserDB {
             result = ps.executeUpdate();
             System.out.println("New User added, not the role yet though.");
             
-            //ResultSet rs = 
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            int key = -1;
+            if (rs != null && rs.next()) {
+                key = rs.getInt(1);
+            }
             
             if (result != -1) {
                 query = """
@@ -69,7 +74,7 @@ public class UserDB {
                                (?, ?);
                                """;
                 ps = connection.prepareStatement(query);
-                ps.setInt(1, getUserID(user.getUsername()));
+                ps.setInt(1, key);
                 ps.setString(2, user.getRole());
             }
             System.out.println("New User added, and now User role added too.");
