@@ -36,6 +36,8 @@ h1 {
 .button-container {
     display: flex;
     gap: 10px;
+    padding: 15px 30px !important;
+    background-color: #141124;
 }
 
 .button-container form {
@@ -66,6 +68,7 @@ h1 {
 
 #profilePicShape {
     border-radius: 50%;
+    border: 3px solid #1aaed1;
 }
 
 #profilePicPostion {
@@ -191,6 +194,7 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     box-shadow: 0 0 1px 100000px #009688ab;
     max-height: 60%;
     overflow-y: auto;
+    z-index: 1;
 }
 
 .post_text {
@@ -288,8 +292,10 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
     background: #141124;
     max-width: 1200px;
     margin: 0 auto;
-    column-count: 4;
+    column-count: 2;
     font-family: arial;
+    padding: 20px;
+    border-radius: 15px;
 }
 
 .gallery-item {
@@ -454,4 +460,73 @@ Retrieved 2026-03-21, License - CC BY-SA 3.0
 .feed_toggle>div {
     position: relative;
     z-index: 2;
+}
+
+.followers_container {
+    background: #141124;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.follow_list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.reload_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blocked_container {
+    background: #141124;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.blocked_action_bar {
+    display: flex;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.blocked_action_bar>a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error_message {
+    color: #b9154e;
+}
+
+.all_users_list_container {
+    background: #141124;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.user_list.all_users {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (min-width: 1260px) {
+    .user_list.all_users {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1400px) {
+    .user_list.all_users {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.user_list.all_users>li {
+    padding: 10px 0;
 }

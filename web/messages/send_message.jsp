@@ -26,8 +26,7 @@
             </select>
 
             <div class="reply_message_container">    
-                <textarea id="message_body" name="message_body" rows="20" cols="100" class="message_reply_body">
-                </textarea>
+                <textarea id="message_body" name="message_body" rows="20" cols="100" class="message_reply_body"></textarea>
             </div>
             <div>
                 <input type="submit" value="Send" class="button_primary"/>

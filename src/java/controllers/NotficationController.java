@@ -63,7 +63,7 @@ public class NotficationController extends HttpServlet {
         
         HashMap<Integer, Notification> AllNotificationsMap = NotificationDB.getAllNotificationsForUserByUserID(loggedInUserIDInt);
         try{
-            request.setAttribute("notificationsMap", AllNotificationsMap);
+            session.setAttribute("notificationsMap", AllNotificationsMap);
             System.out.println("NotificationController -> Notifications map loaded.");
         }catch(Exception ex){
             System.err.println("Exception getting all notifications for user " + username + "NotificationController -> \n\txception: "  + ex);
