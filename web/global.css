@@ -410,6 +410,8 @@ body:has(.main_content) {
     top: 60px;
     left: 50%;
     transform: translateX(-50%);
+    border: 3px solid #1AAED1;
+    background-color: #141124;
 }
 
 .left_panel h5 {
@@ -592,4 +594,21 @@ nav li {
 .view_all_btn a {
     color: white;
     font-size: 16px;
+}
+
+.fake_link {
+    background: transparent;
+    border: none;
+    color: #1AA7A7;
+}
+
+.fake_link:hover {
+    cursor: pointer;
+}
+
+.log_container {
+    margin-bottom: 15px;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: #141124;
 }
