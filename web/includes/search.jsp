@@ -8,23 +8,30 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <input type="text" id="search" onkeyup="searchFunction()" placeholder="Search Usernames..." title="Usernames"/>
 
-    <ul id="menu">
+    <input type="text" id="search" onkeyup="search()" placeholder="Search Usernames..." title="Usernames"/>
+
+    <ul id="menu" class="hidden listStyle">
         <c:forEach var="userMapItem" items="${userNameSearchMap}">
             <li><a href="Member?action=load_other_profile&&loadedProfileUserID=${userMapItem.value.getUserID()}">${userMapItem.value.getUsername()}</a></li>
-            </c:forEach>
+         </c:forEach>
     </ul>
 
     <script> //https://www.w3schools.com/howto/howto_js_search_menu.asp
-        function searchFunction() {
+        function search() {
             // Declare variables
             var input, filter, ul, li, a, i;
             input = document.getElementById("search");
             filter = input.value.toUpperCase();
             ul = document.getElementById("menu");
             li = ul.getElementsByTagName("li");
-
+            
+            if(input.value.length > 0 ){
+                ul.classList.remove("hidden");
+            }else{
+                ul.classList.add("hidden");
+            }
+            
             // Loop through all list items, and hide those who don't match the search query
             for (i = 0; i < li.length; i++) {
                 a = li[i].getElementsByTagName("a")[0];

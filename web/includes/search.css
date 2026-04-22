@@ -7,28 +7,42 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Author     : raren
 */
 
-#mySearch {
+#search {
   width: 100%;
   font-size: 18px;
   padding: 11px;
-  border: 1px solid #ddd;
+  border: 1px solid #00ceff;
+  color: white;
+  background-color: darkblue;
+  margin-left: 2px;
 }
 
 /* Style the navigation menu */
-#myMenu {
+#menu {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
 /* Style the navigation links */
-#myMenu li a {
+#menu li a {
   padding: 12px;
   text-decoration: none;
-  color: black;
+  color: #00ceff;
   display: block
 }
 
 #myMenu li a:hover {
   background-color: #eee;
+}
+
+.solid {
+    border: 1px solid #00ceff;
+}
+
+.listStyle {
+     list-style-type: none;
+     font-size: 2em;
+     border: 2px solid #00ceff;
+     background-color: #000;
 }
