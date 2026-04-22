@@ -21,6 +21,7 @@
                                 <form action="${pageContext.request.contextPath}/Friends" method="post">
                                     <input type="hidden" name="action" value="followUser">
                                     <input type="hidden" name="followingID" value="${user.value.getUserID()}">
+                                    <input type="hidden" name="suggestedClicked" value="true"/>
                                     <button type="submit" class="follow_btn"><img
                                             src="${pageContext.request.contextPath}/img/add-user.svg"
                                             alt="alt" /></button>

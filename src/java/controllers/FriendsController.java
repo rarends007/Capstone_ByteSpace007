@@ -52,8 +52,11 @@ public class FriendsController extends HttpServlet {
 
         String url = "/member/follow.jsp";
 
-        boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
         int userID = UserDB.getUserID(username);
+        
+        HashMap<Integer, User> SuggestedUsersHashMap = new HashMap<>();
+        SuggestedUsersHashMap = UserDB.getSuggestedUsers(userID);
+        session.setAttribute("SuggestedUsersHashMap", SuggestedUsersHashMap);
 
         switch (action) {
             case "getFollowing" -> {
@@ -127,8 +130,12 @@ public class FriendsController extends HttpServlet {
                 } catch (Exception ex) {
                     System.out.println("Unable follow user");
                 }
-
-                url = "/Member?action=load_other_profile&userID=" + followingID;
+                
+                String suggestedClicked = request.getParameter("suggestedClicked");
+                
+                if (suggestedClicked != null){
+                    url = "/Member?action=follow_suggested_member_clicked";
+                }
             }
         }
         request.setAttribute("message", message);

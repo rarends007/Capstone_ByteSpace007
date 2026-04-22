@@ -429,6 +429,9 @@ public class MemberController extends HttpServlet {
                     System.out.println("postID successfully converted to int");
                 }
                 break;
+            case "follow_suggested_member_clicked":
+                url = "/member/follow.jsp";
+                break;
 
         }
 
