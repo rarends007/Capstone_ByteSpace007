@@ -60,8 +60,9 @@ public class MemberController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         HttpSession session = request.getSession();
+        
         String username = session.getAttribute("username").toString();
 
         ArrayList errors = new ArrayList();
@@ -88,7 +89,7 @@ public class MemberController extends HttpServlet {
 
         if (pageControllerIsMember) {
             String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(userID); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
-            
+
             if (profilePhotoPathLoad == null) {
                 profilePhotoPathLoad = "";
             } else {
@@ -99,10 +100,10 @@ public class MemberController extends HttpServlet {
             try {
                 LinkedHashMap<Integer, String> following = FollowersDB.getFollowing(userID);
                 LinkedHashMap<Integer, String> followers = FollowersDB.getFollowers(userID);
-                        
+
                 for (Map.Entry<Integer, String> entry : following.entrySet()) {
-                     HashMap<Integer, Post> followingPosts  = PostDB.getUserPosts(entry.getKey());      
-                     feed.put(entry.getValue(), followingPosts);                    
+                    HashMap<Integer, Post> followingPosts = PostDB.getUserPosts(entry.getKey());
+                    feed.put(entry.getValue(), followingPosts);
                 }
 
                 session.setAttribute("numFollowing", following.size());
@@ -120,8 +121,6 @@ public class MemberController extends HttpServlet {
                 errors.add("Unable to retrieve profile posts.");
             }
         }
-        
-        
 
         //Notifications init retreival 
         /**
@@ -155,17 +154,17 @@ public class MemberController extends HttpServlet {
         } catch (Exception ex) {
             System.err.println("Exception getting all notifications for user " + username + "NotificationController -> \n\txception: " + ex);
         }
-        
+
         //Username Search Feature -> Load all users into a hashmap at page start
-        try{
+        try {
             HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
-            if(userNameSearchMap != null) {
-                
-            }else{
+            if (userNameSearchMap != null) {
+
+            } else {
                 userNameSearchMap = new HashMap<>();
             }
             request.setAttribute("userNameSearchMap", userNameSearchMap);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
         }
 
@@ -270,7 +269,7 @@ public class MemberController extends HttpServlet {
 
                     //get other users ID coming in from the show_all_profiles.jsp page request object
                     int loadedProfileUserID = Integer.parseInt(request.getParameter("userID"));
-                    
+
                     User loadedUserFromProfileselected = UserDB.getUser(loadedProfileUserID);
 
                     if (loadedUserFromProfileselected != null) {
@@ -372,10 +371,16 @@ public class MemberController extends HttpServlet {
                     if (toOther != null) {
                         url = "/member/otherProfile.jsp";
                     }
+
+                    posts = PostDB.getUserPosts(userID);
+
                 } catch (NumberFormatException ex) {
                     System.err.println("issue converting postID memberController case post_comment -> " + ex);
                 } catch (NullPointerException ex) {
                     System.err.println("postID is NULL memberController case post_comment");
+                } catch (SQLException ex) {
+                    System.err.println("action post_ comment -> Issue getting user posts -> \n\tSQLException " + ex);
+
                 }
 
                 break;
@@ -387,11 +392,16 @@ public class MemberController extends HttpServlet {
                     CommentDB.deleteCommentByID(commentID);
                     messages.add("comment deleted");
                     System.out.println("comment id deleted is -> " + commentID);
+
+                    posts = PostDB.getUserPosts(userID);
+
                 } catch (NumberFormatException ex) {
-                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \nNumberFormatExcetion " + ex);
+                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tNumberFormatExcetion " + ex);
                 } catch (NullPointerException ex) {
-                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \nNullPointerException " + ex);
-                } finally {
+                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tNullPointerException " + ex);
+                }catch (SQLException ex){
+                     System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tSQLException " + ex);
+                }finally {
                     System.out.println("commentID successfully converted to int");
                 }
                 break;
