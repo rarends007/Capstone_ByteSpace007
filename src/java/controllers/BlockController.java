@@ -6,6 +6,7 @@ package controllers;
 
 import business.bytespace.Super.User;
 import data.BlockedDB;
+import data.FollowersDB;
 import data.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -82,6 +83,10 @@ public class BlockController extends HttpServlet {
                 int blockedUserID = Integer.parseInt(request.getParameter("blockedUserID"));
 
                 try {
+                    if (FollowersDB.isUserFollowing(userID, blockedUserID) | FollowersDB.isUserFollowing(blockedUserID, userID)) {
+                        FollowersDB.removeFollow(userID, blockedUserID);
+                        FollowersDB.removeFollow(blockedUserID, userID);
+                    }
                     BlockedDB.blockUser(userID, blockedUserID);
                     message = "User blocked successfully";
                 } catch (Exception ex) {
