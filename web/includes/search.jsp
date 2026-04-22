@@ -13,7 +13,7 @@
 
     <ul id="menu" class="hidden listStyle">
         <c:forEach var="userMapItem" items="${userNameSearchMap}">
-            <li><a href="Member?action=load_other_profile&&loadedProfileUserID=${userMapItem.value.getUserID()}">${userMapItem.value.getUsername()}</a></li>
+            <li><a href="Member?action=load_other_profile&userID=${userMapItem.value.getUserID()}">${userMapItem.value.getUsername()}</a></li>
          </c:forEach>
     </ul>
 
