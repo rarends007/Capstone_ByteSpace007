@@ -61,6 +61,7 @@ public class FriendsController extends HttpServlet {
                 try {
                     follows = FollowersDB.getFollowing(userID);
                     session.setAttribute("follows", follows);
+                    session.setAttribute("numFollowing", follows.size());
                 } catch (Exception ex) {
                     message = "Unable to retrieve following.";
                 }
@@ -68,7 +69,7 @@ public class FriendsController extends HttpServlet {
                 if (follows.isEmpty()) {
                     request.setAttribute("noFollow", "You aren't following anyone!");
                 }
-
+                
                 session.setAttribute("title", "Following");
             }
             case "getFollowers" -> {
@@ -76,6 +77,7 @@ public class FriendsController extends HttpServlet {
                 try {
                     follows = FollowersDB.getFollowers(userID);
                     session.setAttribute("follows", follows);
+                    session.setAttribute("numFollowers", follows.size());
                 } catch (Exception ex) {
                     message = "Unable to retrieve followers.";
                 }
