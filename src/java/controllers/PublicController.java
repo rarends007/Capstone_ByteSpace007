@@ -62,7 +62,8 @@ public class PublicController extends HttpServlet {
             //String credential; no longer needed with new modularization of registration functionality
             String role;
             
-            switch (action) {
+            switch (action) { //TODO: figure out why the redirect isn't working right and is going to the URL patter /Public instead of  
+                //"/public-authorization/login.jsp"; even though it is set to the latter.
                 case ("login"): 
                     //1. session will store the username and other non confidential fields
                     //2. security roles control the login and password and references the role from the security context

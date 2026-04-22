@@ -13,6 +13,7 @@
     <servlet-mapping>
         <servlet-name>Admin</servlet-name>
         <url-pattern>/Admin/*</url-pattern>
+        <url-pattern>/Admin</url-pattern>
     </servlet-mapping>
     
     <servlet>
