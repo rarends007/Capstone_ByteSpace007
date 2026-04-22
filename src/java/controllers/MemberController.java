@@ -155,6 +155,19 @@ public class MemberController extends HttpServlet {
         } catch (Exception ex) {
             System.err.println("Exception getting all notifications for user " + username + "NotificationController -> \n\txception: " + ex);
         }
+        
+        //Username Search Feature -> Load all users into a hashmap at page start
+        try{
+            HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
+            if(userNameSearchMap != null) {
+                
+            }else{
+                userNameSearchMap = new HashMap<>();
+            }
+            request.setAttribute("userNameSearchMap", userNameSearchMap);
+        }catch(Exception ex){
+            System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
+        }
 
         switch (action) { //post
             case "uploadProfilePhoto":
@@ -257,7 +270,7 @@ public class MemberController extends HttpServlet {
 
                     //get other users ID coming in from the show_all_profiles.jsp page request object
                     int loadedProfileUserID = Integer.parseInt(request.getParameter("userID"));
-
+                    
                     User loadedUserFromProfileselected = UserDB.getUser(loadedProfileUserID);
 
                     if (loadedUserFromProfileselected != null) {
