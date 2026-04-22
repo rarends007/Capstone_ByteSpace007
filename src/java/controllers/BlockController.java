@@ -4,16 +4,13 @@
  */
 package controllers;
 
-import business.bytespace.Super.User;
-import data.FollowersDB;
-import data.NotificationDB;
+import data.BlockedDB;
 import data.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +18,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author raren
+ * @author se757706
  */
-//@WebServlet(name = "FriendsController", urlPatterns = {"/FriendsController"}) TODO need to add to deployment descriptor or it won't work, realms too -RA
-public class FriendsController extends HttpServlet {
+public class BlockController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,87 +34,57 @@ public class FriendsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
         HttpSession session = request.getSession();
         String username = session.getAttribute("username").toString();
 
         String message = null;
-        HashMap<Integer, String> follows = new HashMap<Integer, String>();
+        String error = null;
+        HashMap<Integer, String> blocked = new HashMap<Integer, String>();
 
         String action = request.getParameter("action");
         if (action == null) {
             action = "No action";
         }
 
-        String url = "/member/follow.jsp";
+        String url = "/member/blocked.jsp";
 
         boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
         int userID = UserDB.getUserID(username);
 
         switch (action) {
-            case "getFollowing" -> {
-
+            case ("getBlockedUsers"):
                 try {
-                    follows = FollowersDB.getFollowing(userID);
-                    session.setAttribute("follows", follows);
-                } catch (Exception ex) {
-                    message = "Unable to retrieve following.";
-                }
-
-                if (follows.isEmpty()) {
-                    request.setAttribute("noFollow", "You aren't following anyone!");
-                }
-
-                session.setAttribute("title", "Following");
-            }
-            case "getFollowers" -> {
-
-                try {
-                    follows= FollowersDB.getFollowers(userID);
-                    session.setAttribute("follows", follows);
-                } catch (Exception ex) {
-                    message = "Unable to retrieve followers.";
-                }
-
-                if (follows.isEmpty()) {
-                    request.setAttribute("noFollow", "You have no followers!");
-                }
-
-                session.setAttribute("title", "Followers");
-            }
-            case "removeFollow" -> {
-                int followingID = Integer.parseInt(request.getParameter("followingID"));
-                
-                try {
-                    if (session.getAttribute("title").equals("Followers")) {
-                        FollowersDB.removeFollow(followingID, userID);
-                        message = "Successfully removed follower";
-                    } else {
-                        FollowersDB.removeFollow(userID, followingID);
-                        message = "Removed from your following list";
+                    blocked = BlockedDB.getBlockedUsers(userID);
+                    if (blocked.isEmpty()) {
+                        request.setAttribute("noneBlocked", "No users blocked.");
                     }
+                    session.setAttribute("blockedUsers", blocked);
                 } catch (Exception ex) {
-                    message = "Unable to remove user from list.";
+                    error = "Error retrieving blocked users";
                 }
-            }
-            case "followUser" -> {
-                int followingID = Integer.parseInt(request.getParameter("followingID"));
-                
-                //This ensures that when a user follows another user that the user will be notified they followed them.
-                if (NotificationDB.insertNotificationForUserByUserID(followingID, username +  " started following you.")){ 
-                    System.out.println("Notification successfully sent to the followed user.");
-                }
-                //End notification
-                
+                break;
+            case ("blockUser"):
+                int blockedUserID = Integer.parseInt(request.getParameter("blockedUserID"));
+
                 try {
-                    FollowersDB.addFollow(userID, followingID);
-                    System.out.println("Successfully followed user");
+                    BlockedDB.blockUser(userID, blockedUserID);
+                    message = "User blocked successfully";
                 } catch (Exception ex) {
-                    System.out.println("Unable follow user");
+                    error = "Unable to block user";
                 }
-                
-                url = "/Member?action=load_other_profile&userID=" + followingID;
-            }
+                break;
+            case ("unblockUser"):
+                blockedUserID = Integer.parseInt(request.getParameter("blockedUserID"));
+                try {
+                    BlockedDB.unblockUser(userID, blockedUserID);
+                    message = "User unblocked successfully";
+                } catch (Exception ex) {
+                    error = "Unable to unblock user";
+                }
+                break;
         }
+        request.setAttribute("error", error);
         request.setAttribute("message", message);
 
         getServletContext()

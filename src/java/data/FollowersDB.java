@@ -4,12 +4,19 @@
  */
 package data;
 
+import business.bytespace.Comment;
+import business.bytespace.Image;
+import business.bytespace.Super.Post;
 import business.bytespace.Super.User;
+import static data.PostDB.getPostComments;
+import static data.PostDB.getPostImages;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -56,7 +63,7 @@ public class FollowersDB {
 
         return following;
     }
-    
+
     //retrieve list of users that are following this user
     public static LinkedHashMap<Integer, String> getFollowers(int userID)
             throws SQLException {
@@ -95,5 +102,68 @@ public class FollowersDB {
         pool.freeConnection(connection);
 
         return followers;
+    }
+
+    public static int removeFollow(int userID, int followingID)
+            throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query = """
+                       DELETE FROM user_followers 
+                       WHERE user_id = ? 
+                       AND following_id = ?
+                       """;
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, userID);
+        ps.setInt(2, followingID);
+
+        int rows = ps.executeUpdate();
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return rows;
+    }
+
+    public static int addFollow(int userID, int followingID)
+            throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        
+
+        String query = """
+                       INSERT INTO user_followers 
+                       (user_id, following_id)
+                       VALUES (?, ?)
+                       """;
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, userID);
+        ps.setInt(2, followingID);
+
+        int rows = ps.executeUpdate();
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return rows;
+    }
+    
+    /**
+     * 
+     * @param userID
+     * @return 
+     */
+    public static boolean deleteAllFolloweringByUserID(User userID){
+        //TODO: 
+        //1. write the logic to delete all of the followers for a user to be deleted
+        // 2. Call that function in the UserDB function that is called when an admin wants to delete a user from the database on the user to be deleted.
+        // There will be a database error when an admin attempts to do so until i do.
+        
+        return false;
     }
 }

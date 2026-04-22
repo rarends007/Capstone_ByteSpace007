@@ -195,13 +195,14 @@ public class MessageDB {
         String query = """ 
                                SELECT *
                                FROM message
-                               WHERE reciever_id = ?
+                               WHERE reciever_id = ? OR sender_id = ?
                                ORDER BY timestamp DESC;
                        """;        //retrieves all messages for a single user that they recieved
 
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, userID);
+            ps.setInt(2, userID);
             rs = ps.executeQuery();
 
             while (rs.next()) {

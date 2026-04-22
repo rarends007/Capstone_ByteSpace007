@@ -14,6 +14,12 @@ import java.sql.SQLException;
  */
 public class CommentDB {
     
+    /**
+     * Deletes all comments based on user id.
+     * Returns true if successful, false if not.
+     * @param userID
+     * @return (boolean)
+     */
      public static boolean deleteAllCommentsForUser(int userID){
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -43,6 +49,43 @@ public class CommentDB {
         pool.freeConnection(connection);
         
         return commentDeleted;
+    } 
+    
+    /**
+     * Deletes all comments for a post based on the post ID. Intended for when you need to delete a post to satisfy FK.
+     * Returns true if successful, false if not.
+     * @param postID
+     * @return (boolean)
+     */
+    public static boolean deleteAllCommentsByPostID(int postID){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+       
+        int result = -1;
+        
+        boolean commentsDeleted = false; 
+        
+        String query = """
+                       DELETE FROM comment
+                       WHERE post_id = ?;
+                       """;
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, postID);
+
+            result = ps.executeUpdate();
+            System.out.println("CommentsDB -> deleteAllCommentsByPost() -> Delete executed -> rows effected -> " + result);
+            commentsDeleted = true;
+
+        }catch(SQLException ex){
+            System.out.println("CommentsDB -> deleteAllCommentsByPost() failed-> \nExcetion -> " + ex +"\n") ;
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+        
+        return commentsDeleted;
     } 
    
    /**

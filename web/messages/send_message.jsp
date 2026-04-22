@@ -13,11 +13,11 @@
         <title>Send Message</title>
     </head>
     <body>
-        <h1>Send Message</h1>
+        <h4>Send Message</h4>
         <form action="${pageContext.request.contextPath}/Message" method="post">
             <input type="hidden" name="action" value="send_message"/>
 
-            <select name="selected_recipient" id="selected_recipient"> 
+            <select name="selected_recipient" id="selected_recipient" class="recipient_selector"> 
                 <option value="">choose a recipient</option>
                 <!--TODO: Take each recipient and load them into the messages_receiver db field in message table --> 
                 <c:forEach var="item" items="${users}">
@@ -25,12 +25,11 @@
                 </c:forEach>
             </select>
 
-            <div>    
-                <textarea id="message_body" name="message_body" rows="20" cols="100">
-                </textarea>
+            <div class="reply_message_container">    
+                <textarea id="message_body" name="message_body" rows="20" cols="100" class="message_reply_body"></textarea>
             </div>
             <div>
-                <input type="submit" value="Send"/>
+                <input type="submit" value="Send" class="button_primary"/>
             </div>
         </form>
         <span>${messages}</span>

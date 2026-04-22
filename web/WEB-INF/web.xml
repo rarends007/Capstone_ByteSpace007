@@ -43,6 +43,15 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>Block</servlet-name>
+        <servlet-class>controllers.BlockController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Block</servlet-name>
+        <url-pattern>/Block</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>Friends</servlet-name>
         <servlet-class>controllers.FriendsController</servlet-class>
     </servlet>
@@ -58,6 +67,15 @@
     <servlet-mapping>
         <servlet-name>Comment</servlet-name>
         <url-pattern>/Comment</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>Notification</servlet-name>
+        <servlet-class>controllers.NotficationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Notification</servlet-name>
+        <url-pattern>/Notification</url-pattern>
     </servlet-mapping>
     
     

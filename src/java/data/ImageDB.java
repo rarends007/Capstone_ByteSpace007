@@ -48,6 +48,38 @@ public class ImageDB {
 
         return imagesDeleted;
     }
+    
+    public static boolean deleteAllImagesByPostID(int postID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        int result = -1;
+
+        boolean imagesDeleted = false;
+
+        String query = """
+                       DELETE FROM image
+                       WHERE post_id = ?;
+                       """;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, postID);
+
+            result = ps.executeUpdate();
+            System.out.println("ImageDB -> deleteAllImagesByPostID() -> Delete executed -> rows effected -> " + result);
+            imagesDeleted = true;
+
+        } catch (SQLException ex) {
+            System.out.println("ImageDB -> deleteAllImagesByPostID() failed-> \nExcetion -> " + ex + "\n");
+        }
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return imagesDeleted;
+    }
+
 
     public static String getAllIUserImagePhotoPaths(String username) {
         String profilePhotoPath = "";
