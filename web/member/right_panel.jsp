@@ -7,20 +7,20 @@
                 <div class="suggestion_container">
                     <h4>Suggestion for you</h4>
                     <ul class="suggestion_list">
-                        <c:forEach var="users" items="${SuggestedUsersHashMap}">
+                        <c:forEach var="user" items="${SuggestedUsersHashMap}">
                             <li>
                                 <div class="suggestion_content">
-                                    <div class="user_avatar">${users.value.getFirstname()},${users.value.getLastname()}
+                                    <div class="user_avatar">${user.value.getFirstname()},${user.value.getLastname()}
                                     </div>
                                     <a
-                                        href="${pageContext.request.contextPath}/Member?action=load_other_profile&userID=${users.value.getUserID()}">
-                                        <h4>${users.value.getFirstname()} ${users.value.getLastname()}</h4>
+                                        href="${pageContext.request.contextPath}/Member?action=load_other_profile&userID=${user.value.getUserID()}">
+                                        <h4>${user.value.getFirstname()} ${user.value.getLastname()}</h4>
                                         <span class="under_text">${users.value.getUsername()}</span>
                                     </a>
                                 </div>
                                 <form action="${pageContext.request.contextPath}/Friends" method="post">
                                     <input type="hidden" name="action" value="followUser">
-                                    <input type="hidden" name="followingID" value="${loadedProfileUserID}">
+                                    <input type="hidden" name="followingID" value="${user.value.getUserID()}">
                                     <button type="submit" class="follow_btn"><img
                                             src="${pageContext.request.contextPath}/img/add-user.svg"
                                             alt="alt" /></button>
