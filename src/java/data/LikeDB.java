@@ -9,9 +9,10 @@ import static data.UserDB.getUserID;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import javax.naming.NamingException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -87,13 +88,14 @@ public class LikeDB {
         return success;
     }
     
-    public static int getPostLikes(int likeID) throws SQLException, NamingException {
+    public static LinkedHashMap<Integer, Integer> getPostLikes(int postID) throws SQLException, NamingException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         ResultSet rs = null;
-        ArrayList<Integer> likes = new ArrayList<>();
+        LinkedHashMap<Integer, Integer> postLikes = new LinkedHashMap<>(); //postID and num of likes
+        int likes = 0;
 
         //todo, make a function to insert Admins later, in the JSP there needs, getting the role from the User user obj
         //to be a hidden field that passes MEMBER or ADMIN and then it is passed to user in the PublicController -> 
@@ -105,27 +107,29 @@ public class LikeDB {
                        WHERE post_ID = ?
                        """;
         ps = connection.prepareStatement(query);
-        ps.setInt(1, likeID);
+        ps.setInt(1, postID);
 
         rs = ps.executeQuery();
 
         while (rs.next()) {
-            likes.add(likeID);
+            likes++;
         }
-
+        postLikes.put(postID, likes);
+        
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
 
-        return likes.size();
+        return postLikes;
     }
     
-    public static int getCommentLikes(int commentID) throws SQLException, NamingException {
+    public static LinkedHashMap<Integer, Integer> getCommentLikes(int commentID) throws SQLException, NamingException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         ResultSet rs = null;
-        ArrayList<Integer> likes = new ArrayList<>();
+        LinkedHashMap<Integer, Integer> commentLikes = new LinkedHashMap<>(); //postID and num of likes
+        int likes = 0;
 
         //todo, make a function to insert Admins later, in the JSP there needs, getting the role from the User user obj
         //to be a hidden field that passes MEMBER or ADMIN and then it is passed to user in the PublicController -> 
@@ -142,12 +146,13 @@ public class LikeDB {
         rs = ps.executeQuery();
 
         while (rs.next()) {
-            likes.add(commentID);
+            likes++;
+            commentLikes.put(commentID, likes);
         }
 
         DBUtil.closePreparedStatement(ps);
         pool.freeConnection(connection);
 
-        return likes.size();
+        return commentLikes;
     }
 }

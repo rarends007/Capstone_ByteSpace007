@@ -11,6 +11,7 @@ import data.BlockedDB;
 import data.CommentDB;
 import data.FollowersDB;
 import data.ImageDB;
+import data.LikeDB;
 import data.NotificationDB;
 import data.PostDB;
 import data.ProfileDB;
@@ -24,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -114,6 +116,14 @@ public class MemberController extends HttpServlet {
 
             try {
                 posts = PostDB.getUserPosts(userID);
+                posts.forEach((key, value) -> {
+                    try {
+                        LinkedHashMap<Integer, Integer> postLikes = LikeDB.getPostLikes(key);
+                        request.setAttribute("likesForPost" + key, postLikes);
+                    } catch (SQLException | NamingException ex) {
+                        Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
                 userStatus = ProfileDB.getUserStatus(userID);
             } catch (SQLException ex) {
                 Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
