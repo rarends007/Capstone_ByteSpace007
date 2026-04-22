@@ -27,7 +27,7 @@
                         <div class="follow_num">
                             <p>
                                 <c:choose>
-                                    <c:when test="${follow_num != null}">
+                                    <c:when test="${numFollowingOther != null}">
                                         ${numFollowingOther}
                                     </c:when>
                                     <c:otherwise>
@@ -42,7 +42,7 @@
                         <div class="follow_num">
                             <p>
                                 <c:choose>
-                                    <c:when test="${numFollowers != null}">
+                                    <c:when test="${numFollowingOther != null}">
                                         ${numFollowersOther}
                                     </c:when>
                                     <c:otherwise>

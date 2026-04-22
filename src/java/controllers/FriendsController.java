@@ -71,6 +71,8 @@ public class FriendsController extends HttpServlet {
                 }
                 
                 session.setAttribute("title", "Following");
+                
+                url = ""; //inf loop prevention
             }
             case "getFollowers" -> {
 
@@ -88,6 +90,7 @@ public class FriendsController extends HttpServlet {
 
                 session.setAttribute("title", "Followers");
                 
+                 url = ""; //inf loop prevention
             }
             case "removeFollow" -> {
                 int followingID = Integer.parseInt(request.getParameter("followingID"));
@@ -129,6 +132,10 @@ public class FriendsController extends HttpServlet {
             }
         }
         request.setAttribute("message", message);
+        
+        if(url.isBlank()){
+            url = "/member/follow.jsp";
+        }
 
         getServletContext()
                 .getRequestDispatcher(url)
