@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.naming.NamingException;
 
 /**
  *
@@ -165,5 +166,37 @@ public class FollowersDB {
         // There will be a database error when an admin attempts to do so until i do.
         
         return false;
+    }
+    
+    public static boolean isUserFollowing(int userID, int followingID) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean blocked = false;
+
+        String query = """
+                       SELECT user_follower_id 
+                       FROM user_followers 
+                       WHERE user_id = ? 
+                       AND following_id = ?
+                       """;
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, userID);
+        ps.setInt(2, followingID);
+
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            blocked = true;
+        }
+
+        DBUtil.closeResultSet(rs);
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return blocked;
     }
 }
