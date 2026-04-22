@@ -23,6 +23,7 @@
                 <span> Login</span>
             </div>
             <h3>Welcome Back</h3>
+            <form action="Public" method="post" class="login-form_container">
             <form action="${pageContext.request.contextPath}/Public" method="post" class="login-form_container">
                 <input type="hidden" name="action" value="login">
                 <label for="username">Username</label>

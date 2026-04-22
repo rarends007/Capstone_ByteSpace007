@@ -59,7 +59,7 @@ public class UserDB {
             result = ps.executeUpdate();
             System.out.println("New User added, not the role yet though.");
             
-            ResultSet rs = 
+            //ResultSet rs = 
             
             if (result != -1) {
                 query = """
