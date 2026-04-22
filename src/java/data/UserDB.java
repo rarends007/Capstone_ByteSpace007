@@ -177,6 +177,7 @@ public class UserDB {
         PreparedStatement ps = null;
         ResultSet rs = null;
         
+        usernamePassed = usernamePassed.trim();
         User user = null;
 
         String query = """

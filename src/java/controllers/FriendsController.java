@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -73,7 +74,7 @@ public class FriendsController extends HttpServlet {
             case "getFollowers" -> {
 
                 try {
-                    follows= FollowersDB.getFollowers(userID);
+                    follows = FollowersDB.getFollowers(userID);
                     session.setAttribute("follows", follows);
                 } catch (Exception ex) {
                     message = "Unable to retrieve followers.";
@@ -84,15 +85,21 @@ public class FriendsController extends HttpServlet {
                 }
 
                 session.setAttribute("title", "Followers");
+                
             }
             case "removeFollow" -> {
                 int followingID = Integer.parseInt(request.getParameter("followingID"));
+                String title = request.getParameter("title").trim();
                 
                 try {
                     if (session.getAttribute("title").equals("Followers")) {
+                        url="/Friends?action=get" + title;
                         FollowersDB.removeFollow(followingID, userID);
                         message = "Successfully removed follower";
+                        
+                       
                     } else {
+                        url="/Friends?action=get" + title;
                         FollowersDB.removeFollow(userID, followingID);
                         message = "Removed from your following list";
                     }
@@ -102,20 +109,20 @@ public class FriendsController extends HttpServlet {
             }
             case "followUser" -> {
                 int followingID = Integer.parseInt(request.getParameter("followingID"));
-                
+
                 //This ensures that when a user follows another user that the user will be notified they followed them.
-                if (NotificationDB.insertNotificationForUserByUserID(followingID, username +  " started following you.")){ 
+                if (NotificationDB.insertNotificationForUserByUserID(followingID, username + " started following you.")) {
                     System.out.println("Notification successfully sent to the followed user.");
                 }
                 //End notification
-                
+
                 try {
                     FollowersDB.addFollow(userID, followingID);
                     System.out.println("Successfully followed user");
                 } catch (Exception ex) {
                     System.out.println("Unable follow user");
                 }
-                
+
                 url = "/Member?action=load_other_profile&userID=" + followingID;
             }
         }
