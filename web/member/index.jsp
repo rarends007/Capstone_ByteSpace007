@@ -10,6 +10,7 @@
                 <title>Member Profile</title>
                 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/global.css" />
                 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/member/member.css" />
+                <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/includes/search.css" />
             </head>
 
             <body>
