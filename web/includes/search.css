@@ -32,8 +32,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
   display: block
 }
 
-#myMenu li a:hover {
-  background-color: #eee;
+
+#menu li a:hover {
+  background-color: #FFF;
 }
 
 .solid {
