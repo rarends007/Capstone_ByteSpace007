@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import business.bytespace.Super.User;
 import data.BlockedDB;
 import data.UserDB;
 import java.io.IOException;
@@ -51,6 +52,19 @@ public class BlockController extends HttpServlet {
 
         boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
         int userID = UserDB.getUserID(username);
+
+        //Ensures usernames are cached for the search functionality
+        try {
+            HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
+            if (userNameSearchMap != null) {
+
+            } else {
+                userNameSearchMap = new HashMap<>();
+            }
+            request.setAttribute("userNameSearchMap", userNameSearchMap);
+        } catch (Exception ex) {
+            System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
+        }
 
         switch (action) {
             case ("getBlockedUsers"):

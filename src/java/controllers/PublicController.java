@@ -147,7 +147,7 @@ public class PublicController extends HttpServlet {
                     user.setLastname(lastname);
                     user.setRole(role);
                     
-                     Utility.handleRegistration(user,  password, confirmPassword,  errors, messages);
+                    Utility.handleRegistration(user,  password, confirmPassword,  errors, messages);
 
                     url = "/public-authorization/register.jsp";
                     break;

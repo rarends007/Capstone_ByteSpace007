@@ -46,8 +46,10 @@ public class UserDB {
                        VALUES
                        (?, ?, ?, ?, ?);
                        """;
+        
+        
         try {
-            ps = connection.prepareStatement(query);
+            ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS); //https://stackoverflow.com/questions/4224228/preparedstatement-with-statement-return-generated-keys
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getFirstname());
             ps.setString(3, user.getMiddlename());
@@ -56,7 +58,9 @@ public class UserDB {
 
             result = ps.executeUpdate();
             System.out.println("New User added, not the role yet though.");
-
+            
+            ResultSet rs = 
+            
             if (result != -1) {
                 query = """
                                INSERT INTO role
