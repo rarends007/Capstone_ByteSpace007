@@ -133,7 +133,6 @@ public class FollowersDB {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
-        
 
         String query = """
                        INSERT INTO user_followers 
@@ -152,18 +151,76 @@ public class FollowersDB {
 
         return rows;
     }
-    
+
     /**
-     * 
-     * @param userID
-     * @return 
+     * Deletes all follow entries for the provider user id.
+     * @param userID int
+     * @return boolean
      */
-    public static boolean deleteAllFolloweringByUserID(User userID){
+    public static boolean deleteAllFollowingByUserID(int userID) {
         //TODO: 
         //1. write the logic to delete all of the followers for a user to be deleted
         // 2. Call that function in the UserDB function that is called when an admin wants to delete a user from the database on the user to be deleted.
         // There will be a database error when an admin attempts to do so until i do.
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
         
-        return false;
+        boolean userFollowerEntriesDeleted = false;
+        int result = -1;
+        
+        String query = """
+                       DELETE
+                       FROM user_followers
+                       WHERE user_id = ?;
+                       """;
+        
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+            result = ps.executeUpdate();
+            System.out.println("Rows deleted: " + result);
+            
+            userFollowerEntriesDeleted = true;
+        }catch(SQLException ex){
+            System.err.println("FollowersDB -> .deleteAllFollowingByUserID() -> \n\tSQLException: " + ex );
+        }
+        return userFollowerEntriesDeleted;
+    }
+    
+    /**
+     * Deletes all of the entries from the user_follower table where the provided userID is being followed by another member
+     * @param userID
+     * @return 
+     */
+    public static boolean deleteAllFollowedByUserID(int userID) {
+        //TODO: 
+        //1. write the logic to delete all of the followers for a user to be deleted
+        // 2. Call that function in the UserDB function that is called when an admin wants to delete a user from the database on the user to be deleted.
+        // There will be a database error when an admin attempts to do so until i do.
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        
+        boolean userFollowerEntriesDeleted = false;
+        int result = -1;
+        
+        String query = """
+                       DELETE
+                       FROM user_followers
+                       WHERE following_id = ?;
+                       """;
+        
+        try{
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userID);
+            result = ps.executeUpdate();
+            System.out.println("Rows deleted: " + result);
+            
+            userFollowerEntriesDeleted = true;
+        }catch(SQLException ex){
+            System.err.println("FollowersDB -> .deleteAllFollowingByUserID() -> \n\tSQLException: " + ex );
+        }
+        return userFollowerEntriesDeleted;
     }
 }

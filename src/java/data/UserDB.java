@@ -395,7 +395,9 @@ public class UserDB {
             NotificationDB.deleteNotificationsForUser(userID);
             ProfileDB.deleteUserProfile(userID);
             ReportDB.deleteAllReportsForUser(userID); //must execute in order so all fk are deleted then then finally the parent user record
-
+            FollowersDB.deleteAllFollowingByUserID(userID);
+            FollowersDB.deleteAllFollowedByUserID(userID);
+            
             deleteRole(userID);
 
             ps = connection.prepareStatement(query);
