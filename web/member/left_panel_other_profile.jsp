@@ -56,14 +56,9 @@
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="${pageContext.request.contextPath}/Member">Profile</a></li>
-                        <li><a href="${pageContext.request.contextPath}/Block?action=getBlockedUsers">Blocked Users</a>
-                        </li>
-                        <c:if test="${role.equals('ADMIN')}">
-                            <li><a href="${pageContext.request.contextPath}/Admin?action=load_admins_member_info">Admin Portal</a></li>
-                        </c:if>
-                        <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
-                        <li><a href="${pageContext.request.contextPath}/Member?action=getImageGalleryForOtherProfile&loadedProfileUserID=${loadedProfileUserID}">Gallery</a></li>
+                        <li><a href="${pageContext.request.contextPath}/Member">Back to My Profile</a></li>
+
+                        <li><a href="${pageContext.request.contextPath}/Member?action=load_other_profile&userID=${loadedProfileUserID}&loadOtherGallery=true">Gallery</a></li>
                     </ul>
                 </nav>
                 <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>

@@ -60,9 +60,9 @@ public class MemberController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
-        
+
         String username = session.getAttribute("username").toString();
 
         ArrayList errors = new ArrayList();
@@ -242,25 +242,6 @@ public class MemberController extends HttpServlet {
                 }
 
                 break;
-            case "getImageGalleryForOtherProfile":
-                ArrayList<String> OtherProfilephotoFilePaths = new ArrayList();
-                int  loadedProfileUserIDForGalleryInt = -1000;
-                try{
-                    loadedProfileUserIDForGalleryInt = Integer.parseInt(request.getParameter("loadedProfileUserID"));
-                }catch (NumberFormatException ex){
-                    System.err.println("");
-                }
-                
-                try {
-                    OtherProfilephotoFilePaths = ImageDB.getUserImagePhotoPathsById(loadedProfileUserIDForGalleryInt);
-                    System.out.print("Images retrieved");
-                } catch (Exception ex) {
-                    Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
-                    errors.add("Unable to get images.");
-                }
-                url = "/member/gallery.jsp";
-                request.setAttribute("gallery", OtherProfilephotoFilePaths);
-                break;
             case "get_all_users":
                 System.out.println("Member -> case 'get_all_users' hit");
                 HashMap allUsersHashMap = new HashMap();
@@ -346,6 +327,29 @@ public class MemberController extends HttpServlet {
                     System.out.println("Member -> load_other_profile -> \nNumberFormatException: " + ex);
                 }
 
+                String loadOtherGallery = request.getParameter("loadOtherGallery");
+                if (loadOtherGallery != null) {
+                    url = "/member/gallery_other_profile.jsp";
+
+                    //request.setAttribute("loadedProfileUserID", url);
+                    ArrayList<String> OtherProfilephotoFilePaths = new ArrayList();
+                    int loadedProfileUserIDForGalleryInt = -1000;
+                    try {
+                        loadedProfileUserIDForGalleryInt = Integer.parseInt(request.getParameter("userID"));
+                    } catch (NumberFormatException ex) {
+                        System.err.println("");
+                    }
+
+                    try {
+                        OtherProfilephotoFilePaths = ImageDB.getUserImagePhotoPathsById(loadedProfileUserIDForGalleryInt);
+                        System.out.print("Images retrieved");
+                    } catch (Exception ex) {
+                        Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                        errors.add("Unable to get images.");
+                    }
+                    url = "/member/gallery_other_profile.jsp";
+                    request.setAttribute("gallery", OtherProfilephotoFilePaths);
+                }
                 break;
             case "makePost":
                 String postText = request.getParameter("postText");
@@ -419,9 +423,9 @@ public class MemberController extends HttpServlet {
                     System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tNumberFormatExcetion " + ex);
                 } catch (NullPointerException ex) {
                     System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tNullPointerException " + ex);
-                }catch (SQLException ex){
-                     System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tSQLException " + ex);
-                }finally {
+                } catch (SQLException ex) {
+                    System.err.println("MemberController -> case delete_comment -> converting commentID to int -> \n\tSQLException " + ex);
+                } finally {
                     System.out.println("commentID successfully converted to int");
                 }
                 break;
