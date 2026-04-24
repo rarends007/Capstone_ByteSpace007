@@ -60,7 +60,7 @@
                         <li><a href="${pageContext.request.contextPath}/Block?action=getBlockedUsers">Blocked Users</a>
                         </li>
                         <c:if test="${role.equals('ADMIN')}">
-                            <li><a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Portal</a></li>
+                            <li><a href="${pageContext.request.contextPath}/Admin?action=load_admins_member_info">Admin Portal</a></li>
                         </c:if>
                         <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
                         <li><a href="${pageContext.request.contextPath}/Member?action=getImageForUser">Gallery</a></li>

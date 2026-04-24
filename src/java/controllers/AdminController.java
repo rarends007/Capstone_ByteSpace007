@@ -7,6 +7,7 @@ package controllers;
 import business.bytespace.Log;
 import business.bytespace.Super.User;
 import data.LogDB;
+import data.ProfileDB;
 import utilities.Utility;
 
 import data.UserDB;
@@ -19,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -61,7 +63,7 @@ public class AdminController extends HttpServlet {
         String password;
         String confirmPassword;
         String role;
-        
+
         //Ensures usernames are cached for the search functionality
         try {
             HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
@@ -142,6 +144,26 @@ public class AdminController extends HttpServlet {
                     request.setAttribute("loginMap", loginLog);
 
                     url = "/admin/user_login_log.jsp";
+                    break;
+                case "load_admins_member_info":
+                    HttpSession session = request.getSession();
+                    String adminsUserID = session.getAttribute("userID").toString();
+                    try{
+                        int adminUserIDInt = Integer.parseInt(adminsUserID);
+                        
+                        String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(adminUserIDInt); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
+
+                    if (profilePhotoPathLoad == null) {
+                        profilePhotoPathLoad = "";
+                    } else {
+                        session.setAttribute("profile_photo", profilePhotoPathLoad);
+                        System.out.println("photo path is: " + profilePhotoPathLoad);
+                    }
+                    }catch (NumberFormatException ex) {
+                        System.err.println("Admin -> case load_admins_member_info -> \n\tNumberFormatException " + ex);
+                    }
+                    
+                    
                     break;
             }
         }
