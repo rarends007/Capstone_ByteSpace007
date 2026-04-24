@@ -4,6 +4,9 @@
         <%@page contentType="text/html" pageEncoding="UTF-8" %>
             <!DOCTYPE html>
             <div class="right_panel">
+                <div class="search_container">
+                    <c:import url="/includes/search.jsp"/><!--<!-- Adds functionality to search for users by username dynamically -->
+                </div>
                 <div class="suggestion_container">
                     <h4>Suggestion for you</h4>
                     <ul class="suggestion_list">
@@ -33,7 +36,4 @@
                 </div>
                 <c:import url="/includes/notification.jsp" /><!--<!-- Modded to add new notification.jsp - RA -->
                 
-                <div>
-                    <c:import url="/includes/search.jsp"/><!--<!-- Adds functionality to search for users by username dynamically -->
-                </div>
             </div>
