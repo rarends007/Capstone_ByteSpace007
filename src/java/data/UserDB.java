@@ -68,14 +68,16 @@ public class UserDB {
             
             if (result != -1) {
                 query = """
-                               INSERT INTO role
-                               (user_id, rolename)
+                               INSERT INTO user_role
+                               (user_id, username, rolename)
                                VALUES
-                               (?, ?);
+                               (?, ?, ?);
                                """;
                 ps = connection.prepareStatement(query);
                 ps.setInt(1, key);
-                ps.setString(2, user.getRole());
+                ps.setString(2, user.getUsername());
+                ps.setString(3, user.getRole());
+                ps.executeUpdate();
             }
             System.out.println("New User added, and now User role added too.");
             userRegistered = true;
