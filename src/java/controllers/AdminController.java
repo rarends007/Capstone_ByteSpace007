@@ -129,7 +129,13 @@ public class AdminController extends HttpServlet {
                     User user = new User(username, firstname, middlename, lastname, password, role);
 
                     Utility.handleRegistration(user, password, confirmPassword, errors, messages);
-
+                    
+                    try {
+                        userHashMap = UserDB.getAllUsers();
+                    } catch (Exception ex) {
+                        System.out.println("Admin loading userHashMap error -> " + ex);
+                    }
+                    
                     if (userHashMap != null) {
                         request.setAttribute("usersHashMap", userHashMap);
                     }
@@ -148,22 +154,21 @@ public class AdminController extends HttpServlet {
                 case "load_admins_member_info":
                     HttpSession session = request.getSession();
                     String adminsUserID = session.getAttribute("userID").toString();
-                    try{
+                    try {
                         int adminUserIDInt = Integer.parseInt(adminsUserID);
-                        
+
                         String profilePhotoPathLoad = ProfileDB.getProfilePhotoPath(adminUserIDInt); //call db method to get the photo and later all profile info that is loaded will also be populated in this switch case as well
 
-                    if (profilePhotoPathLoad == null) {
-                        profilePhotoPathLoad = "";
-                    } else {
-                        session.setAttribute("profile_photo", profilePhotoPathLoad);
-                        System.out.println("photo path is: " + profilePhotoPathLoad);
-                    }
-                    }catch (NumberFormatException ex) {
+                        if (profilePhotoPathLoad == null) {
+                            profilePhotoPathLoad = "";
+                        } else {
+                            session.setAttribute("profile_photo", profilePhotoPathLoad);
+                            System.out.println("photo path is: " + profilePhotoPathLoad);
+                        }
+                    } catch (NumberFormatException ex) {
                         System.err.println("Admin -> case load_admins_member_info -> \n\tNumberFormatException " + ex);
                     }
-                    
-                    
+
                     break;
             }
         }
