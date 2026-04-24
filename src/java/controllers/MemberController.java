@@ -242,6 +242,25 @@ public class MemberController extends HttpServlet {
                 }
 
                 break;
+            case "getImageGalleryForOtherProfile":
+                ArrayList<String> OtherProfilephotoFilePaths = new ArrayList();
+                int  loadedProfileUserIDForGalleryInt = -1000;
+                try{
+                    loadedProfileUserIDForGalleryInt = Integer.parseInt(request.getParameter("loadedProfileUserID"));
+                }catch (NumberFormatException ex){
+                    System.err.println("");
+                }
+                
+                try {
+                    OtherProfilephotoFilePaths = ImageDB.getUserImagePhotoPathsById(loadedProfileUserIDForGalleryInt);
+                    System.out.print("Images retrieved");
+                } catch (Exception ex) {
+                    Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    errors.add("Unable to get images.");
+                }
+                url = "/member/gallery.jsp";
+                request.setAttribute("gallery", OtherProfilephotoFilePaths);
+                break;
             case "get_all_users":
                 System.out.println("Member -> case 'get_all_users' hit");
                 HashMap allUsersHashMap = new HashMap();
@@ -269,6 +288,7 @@ public class MemberController extends HttpServlet {
 
                     //get other users ID coming in from the show_all_profiles.jsp page request object
                     int loadedProfileUserID = Integer.parseInt(request.getParameter("userID"));
+                    request.setAttribute("loadedProfileUserID", loadedProfileUserID);
 
                     User loadedUserFromProfileselected = UserDB.getUser(loadedProfileUserID);
 

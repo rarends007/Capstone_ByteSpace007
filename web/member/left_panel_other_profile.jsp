@@ -63,7 +63,7 @@
                             <li><a href="${pageContext.request.contextPath}/Admin?action=load_admins_member_info">Admin Portal</a></li>
                         </c:if>
                         <li><a href="${pageContext.request.contextPath}/Message">Messages</a></li>
-                        <li><a href="${pageContext.request.contextPath}/Member?action=getImageForUser">Gallery</a></li>
+                        <li><a href="${pageContext.request.contextPath}/Member?action=getImageGalleryForOtherProfile&loadedProfileUserID=${loadedProfileUserID}">Gallery</a></li>
                     </ul>
                 </nav>
                 <a class="logout" href="${pageContext.request.contextPath}/Public?action=logout">Log out</a>
