@@ -62,7 +62,23 @@ public class PublicController extends HttpServlet {
             //String credential; no longer needed with new modularization of registration functionality
             String role;
             
+            errors.clear();
+            
+            if(action == null){
+                action = "init";
+            }
+            
             switch (action) {
+                case ("init"): 
+                    if(session.getAttribute("username") == null){
+                        url = "/public-authorization/login.jsp";
+                        break;
+                    }
+                    else{
+                        url = "/Member";
+                        break;
+                    }
+
                 case ("login"): 
                     //1. session will store the username and other non confidential fields
                     //2. security roles control the login and password and references the role from the security context
@@ -104,6 +120,8 @@ public class PublicController extends HttpServlet {
                                  String loggingUser = String.format("user %s has logged in", username);
                                 
                                  LogDB.createLoginLog(userID, 1, loggingUser, now);
+                                 
+                                url = "/Member";
                              }
                              System.out.println("PublicController -> User " + username + " has logged in.");
                         }else{
@@ -112,15 +130,14 @@ public class PublicController extends HttpServlet {
                         }
                     }else{
                         username = session.getAttribute("username").toString();
-                        url = "/public-authorization/login.jsp";
+                        url = "/Member";
                         errors.add(username + " is already logged in.");
-                        username = "";
                     }
                     break;
                 case ("logout"):
                     request.logout();
-                    session.removeAttribute("username");
-                    url = "/index.jsp";
+                    session.invalidate();
+                    url = "/public-authorization/login.jsp";
                     break;
                 case ("register"):
                     //instantiate a User
@@ -146,7 +163,7 @@ public class PublicController extends HttpServlet {
                     user.setLastname(lastname);
                     user.setRole(role);
                     
-                     Utility.handleRegistration(user,  password, confirmPassword,  errors, messages);
+                    Utility.handleRegistration(user,  password, confirmPassword,  errors, messages);
 
                     url = "/public-authorization/register.jsp";
                     break;

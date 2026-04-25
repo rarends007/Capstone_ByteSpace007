@@ -1,0 +1,67 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Apr 21, 2026, 8:32:44 PM
+    Author     : raren
+*/
+
+#search {
+    width: 100%;
+    font-size: 18px;
+    background-color: #2A2742;
+    margin-left: 2px;
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+    color: #FFF;
+}
+
+/* Style the navigation menu */
+#menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Style the navigation links */
+#menu li a {
+    border-radius: 0 10px 10px 0;
+    padding: 12px;
+    text-decoration: none;
+    color: #1aa7a7;
+    display: block
+}
+
+
+#menu li a:hover {
+    background-color: #1aa7a730;
+    border-left: 4px solid #00ceff;
+}
+
+.solid {
+    border: 1px solid #00ceff;
+}
+
+.listStyle {
+    max-height: 35vh;
+    overflow-y: auto;
+    background-color: #2a2742;
+    border-radius: 10px;
+    list-style-type: none;
+    font-size: 1.75em;
+}
+
+.listStyle::-webkit-scrollbar {
+    width: .5em;
+}
+
+.listStyle::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.listStyle::-webkit-scrollbar-thumb {
+    background: #1AA7A7;
+    border-radius: 25px;
+}

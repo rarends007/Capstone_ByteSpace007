@@ -15,15 +15,9 @@
 
     </head>
     <body>
-        <c:import url="left_panel.jsp" />
+        <c:import url="left_panel_other_profile.jsp" />
         <div class="main_content">
-            <form method="post" action="${pageContext.request.contextPath}/Member" enctype='multipart/form-data' class="uplaod_image_form gallery_form">
-                <input  type="hidden" name="action" value="uploadImage"/>
-
-                <input type="file" name="file" />
-                <input type="submit" value="upload" class="button_primary"/>
-
-            </form>
+           
             <div class="gallery">
                 <c:forEach var="image" items="${gallery}">                     
                     <img src="${image}" class="gallery-item"/>

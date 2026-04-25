@@ -11,14 +11,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Manage Users</title>
+        <title>Manage Users</title> 
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/admin/admin.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/global.css" />
     </head>
     <body class="pageColor"> 
         <nav  class="floatNavLeft" style="margin-top: 100px; width: 200px;">
             <ul>
                 <li>
-                     <a href="${pageContext.request.contextPath}/index.jsp">Main Home</a>
+                     <a href="${pageContext.request.contextPath}/index.jsp">Developer Home</a>
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Home</a>
@@ -36,12 +37,12 @@
                 
                 <div>     
                     <label>Username</label>
-                    <input type="text" name="username" id="username"/>
+                    <input type="text" name="username" id="username" class="input"/>
                 </div>
                 
                 <div>
                     <label>Firstname</label>
-                    <input type="text" name="firstname" id="firstname"/>
+                    <input type="text" name="firstname" id="firstname" class="input"/>
                 </div>
                 
                 <div>
@@ -79,25 +80,27 @@
                 
             </form>
             <br>
-            <span>${errors}</span>
+            <span class="marginLeft300px errors">${errors}</span>
         </div>
                 
             </form>
         </div>
         
-        <div style="margin-left: 250px; margin-bottom: 80px">
+        <div style="margin-left: 250px; margin-bottom: 80px" id="deleteUserContainer">
             <h1>Delete User</h1>
-            <span>
+            <c:import url="/includes/search_for_admin.jsp" />
+            <h4><br>Full List of Users</h2>
+            <span class="errors">
                 <c:forEach var="item" items="${errors}">
                     <tr>
-                        <td>${item.toString()}</td>
+                        <td>[${item.toString()}]</td>
                     </tr>
                  </c:forEach>
-            </span><!<!-- TODO: need to make this look nicer, functionality first though. - RA -->
-            <span>
+            </span><!-- TODO: need to make this look nicer, functionality first though. - RA -->
+            <span class="message">
                 <c:forEach var="item" items="${messages}">
                     <tr>
-                        <td>${item.toString()}</td>
+                        <td>[${item.toString()}]</td>
                     </tr>
                  </c:forEach>
             </span>
@@ -106,7 +109,7 @@
             <div class="userList">
                 <c:forEach var="item" items="${usersHashMap}">
                     <tr>
-                        <td><a href="${pageContext.request.contextPath}/Admin?userID=${item.value.getUserID()}&username=${item.value.getUsername()}&action=deleteUser"> <c:out value="${item.value.getUsername()}" /> | Remove User | </a></td> <!--<href="parameters passed to controller from url in get request">Part shown to user</a>-->
+                        <td>-> <c:out value="${item.value.getUsername()}" /> </td> <!--<href="parameters passed to controller from url in get request">Part shown to user</a>-->
                     </tr>
                     <br>
                 </c:forEach>

@@ -43,6 +43,15 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>Block</servlet-name>
+        <servlet-class>controllers.BlockController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Block</servlet-name>
+        <url-pattern>/Block</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>Friends</servlet-name>
         <servlet-class>controllers.FriendsController</servlet-class>
     </servlet>
@@ -58,6 +67,15 @@
     <servlet-mapping>
         <servlet-name>Comment</servlet-name>
         <url-pattern>/Comment</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>Notification</servlet-name>
+        <servlet-class>controllers.NotficationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Notification</servlet-name>
+        <url-pattern>/Notification</url-pattern>
     </servlet-mapping>
     
     
@@ -79,6 +97,7 @@
         <web-resource-collection>
             <web-resource-name>Protected AreaA</web-resource-name>
             <url-pattern>/admin/*</url-pattern>
+            <url-pattern>/Admin/*</url-pattern>
         </web-resource-collection>
         
         <auth-constraint>
@@ -94,6 +113,7 @@
         <web-resource-collection>
             <web-resource-name>Protected AreaM</web-resource-name>
             <url-pattern>/member/*</url-pattern>
+            <url-pattern>/Member/*</url-pattern>
             <url-pattern>/messages/*</url-pattern>
             <url-pattern>/comments/*</url-pattern>
         </web-resource-collection>
@@ -127,8 +147,7 @@
     
     <!--welcome file-->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>Public</welcome-file>
     </welcome-file-list>
 </web-app>
 

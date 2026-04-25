@@ -4,6 +4,7 @@
     Author     : raren
 --%>
 
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,7 @@
         <div>
             <nav>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/admin/index.jsp">Admin Portal</a></li>
+                    <li><a href="${pageContext.request.contextPath}/Admin">Admin Portal</a></li>
                     <li><a href="${pageContext.request.contextPath}/Member">Member Portal</a></li>
                     <li><a href="${pageContext.request.contextPath}/public-authorization/register.jsp">Register</a></li>
                     <li><a href="${pageContext.request.contextPath}/public-authorization/login.jsp">Login</a></li>
