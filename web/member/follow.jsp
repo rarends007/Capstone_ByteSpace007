@@ -22,16 +22,17 @@
                         <p>${noFollow}</p>
                         <ul class="follow_list">
                             <c:forEach items="${follows}" var="follow">
-                                <li>${follow.value}
+                                <li><a href="${pageContext.request.contextPath}/Member?action=load_other_profile&userID=${follow.key}">${follow.value}</a>
                                     <form action="${pageContext.request.contextPath}/Friends" method="post">
-                                        <input type="hidden" name="action" value="removeFollow">
+                                        <input type="hidden" name="action" value="removeFollow"><!-- action 1  -->
+                                        <input type="hidden" name="title" value="${title}"/>
                                         <input type="hidden" name="followingID" value="${follow.key}">
                                         <input type="submit" value="Remove" class="fake_link">
                                     </form>
                                 </li>
                             </c:forEach>
                         </ul>
-                        <a href="Friends?action=get${title}" class="button_primary reload_btn">Reload list</a>
+                        <!--<a href="Friends?action=get$title" class="button_primary reload_btn">Reload list</a> Obsolete RA-->
 
                         <p>${message}</p>
                     </div>

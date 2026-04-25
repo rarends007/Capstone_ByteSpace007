@@ -100,6 +100,20 @@ public class MessageController extends HttpServlet {
         }
 
         String action = request.getParameter("action");
+        
+        //Ensures usernames are cached for the search functionality
+        try {
+            HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
+            if (userNameSearchMap != null) {
+
+            } else {
+                userNameSearchMap = new HashMap<>();
+            }
+            request.setAttribute("userNameSearchMap", userNameSearchMap);
+        } catch (Exception ex) {
+            System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
+        }
+        
         if (action != null) {
             switch (action) {
                 case "send_message":

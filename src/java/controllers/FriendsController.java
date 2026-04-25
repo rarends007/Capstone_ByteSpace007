@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -51,8 +52,11 @@ public class FriendsController extends HttpServlet {
 
         String url = "/member/follow.jsp";
 
-        boolean pageControllerIsMember = request.getRequestURL().toString().contains("Member");//getting request url -> https://kodejava.org/how-do-i-get-servlet-request-url-information/
         int userID = UserDB.getUserID(username);
+        
+        HashMap<Integer, User> SuggestedUsersHashMap = new HashMap<>();
+        SuggestedUsersHashMap = UserDB.getSuggestedUsers(userID);
+        session.setAttribute("SuggestedUsersHashMap", SuggestedUsersHashMap);
 
         switch (action) {
             case "getFollowing" -> {
@@ -60,6 +64,7 @@ public class FriendsController extends HttpServlet {
                 try {
                     follows = FollowersDB.getFollowing(userID);
                     session.setAttribute("follows", follows);
+                    session.setAttribute("numFollowing", follows.size());
                 } catch (Exception ex) {
                     message = "Unable to retrieve following.";
                 }
@@ -67,14 +72,17 @@ public class FriendsController extends HttpServlet {
                 if (follows.isEmpty()) {
                     request.setAttribute("noFollow", "You aren't following anyone!");
                 }
-
+                
                 session.setAttribute("title", "Following");
+                
+                url = ""; //inf loop prevention
             }
             case "getFollowers" -> {
 
                 try {
-                    follows= FollowersDB.getFollowers(userID);
+                    follows = FollowersDB.getFollowers(userID);
                     session.setAttribute("follows", follows);
+                    session.setAttribute("numFollowers", follows.size());
                 } catch (Exception ex) {
                     message = "Unable to retrieve followers.";
                 }
@@ -84,15 +92,22 @@ public class FriendsController extends HttpServlet {
                 }
 
                 session.setAttribute("title", "Followers");
+                
+                 url = ""; //inf loop prevention
             }
             case "removeFollow" -> {
                 int followingID = Integer.parseInt(request.getParameter("followingID"));
+                String title = request.getParameter("title").trim();
                 
                 try {
                     if (session.getAttribute("title").equals("Followers")) {
+                        url="/Friends?action=get" + title;
                         FollowersDB.removeFollow(followingID, userID);
                         message = "Successfully removed follower";
+                        
+                       
                     } else {
+                        url="/Friends?action=get" + title;
                         FollowersDB.removeFollow(userID, followingID);
                         message = "Removed from your following list";
                     }
@@ -102,13 +117,13 @@ public class FriendsController extends HttpServlet {
             }
             case "followUser" -> {
                 int followingID = Integer.parseInt(request.getParameter("followingID"));
-                
+
                 //This ensures that when a user follows another user that the user will be notified they followed them.
-                if (NotificationDB.insertNotificationForUserByUserID(followingID, username +  " started following you.")){ 
+                if (NotificationDB.insertNotificationForUserByUserID(followingID, username + " started following you.")) {
                     System.out.println("Notification successfully sent to the followed user.");
                 }
                 //End notification
-                
+
                 try {
                     FollowersDB.addFollow(userID, followingID);
                     System.out.println("Successfully followed user");
@@ -116,10 +131,18 @@ public class FriendsController extends HttpServlet {
                     System.out.println("Unable follow user");
                 }
                 
-                url = "/Member?action=load_other_profile&userID=" + followingID;
+                String suggestedClicked = request.getParameter("suggestedClicked");
+                
+                if (suggestedClicked != null){
+                    url = "/Member?action=follow_suggested_member_clicked";
+                }
             }
         }
         request.setAttribute("message", message);
+        
+        if(url.isBlank()){
+            url = "/member/follow.jsp";
+        }
 
         getServletContext()
                 .getRequestDispatcher(url)

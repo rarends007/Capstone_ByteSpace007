@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import business.bytespace.Super.User;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -46,8 +47,10 @@ public class UserDB {
                        VALUES
                        (?, ?, ?, ?, ?);
                        """;
+        
+        
         try {
-            ps = connection.prepareStatement(query);
+            ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS); //https://stackoverflow.com/questions/4224228/preparedstatement-with-statement-return-generated-keys
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getFirstname());
             ps.setString(3, user.getMiddlename());
@@ -56,17 +59,26 @@ public class UserDB {
 
             result = ps.executeUpdate();
             System.out.println("New User added, not the role yet though.");
-
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            int key = -1;
+            if (rs != null && rs.next()) {
+                key = rs.getInt(1);
+            }
+            
             if (result != -1) {
                 query = """
-                               INSERT INTO role
-                               (user_id, rolename)
+                               INSERT INTO user_role
+                               (user_id, username, rolename)
                                VALUES
-                               (?, ?);
+                               (?, ?, ?);
                                """;
                 ps = connection.prepareStatement(query);
-                ps.setInt(1, getUserID(user.getUsername()));
-                ps.setString(2, user.getRole());
+                ps.setInt(1, key);
+                ps.setString(2, user.getUsername());
+                ps.setString(3, user.getRole());
+                ps.executeUpdate();
             }
             System.out.println("New User added, and now User role added too.");
             userRegistered = true;
@@ -177,6 +189,7 @@ public class UserDB {
         PreparedStatement ps = null;
         ResultSet rs = null;
         
+        usernamePassed = usernamePassed.trim();
         User user = null;
 
         String query = """
@@ -286,7 +299,8 @@ public class UserDB {
         HashMap<Integer, User> userHashMap = new HashMap<>();
         String query = """
                        SELECT *
-                       FROM user;
+                       FROM user
+                       ORDER BY username ASC;
                        """;
 
         try {
@@ -318,6 +332,53 @@ public class UserDB {
         pool.freeConnection(connection);
 
         return userHashMap;
+    }
+    
+    public static LinkedHashMap<Integer, User> getAllUsersLinked() {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        LinkedHashMap<Integer, User> userLinkedHashMap = new LinkedHashMap<>(); /*Needs to be lnked or 
+        //order is not guaranteed 
+        ->         * https://docs.oracle.com/javase/6/docs/api/java/util/HashMap.html && 
+                    *https://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html */
+        String query = """
+                       SELECT *
+                       FROM user
+                       ORDER BY username ASC;
+                       """;
+
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    int userID = rs.getInt("user_id");
+                    String username = rs.getString("username");
+                    String firstname = rs.getString("firstname");
+                    String middlename = rs.getString("middlename");
+                    String lastname = rs.getString("lastname");
+                    String credential = rs.getString("credential");
+
+                    User user = new User(userID, username, firstname, middlename, lastname, credential);
+
+                    userLinkedHashMap.put(userID, user);
+                }
+
+            }
+        } catch (SQLException ex) {
+            System.out.println("error retrieving userID -> UserDB -> getAllUser()");
+        }
+
+        DBUtil.closeResultSet(rs); //remove if not using SELECT and thus returning a resultset
+
+        DBUtil.closePreparedStatement(ps);
+        pool.freeConnection(connection);
+
+        return userLinkedHashMap;
     }
     
     public static HashMap<Integer, User> getSuggestedUsers(int userID) {
@@ -395,7 +456,9 @@ public class UserDB {
             NotificationDB.deleteNotificationsForUser(userID);
             ProfileDB.deleteUserProfile(userID);
             ReportDB.deleteAllReportsForUser(userID); //must execute in order so all fk are deleted then then finally the parent user record
-
+            FollowersDB.deleteAllFollowingByUserID(userID);
+            FollowersDB.deleteAllFollowedByUserID(userID);
+            
             deleteRole(userID);
 
             ps = connection.prepareStatement(query);
