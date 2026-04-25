@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,9 +41,9 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HashMap<Integer, User> userHashMap = null; //always check if null before using this
+        LinkedHashMap<Integer, User> userLinkedHashMap = null; //always check if null before using this
         try {
-            userHashMap = UserDB.getAllUsers();
+            userLinkedHashMap = UserDB.getAllUsersLinked();
         } catch (Exception ex) {
             System.out.println("Admin loading userHashMap error -> " + ex);
         }
@@ -79,13 +80,13 @@ public class AdminController extends HttpServlet {
 
         if (action != null) {
             switch (action) {
-                case "getAllUsers":
-                    if (userHashMap != null) {
+                case "getAllUsers": //Orders usernames ASC due to  UserDB.getAllUsersLinked() function - RA
+                    if (userLinkedHashMap != null) {
                         System.out.println("Admin ->switch case getAllUsers -> AllUsersHashMap populated successfully.");
                     } else {
                         System.out.println("Admin ->switch case getAllUsers -> AllUsersHashMap is null");
                     }
-                    request.setAttribute("usersHashMap", userHashMap);
+                    request.setAttribute("usersHashMap", userLinkedHashMap);
                     url = "/admin/admin_level_add_delete_users.jsp";
 
                     //Start userDeletedMessage Logic
@@ -97,7 +98,6 @@ public class AdminController extends HttpServlet {
                         request.setAttribute("userDeletedMessage", userDeletedMessage);
                     }
                     //End userDeletedMessage Logic
-
                     break;
                 case "deleteUser":
                     messages.clear();
@@ -110,6 +110,20 @@ public class AdminController extends HttpServlet {
 
                         url = "/Admin?action=getAllUsers&userDeletedMessage=" + messages.get(0) + "&adminIsDeletingUser=true"; //so the list will repopulate with the missing user shown as gone, proper refresh, NOTE: only one ? allowed in URL to properly parametize it on forward
                         System.out.println("Admin -> switch case 'deleteUser' url is -> " + url);                                                                        //values get called in Admin ->  getAllUsers switch case, where it is directed
+
+                        //Ensures usernames are cached for the search functionality
+                        try {
+                            HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
+                            if (userNameSearchMap != null) {
+
+                            } else {
+                                userNameSearchMap = new HashMap<>();
+                            }
+                            request.setAttribute("userNameSearchMap", userNameSearchMap);
+                        } catch (Exception ex) {
+                            System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
+                        }
+                        //
                     } else {
                         errors.add("Unable to delete user " + username + ", issue with the database connection.");
                         url = "/admin/admin_level_add_delete_users.jsp";
@@ -129,15 +143,29 @@ public class AdminController extends HttpServlet {
                     User user = new User(username, firstname, middlename, lastname, password, role);
 
                     Utility.handleRegistration(user, password, confirmPassword, errors, messages);
-                    
+
+                    //repopulate the users HashMap
                     try {
-                        userHashMap = UserDB.getAllUsers();
+                        userLinkedHashMap = UserDB.getAllUsersLinked();
                     } catch (Exception ex) {
                         System.out.println("Admin loading userHashMap error -> " + ex);
                     }
-                    
-                    if (userHashMap != null) {
-                        request.setAttribute("usersHashMap", userHashMap);
+
+                    if (userLinkedHashMap != null) {
+                        request.setAttribute("usersHashMap", userLinkedHashMap);
+                    }
+
+                    //Ensures usernames are cached for the search functionality
+                    try {
+                        HashMap<Integer, User> userNameSearchMap = UserDB.getAllUsers();
+                        if (userNameSearchMap != null) {
+
+                        } else {
+                            userNameSearchMap = new HashMap<>();
+                        }
+                        request.setAttribute("userNameSearchMap", userNameSearchMap);
+                    } catch (Exception ex) {
+                        System.err.println("MemberController -> failed to populate users -> \n\tException " + ex);
                     }
 
                     url = "/admin/admin_level_add_delete_users.jsp";
@@ -146,7 +174,7 @@ public class AdminController extends HttpServlet {
                 case "getUserList":
                     HashMap<Integer, Log> loginLog = LogDB.getAllLoginLogs();
 
-                    request.setAttribute("usersHashMap", userHashMap);
+                    request.setAttribute("usersHashMap", userLinkedHashMap);
                     request.setAttribute("loginMap", loginLog);
 
                     url = "/admin/user_login_log.jsp";

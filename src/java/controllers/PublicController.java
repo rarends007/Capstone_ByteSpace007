@@ -136,7 +136,7 @@ public class PublicController extends HttpServlet {
                     break;
                 case ("logout"):
                     request.logout();
-                    session.removeAttribute("username");
+                    session.invalidate();
                     url = "/public-authorization/login.jsp";
                     break;
                 case ("register"):
