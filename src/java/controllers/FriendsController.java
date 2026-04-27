@@ -127,6 +127,12 @@ public class FriendsController extends HttpServlet {
                 try {
                     FollowersDB.addFollow(userID, followingID);
                     System.out.println("Successfully followed user");
+                    
+                    //Refresh following list in case user is in the 
+                        //following section of website
+                    follows = FollowersDB.getFollowing(userID);
+                    session.setAttribute("follows", follows);
+                    
                 } catch (Exception ex) {
                     System.out.println("Unable follow user");
                 }
