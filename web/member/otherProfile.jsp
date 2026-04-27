@@ -85,6 +85,7 @@
                                             <form action="${pageContext.request.contextPath}/Member" method="post">
                                                 <input type="hidden" name="action" value="post_comment" />
                                                 <input type="hidden" name="post_id" value="${post.value.postID}" />
+                                                <input type="hidden" name="other_user_id" value="${post.value.userID}"/>
                                                 <input type="hidden" name="to_other" value="true" />
 
                                                 <textarea name="comment_text" rows="5" cols="35"
@@ -95,7 +96,9 @@
                                     </c:forEach>
                                     <form action="${pageContext.request.contextPath}/Member" method="post">
                                         <input type="hidden" name="action" value="post_comment" />
+                                        <input type="hidden" name="other_user_id" value="${post.value.userID}"/>
                                         <input type="hidden" name="post_id" value="${post.value.postID}" />
+                                        <input type="hidden" name="to_other" value="true" />
                                         <textarea name="comment_text" rows="5" cols="35"
                                             class="comment_text_input"></textarea>
                                         <div>

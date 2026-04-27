@@ -389,14 +389,19 @@ public class MemberController extends HttpServlet {
 
                 try {
                     int postID = Integer.parseInt(request.getParameter("post_id"));
-
+                    
                     CommentDB.insertComment(userID, postID, commentText);
-
+                    
                     if (toOther != null) {
                         url = "/member/otherProfile.jsp";
+                        int otherUserID = Integer.parseInt(request.getParameter("other_user_id"));
+                        
+                        posts = PostDB.getUserPosts(otherUserID); //needs to be the other user id
+                    }else{
+                        posts = PostDB.getUserPosts(userID);
                     }
 
-                    posts = PostDB.getUserPosts(userID);
+                    
 
                 } catch (NumberFormatException ex) {
                     System.err.println("issue converting postID memberController case post_comment -> " + ex);

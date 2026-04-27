@@ -189,11 +189,12 @@ public class PostDB {
 
         while (rs.next()) {
             int postID = rs.getInt("post_id");
+            int UserIDOwnedBy = rs.getInt("user_id");
             String postText = rs.getString("post_text");
             HashMap<Integer, Image> images = getPostImages(postID);
             HashMap<Integer, Comment> comments = getPostComments(postID);
 
-            Post post = new Post(postID, postText, images, comments);
+            Post post = new Post(postID, UserIDOwnedBy, postText, images, comments);
 
             posts.put(postID, post);
 
